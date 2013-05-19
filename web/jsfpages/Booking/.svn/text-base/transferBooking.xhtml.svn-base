@@ -1,0 +1,202 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Transfer Booking
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="transferBookingForm" styleClass="table-width">  
+            <p:breadCrumb rendered="#{transferBookingBean.renderDetail}">
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="Booking List" url="/faces/jsfpages/Booking/bookingList.xhtml"/>
+                <p:menuitem value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{transferBookingBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{transferBookingBean.fbsBooking.fbsFlat.flatNo}" 
+                            url="#{transferBookingBean.returnUrl()}"/>
+                <p:menuitem value="Transfer Details" url="#"/>
+            </p:breadCrumb>
+            <p:panel header="Flat Details">
+                <h:panelGrid columns="4" cellpadding="4"> 
+                    <h:outputLabel value="Reg No: " for="regNo"></h:outputLabel>
+                    <h:outputLabel id="regNo" value="#{transferBookingBean.fbsBooking.regNumber}"/>
+                    <h:outputLabel value="Project Name: " for="projName"></h:outputLabel>
+                    <h:outputLabel id="projName" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projName}"/>
+                    <h:outputLabel value="Block Name: " for="blockname"></h:outputLabel>
+                    <h:outputLabel id="blockname" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockName}"/>
+                    <h:outputLabel value="Floor No: " for="floorno"></h:outputLabel>
+                    <h:outputLabel id="floorno" value="#{transferBookingBean.convertFloorNo(transferBookingBean.fbsBooking.fbsFlat.fbsFloor.floorNo)}"/>
+                    <h:outputLabel value="Unit Code: " for="flatno"></h:outputLabel>
+                    <h:outputLabel id="flatno" value=" #{transferBookingBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{transferBookingBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{transferBookingBean.fbsBooking.fbsFlat.flatNo}"/>
+                    <h:outputLabel value="Flat Type: " for="flattype"></h:outputLabel>
+                    <h:outputLabel id="flattype" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFlatType.flatType}"/>
+                    <h:outputLabel value="Flat Specification: " for="flatSpecification"></h:outputLabel>
+                    <h:outputLabel id="flatSpecification" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFlatType.flatSpecification}"/>
+                    <h:outputLabel value="Flat SBA(sqft.): " for="flatsba"></h:outputLabel>
+                    <h:outputLabel id="flatsba" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFlatType.flatSba}"/>
+                    <h:outputLabel value="Flat BA(sqft.): " for="flatba"></h:outputLabel>
+                    <h:outputLabel id="flatba" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFlatType.flatBa}"/>
+                    <h:outputLabel value="Flat CA(sqft.): " for="flatca"></h:outputLabel>
+                    <h:outputLabel id="flatca" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFlatType.flatCa}"/>
+                    <h:outputLabel value="Flat BR(Rs/sqft.): " for="flatbsp"></h:outputLabel>
+                    <h:outputLabel id="flatbsp" value="#{transferBookingBean.fbsBooking.fbsFlat.fbsFlatType.flatBsp}"/>
+                </h:panelGrid>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel header="First Applicant Details" rendered="#{!transferBookingBean.renderDetail}">
+                <h:panelGrid id="applicantdetail" columns="8" cellpadding="3">
+                    <h:outputLabel value="Name:* " for="applicantname"></h:outputLabel>
+                    <p:inputText id="applicantname" value="#{transferBookingBean.fbsApplicant.applicantName}"  required="true" requiredMessage="Applicant Name Should Be Entered"/>
+                    <h:outputLabel value="S/W/D:* " for="swd"></h:outputLabel>
+                    <p:inputText id="swd" value="#{transferBookingBean.fbsApplicant.SWD}" required="true" requiredMessage="S/W/D Should Be Entered"/>
+                    <h:outputLabel value="Nationality:* " for="nationality"></h:outputLabel>
+                    <p:inputText id="nationality" value="#{transferBookingBean.fbsApplicant.nationality}" required="true" requiredMessage="Nationality Should Be Entered"/>
+                    <h:outputLabel value="DOB:*" for="dob"></h:outputLabel>
+                    <p:calendar pattern="#{initParam['date-pattern']}" timeZone="IST" id="dob" value="#{transferBookingBean.fbsApplicant.dob}" required="true" requiredMessage="DOB Should Be Entered"/>
+                    <h:outputLabel value="Profession:* " for="profession"></h:outputLabel>
+                    <p:inputText id="profession" value="#{transferBookingBean.fbsApplicant.profession}" required="true" requiredMessage="Profession Should Be Entered"/>
+
+                    <h:outputLabel value="PAN No:* " for="panno"></h:outputLabel>
+                    <p:inputText id="panno" value="#{transferBookingBean.fbsApplicant.panNo}" required="true" requiredMessage="PAN NO. Should Be Entered"/>
+                    <h:outputLabel value="DL No: " for="dlno"></h:outputLabel>
+                    <p:inputText id="dlno" value="#{transferBookingBean.fbsApplicant.dlNo}" />
+                    <h:outputLabel value="Passport No: " for="passno"></h:outputLabel>
+                    <p:inputText id="passno" value="#{transferBookingBean.fbsApplicant.passportNo}" />
+                    <h:outputLabel value="Telephone: " for="telephone"></h:outputLabel>
+                    <p:inputText id="telephone" value="#{transferBookingBean.fbsApplicant.telephone}" />
+                    <h:outputLabel value="Mobile:* " for="mobile"></h:outputLabel>
+                    <p:inputText id="mobile" value="#{transferBookingBean.fbsApplicant.mobile}" required="true" requiredMessage="Mobile No. Should Be In Digit"/>
+                    <h:outputLabel value="FAX: " for="fax"></h:outputLabel>
+                    <p:inputText id="fax" value="#{transferBookingBean.fbsApplicant.fax}" />
+                    <h:outputLabel value="Email: " for="email"></h:outputLabel>
+                    <p:inputText id="email" value="#{transferBookingBean.fbsApplicant.email}"/>
+                    <h:outputLabel value="Res. Address:* " for="resadd"></h:outputLabel>
+                    <p:inputTextarea id="resadd" value="#{transferBookingBean.fbsApplicant.resAdd}" required="true" requiredMessage="Res. Address Should Be Entered" rows="3" cols="18" autoResize="false"/>
+                    <h:outputLabel value="Off. Address: " for="offadd"></h:outputLabel>
+                    <p:inputTextarea id="offadd" value="#{transferBookingBean.fbsApplicant.offAdd}" rows="3" cols="18" autoResize="false"/>
+                </h:panelGrid>
+            </p:panel>
+            <div class="vertical-space"/>
+
+            <p:panel header="Co-Applicant Details" rendered="#{!transferBookingBean.renderDetail}">
+                <h:panelGrid id="coapplicantdetail" columns="8" cellpadding="3">
+                    <h:outputLabel value="Name:* " for="coapplicantname"></h:outputLabel>
+                    <p:inputText id="coapplicantname" value="#{transferBookingBean.fbsCoApplicant.applicantName}" required="true" requiredMessage="Co-Applicant Name Should Be Entered"/>
+                    <h:outputLabel value="S/W/D:* " for="coswd"></h:outputLabel>
+                    <p:inputText id="coswd" value="#{transferBookingBean.fbsCoApplicant.SWD}" required="true" requiredMessage="S/W/D Should Be Entered"/>
+                    <h:outputLabel value="Nationality:* " for="conationality"></h:outputLabel>
+                    <p:inputText id="conationality" value="#{transferBookingBean.fbsCoApplicant.nationality}" required="true" requiredMessage="Nationality Should Be Entered"/>
+                    <h:outputLabel value="DOB:* " for="codob"></h:outputLabel>
+                    <p:calendar pattern="#{initParam['date-pattern']}" timeZone="IST" id="codob" value="#{transferBookingBean.fbsCoApplicant.dob}" required="true" requiredMessage="DOB Should Be Entered"/>
+                    <h:outputLabel value="Profession:* " for="coprofession"></h:outputLabel>
+                    <p:inputText id="coprofession" value="#{transferBookingBean.fbsCoApplicant.profession}" required="true" requiredMessage="Profession Should Be Entered"/>
+
+                    <h:outputLabel value="PAN No:* " for="copanno"></h:outputLabel>
+                    <p:inputText id="copanno" value="#{transferBookingBean.fbsCoApplicant.panNo}" required="true" requiredMessage="PAN NO. Should Be Entered"/>
+                    <h:outputLabel value="DL No: " for="codlno"></h:outputLabel>
+                    <p:inputText id="codlno" value="#{transferBookingBean.fbsCoApplicant.dlNo}" />
+                    <h:outputLabel value="Passport No: " for="copassno"></h:outputLabel>
+                    <p:inputText id="copassno" value="#{transferBookingBean.fbsCoApplicant.panNo}" />
+                    <h:outputLabel value="Telephone: " for="cotelephone"></h:outputLabel>
+                    <p:inputText id="cotelephone" value="#{transferBookingBean.fbsCoApplicant.telephone}"   maxlength="12"/>
+                    <h:outputLabel value="Mobile:* " for="comobile"></h:outputLabel>
+                    <p:inputText id="comobile" value="#{transferBookingBean.fbsCoApplicant.mobile}"   maxlength="10" required="true" requiredMessage="Mobile No. Should Be In Digit"/>
+                    <h:outputLabel value="FAX: " for="cofax"></h:outputLabel>
+                    <p:inputText id="cofax" value="#{transferBookingBean.fbsCoApplicant.fax}" />
+                    <h:outputLabel value="Email: " for="coemail"></h:outputLabel>
+                    <p:inputText id="coemail" value="#{transferBookingBean.fbsCoApplicant.email}" />
+                    <h:outputLabel value="Res. Address:* " for="coresadd"></h:outputLabel>
+                    <p:inputTextarea id="coresadd" value="#{transferBookingBean.fbsCoApplicant.resAdd}" required="true" requiredMessage="Res Address Should Be Entered" rows="3" cols="18" autoResize="false"/>
+                    <h:outputLabel value="Off. Address: " for="cooffadd"></h:outputLabel>
+                    <p:inputTextarea id="cooffadd" value="#{transferBookingBean.fbsCoApplicant.offAdd}" rows="3" cols="18" autoResize="false"/>
+                </h:panelGrid>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:commandButton value="Transfer" action="#{transferBookingBean.transferBooking()}" update=":transferBookingForm" rendered="#{!transferBookingBean.renderDetail}"/>
+            <p:commandButton value="Cancel" action="#{transferBookingBean.redirectBooking()}"  update=":transferBookingForm" process="@this" rendered="#{!transferBookingBean.renderDetail}"/>
+
+            <div class="vertical-space"/>
+            <p:dataTable  id="parkingTable" value="#{transferBookingBean.fbsapplicantlist}" var="applicant" rowIndexVar="sn" 
+                          rendered="#{transferBookingBean.renderDetail}" rowStyleClass="#{(sn+1) % 2 eq 0 ? 'even' : null}">                         
+                <f:facet name="header">
+                    Transfered Applicant Detail
+                </f:facet>
+                <p:column headerText="SNo">
+                    <h:outputText value="#{sn+1}"/>
+                </p:column>
+                <p:column  headerText="Name">
+                    <h:outputLabel value="#{applicant.applicantName}"></h:outputLabel>
+                </p:column>
+                <p:column  headerText="S/W/D">
+                    <h:outputLabel value="#{applicant.SWD}"></h:outputLabel>
+                </p:column>
+                <p:column  headerText="Nationality">
+                    <h:outputLabel value="#{applicant.nationality}"></h:outputLabel>
+                </p:column>
+                <p:column  headerText="DOB">
+                    <h:outputLabel value="#{applicant.dob}">
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                    </h:outputLabel>
+                </p:column>
+                <p:column  headerText="Profession">
+                    <h:outputLabel value="#{applicant.profession}"></h:outputLabel>
+                </p:column>
+                <p:column  headerText="Type">
+                    <h:outputLabel value="#{applicant.applicantFlag == 1 ? 'First Applicant' : 'Co-Applicant'}"></h:outputLabel>
+                </p:column>
+                <p:column headerText="Option">
+                    <p:commandLink value="Detail" action="#{transferBookingBean.transferDetail(applicant)}" title="Detail" styleClass="ui-icon ui-icon-info"  
+                                   onclick="applicant.show();" update=":ApplicantForm"/>
+                </p:column>
+
+            </p:dataTable>
+           
+        </h:form>
+
+
+        <p:dialog header="Applicant Detail" widgetVar="applicant">
+            <h:form id="ApplicantForm">
+                <h:panelGrid  columns="6" cellpadding="4" cellspacing="4">
+                    <h:outputLabel value="Name: " for="eapplicantname"></h:outputLabel>
+                    <h:outputLabel id="eapplicantname" value="#{transferBookingBean.fbsApplicant.applicantName}"  />
+                    <h:outputLabel value="S/W/D: " for="eswd"></h:outputLabel>
+                    <h:outputLabel id="eswd" value="#{transferBookingBean.fbsApplicant.SWD}" />
+                    <h:outputLabel value="Nationality: " for="enationality"></h:outputLabel>
+                    <h:outputLabel id="enationality" value="#{transferBookingBean.fbsApplicant.nationality}" />
+                    <h:outputLabel value="DOB: " for="edob"></h:outputLabel>
+                    <h:outputLabel  id="edob" value="#{transferBookingBean.fbsApplicant.dob}" >
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                    </h:outputLabel>
+                    <h:outputLabel value="Profession: " for="eprofession"></h:outputLabel>
+                    <h:outputLabel id="eprofession" value="#{transferBookingBean.fbsApplicant.profession}" />
+                    <h:outputLabel value="PAN No: " for="epanno"></h:outputLabel>
+                    <h:outputLabel id="epanno" value="#{transferBookingBean.fbsApplicant.panNo}" />
+                    <h:outputLabel value="DL No: " for="edlno"></h:outputLabel>
+                    <h:outputLabel id="edlno" value="#{transferBookingBean.fbsApplicant.dlNo}" />
+                    <h:outputLabel value="Passport No: " for="epassno"></h:outputLabel>
+                    <h:outputLabel id="epassno" value="#{transferBookingBean.fbsApplicant.passportNo}" />
+                    <h:outputLabel value="Telephone: " for="etelephone"></h:outputLabel>
+                    <h:outputLabel id="etelephone" value="#{transferBookingBean.fbsApplicant.telephone}" />
+                    <h:outputLabel value="Mobile: " for="emobile"></h:outputLabel>
+                    <h:outputLabel id="emobile" value="#{transferBookingBean.fbsApplicant.mobile}" />
+                    <h:outputLabel value="FAX: " for="efax"></h:outputLabel>
+                    <h:outputLabel id="efax" value="#{transferBookingBean.fbsApplicant.fax}" />
+                    <h:outputLabel value="Email: " for="eemail"></h:outputLabel>
+                    <h:outputLabel id="eemail" value="#{transferBookingBean.fbsApplicant.email}"/>
+                    <h:outputLabel value="Res. Address: " for="eresadd"></h:outputLabel>
+                    <h:outputLabel id="eresadd" value="#{transferBookingBean.fbsApplicant.resAdd}" />
+                    <h:outputLabel value="Off. Address: " for="eoffadd"></h:outputLabel>
+                    <h:outputLabel id="eoffadd" value="#{transferBookingBean.fbsApplicant.offAdd}"/>
+                </h:panelGrid>               
+            </h:form>
+        </p:dialog>
+
+
+
+    </ui:define>
+
+
+</ui:composition>

@@ -1,0 +1,35 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns="http://www.w3.org/1999/xhtml">
+
+    <h:form id="bottomForm">
+        <p:commandButton type="push" styleClass="#{loginBean.dashboardIndex eq 1}_active_menu" title="Home" value="Company Home" actionListener="#{loginBean.redirectCompanyDashboard()}" update="menubutton,:sideBarForm" />
+     
+        <p:menuButton id="menubutton" styleClass="#{loginBean.dashboardIndex eq 2}_active_menu"  value="#{loginBean.fbsProject.projName}"   >
+            <c:forEach var="project" items="#{loginBean.fbsProjectList}">
+                <p:menuitem value="#{project.projName}" actionListener="#{loginBean.onSelectionSetProject(project)}" update=":bottomForm:menubutton,:sideBarForm"/>
+            </c:forEach>
+            </p:menuButton>
+      
+        <div id="logout">
+            
+                    <h:outputText value="Welcome " styleClass="bottom" ></h:outputText>
+                    <h:outputText value="#{loginBean.login.userName} " style="font-weight: bold"/>
+                    <h:outputText value="[#{loginBean.login.fbsUser.roleName}]" styleClass="bottom"/>
+                    <p:spacer width="4" />
+                    <p:commandButton type="push" title="logout" value="Logout" actionListener="#{loginBean.logout()}"/>
+                    <p:commandButton type="push" title="profileSettings" value="Profile Settings" actionListener="#{loginBean.showPassword()}"/>
+
+                    <p:commandButton type="push" title="SMP Technologies Pvt Ltd © 2008-2012.All rights reserved"  value="©" onclick="dlg.show()"/>
+                    <p:dialog header="Copyright Information" widgetVar="dlg" showEffect="scale" hideEffect="scale" height="350"  width="400" styleClass="dialog1">
+                        <h:outputText  value="#{loginBean.copyRightMessage}">
+                        </h:outputText>
+                    </p:dialog>
+              
+        </div>
+    </h:form>
+
+</ui:composition>

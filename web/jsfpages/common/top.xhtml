@@ -1,0 +1,23 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:p="http://primefaces.org/ui">
+
+
+
+
+
+    <h:form id="topForm">
+        <a href="${facesContext.externalContext.requestContextPath}/faces/jsfpages/Dashboard/sampleChart.xhtml" id="logo" title="Real Estate Erp"></a>
+        <div id="company-info">
+            <ul>
+                <li><h:outputLabel value="#{loginBean.login.fbsCompany.companyName}" style="font-weight: bold" /></li>
+                <li><p:commandLink action="#{loginBean.redirectCompanyWebsite()}"><h:outputLabel value="#{loginBean.login.fbsCompany.website}"/></p:commandLink></li>
+            </ul>
+        </div>
+    </h:form>
+
+
+
+</ui:composition>

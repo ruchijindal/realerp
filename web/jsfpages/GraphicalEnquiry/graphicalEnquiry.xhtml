@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"     
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:define name="title">
+        Graphical Enquiry
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="graphicalEnquiryForm" styleClass="table-width">           
+
+            <p:breadCrumb rendered="#{blockBean.renderGraphicalView[0]}">
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="Project" url="#"  update=":graphicalEnquiryForm"/>
+            </p:breadCrumb>
+
+            <p:dataGrid var="project" value="#{blockBean.fbsProjectList}" columns="4" 
+                        rows="4" paginator="true"
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="4,8,12"  paginatorPosition="bottom"  rendered="#{blockBean.renderGraphicalView[0]}">
+
+                <p:column>   
+                    <p:commandLink  action="#{blockBean.populateBlock(project)}" update=":graphicalEnquiryForm">
+                        <p:panel header="#{project.projName}" styleClass="datagridpanel">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Project Code:"/>
+                                <h:outputText value="#{project.projCode}" />
+                                <h:outputLabel value="Project Type:"/>
+                                <h:outputText value="#{project.projType}" /> 
+                            </h:panelGrid>                           
+                        </p:panel>  
+                    </p:commandLink>
+                </p:column>
+            </p:dataGrid>
+            <p:breadCrumb rendered="#{blockBean.renderGraphicalView[1]}">
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="Project" url="/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=0" update=":graphicalEnquiryForm" rendered="#{blockBean.renderProject}"/>
+                <p:menuitem value="Block" url="#" update=":graphicalEnquiryForm"/>
+            </p:breadCrumb>
+
+
+            <p:dataGrid var="block" value="#{blockBean.fbsBlockList}" columns="4" 
+                        styleClass="datagrid" rendered="#{blockBean.renderGraphicalView[1]}">
+
+                <p:column>    
+                    <p:commandLink action="#{blockBean.showBlockDetails(block,'g')}" update=":graphicalEnquiryForm">
+                        <p:panel header="#{block.fbsProject.projName} : #{block.blockName}" styleClass="datagridpanel">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Block Abvr: "/>
+                                <h:outputText value="#{block.blockAbvr}" /> 
+                                <h:outputLabel value= "No of Floors: " ></h:outputLabel>
+                                <h:outputText value="#{blockBean.countNoOfFloor(block)}"/>
+                                <h:outputLabel value= "Total No of Flats: " ></h:outputLabel>
+                                <h:outputText value="#{blockBean.countNoOfFlat(block)}"/>
+                            </h:panelGrid>
+
+                        </p:panel>
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataGrid>
+
+            <p:breadCrumb rendered="#{blockBean.renderGraphicalView[2]}">
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="Project" url="/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=0"  update=":graphicalEnquiryForm" rendered="#{blockBean.renderProject}"/>
+                <p:menuitem value="Block" url="/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=1"  update=":graphicalEnquiryForm" />
+                <p:menuitem value="Flat Details" url="#"  update=":graphicalEnquiryForm" />
+            </p:breadCrumb>
+
+            <p:panel  rendered="#{blockBean.renderGraphicalView[2]}">
+                <c:forEach var="floor" items="#{blockBean.desfbsFloorList}" >                   
+                    <h:button value="#{blockBean.convertFloorNo(floor.floorNo)}" styleClass="floor" outcome="flatDetail"/>                    
+                    <c:forEach var="flat" items="#{blockBean.sortFlatList(floor.fbsFlatCollection)}">                
+                        <h:button value="#{floor.fbsBlock.fbsProject.projAbvr}-#{floor.fbsBlock.blockAbvr}-#{flat.flatNo}" styleClass="#{flat.status}-Button" outcome="unitDetail">
+                            <f:param name="unitCode" value="#{flat.unitCode}" /> 
+                            <f:param name="redirectFlag" value="graphicalEnquiry"/>
+                        </h:button>                        
+                    </c:forEach>
+                    <br/>
+                </c:forEach>
+            </p:panel>
+
+
+            <br/>
+            <h:panelGrid columns="4" rendered="#{blockBean.renderGraphicalView[2]}">
+                <h:button style="background: green"/><h:outputText value="Unbooked"/>
+                <h:button style="background: red"/><h:outputText value="Booked"/>
+            </h:panelGrid>
+
+        </h:form>
+
+
+    </ui:define>
+
+
+</ui:composition>

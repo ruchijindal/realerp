@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Report Archive
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="serachReportArchieve" styleClass="table-width">
+            <p:panel header="Search Report">
+                <table cellspacing="4" cellpadding="4">
+                    <tr>
+                        <td><h:outputLabel for="regNum" value="Reg No: "/></td>
+                        <td colspan="2"><p:inputText id="regNum" value="#{reportArchiveBean.fbsRegNum}">
+                                <p:ajax process="regNum" event="keyup" listener="#{reportArchiveBean.filterReportArchiveList()}" update=":reportArchieve"/>
+                            </p:inputText>
+                        </td>
+                    </tr>
+                     <tr>
+                            <td><h:outputLabel value="Date: "/> </td>
+                            <td><p:calendar id="fromDate"  value="#{reportArchiveBean.dateFrom}" pattern="#{initParam['date-pattern']}" timeZone="IST" >
+                                    <p:ajax process="fromDate" event="dateSelect"  update=":reportArchieve" listener="#{reportArchiveBean.handleDateSelectForFromDate}"/>
+                                </p:calendar>
+                                <p:watermark for="fromDate" value="From"/>
+                            </td>
+                            <td colspan="3">
+                                <p:calendar id="toDate"  value="#{reportArchiveBean.dateTo}" pattern="#{initParam['date-pattern']}" timeZone="IST" >
+                                    <p:ajax process="toDate" event="dateSelect"  update=":reportArchieve" listener="#{reportArchiveBean.handleDateSelectForToDate}"/>
+                                </p:calendar>
+                                <p:watermark for="toDate" value="To"/>                   
+                            </td>
+                        </tr>
+                    </table>
+                 <div class="vertical-space"/>
+                <p:button value="Reset"/>
+            </p:panel>
+            
+        </h:form>
+        <div class="vertical-space"/>
+        <h:form id="reportArchieve" styleClass="table-width">
+            
+          
+            <p:dataTable id="report" var="archieve" value="#{reportArchiveBean.filteredFbsReportList}" paginator="true" rows="20"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom" >
+
+                    <f:facet name="header">
+                        <div class="facetheader">
+                            Report Details
+                        </div>
+                    </f:facet>
+
+                    <p:column  headerText="ReportId">
+                        <h:outputText value="#{archieve.id}"/>
+                    </p:column>
+
+
+                    <p:column  headerText="RegNo" >
+                        <h:outputText value="#{archieve.fbsBooking.regNumber}"/>
+                    </p:column>
+
+                    <p:column  headerText="Date">
+                        <h:outputText value="#{archieve.date}"><f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/></h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Recieved Amt" >
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.recievedAmt)}"/>
+
+                    </p:column>
+
+                    <p:column headerText="Current Installment" >
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.curInstallment)}"/>
+
+                    </p:column>
+
+                    <p:column headerText="Out Credit">
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.outCredit)}"/>
+
+                    </p:column>
+
+                    <p:column headerText="Amt Payable">
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.amountPayable)}"/>
+
+                    </p:column>
+
+                    <p:column headerText="Service Tax" >
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.serviceTax)}"/>
+
+                    </p:column>
+
+                    <p:column headerText="Total Cost" >
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.totalCost)}"/>
+
+                    </p:column>
+
+                    <p:column headerText="Remaining Amt." >
+
+                        <h:outputText value="#{reportArchiveBean.roundOfUptoTwoDecimal(archieve.remainingAmt)}"/>
+
+                    </p:column>
+                
+                <p:column headerText="Option">
+                    
+                    <p:commandLink action="#{reportArchiveBean.dueLetterReport(archieve)}" title="Due Letter" styleClass="ui-icon ui-icon-document"/>
+                    
+                </p:column>
+                   
+
+                </p:dataTable>
+         
+
+
+
+
+        </h:form>
+    </ui:define>
+
+
+
+</ui:composition>
+
+

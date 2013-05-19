@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+    </context-param>
+    <context-param>
+        <param-name>date-pattern</param-name>
+        <param-value>dd-MM-yyyy</param-value>
+    </context-param>
+     <context-param>
+        <param-name>name</param-name>
+        <param-value>^[a-zA-Z '-.&amp;]+$</param-value>
+    </context-param>
+    <context-param>
+        <param-name>telephoneNo</param-name>
+        <param-value>^[0-9]{8,11}$|^$</param-value>
+    </context-param>
+    <context-param>
+        <param-name>mobileNo</param-name>
+        <param-value>^[0-9]{10}$|^$</param-value>
+    </context-param>
+    <context-param>
+        <param-name>email</param-name>
+        <param-value>[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]|^$</param-value>
+    </context-param>
+     <context-param>
+        <param-name>website</param-name>
+        <param-value>^(((ht|f)tp(s?))\://)?(www.|[a-zA-Z].)[a-zA-Z0-9\-\.]+\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk)(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$|^$</param-value>
+    </context-param>
+     <context-param>
+        <param-name>numberOnly</param-name>
+        <param-value>^[0-9]+$</param-value>
+    </context-param>
+    <context-param>
+        <param-name>password</param-name>
+        <param-value>^.*(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*([@#$%^&amp;+=]|[0-9])).*$</param-value>
+    </context-param>
+    <filter-mapping>
+        <filter-name>RealErpFilter</filter-name>
+        <url-pattern>/faces/jsfpages/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>RealErpFilter</filter-name>
+        <url-pattern>/DownloadFile</url-pattern>
+        <url-pattern>/ConsumerReport</url-pattern>
+        <url-pattern>/collectionReport</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>faces/index.xhtml</welcome-file>
+    </welcome-file-list>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>start</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    <context-param> 
+        <param-name>facelets.LIBRARIES</param-name> 
+        <param-value> /WEB-INF/lib/fusioncharts.taglib.xml </param-value> 
+    </context-param> 
+    
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>/WEB-INF/faces-config.xml</param-value>
+    </context-param>
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+        <init-param>
+            <param-name>thresholdSize</param-name>
+            <param-value>51200</param-value>
+        </init-param>
+        <init-param>
+            <param-name>uploadDirectory</param-name>
+            <param-value>/home/smp/</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>RealErpFilter</filter-name>
+        <filter-class>org.smp.realerp.pojo.RealErpFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+</web-app>

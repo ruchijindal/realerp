@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"    
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Search Payment
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="paymentForm" styleClass="table-width">
+            <p:panel header="Search Payment">
+                <h:panelGrid id="searchGrid" columns="8">
+                    <h:outputLabel value="Select Filters:" for="project"></h:outputLabel>                 
+                    <p:selectOneMenu  id="project" value="#{searchPaymentBean.fbsProject.projId}" styleClass="select_box">
+                        <f:selectItem itemLabel="Select Project" itemValue="0" />
+                        <f:selectItems value="#{searchPaymentBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  /> 
+                        <p:ajax event="change" process="project" listener="#{searchPaymentBean.populateBlock()}" update=":paymentForm:block,:paymentDetailsForm:payments"/>
+                    </p:selectOneMenu> 
+
+                    <p:selectOneMenu id="block" value="#{searchPaymentBean.fbsBlock.blockId}" styleClass="select_box"  >
+                        <f:selectItem itemLabel="Select Block" itemValue="0" />
+                        <f:selectItems value="#{searchPaymentBean.fbsBlockList}"  itemValue="#{block.blockId}" itemLabel="#{block.blockName}" var="block"  />
+                        <p:ajax event="change" process="block" listener="#{searchPaymentBean.populateFloor()}" update=":paymentForm:floor,:paymentDetailsForm:payments"/>                                
+                    </p:selectOneMenu>
+
+                    <p:selectOneMenu id="floor" value="#{searchPaymentBean.fbsFloor.floorId}" styleClass="select_box" >
+                        <f:selectItem itemLabel="Select Floor" itemValue="0" />
+                        <f:selectItems value="#{searchPaymentBean.fbsFloorList}"  var="floor" itemLabel="#{searchPaymentBean.convertFloorNo(floor.floorNo)}" itemValue="#{floor.floorId}" />
+                        <p:ajax event="change" process="floor" listener="#{searchPaymentBean.populateFlat()}" update=":paymentForm:flat,:paymentDetailsForm:payments"/>                               
+                    </p:selectOneMenu>
+
+                    <p:selectOneMenu id="flat" value="#{searchPaymentBean.fbsFlat.unitCode}" styleClass="select_box">
+                        <f:selectItem itemLabel="Select Flat" itemValue="0"/>
+                        <f:selectItems value="#{searchPaymentBean.fbsFlatList}" var="flat" itemLabel="#{searchPaymentBean.fbsBlock.blockAbvr} - #{flat.flatNo}" itemValue="#{flat.unitCode}"/> 
+                        <p:ajax event="change" process="flat" listener="#{searchPaymentBean.populatePayment()}" update=":paymentDetailsForm:payments"/>                              
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid columns="10">
+                    <h:outputLabel value="Select Filters:" for="Status"></h:outputLabel>  
+                    <p:selectOneMenu  id="Status" value="#{searchPaymentBean.status}"  styleClass="select_box">
+                        <f:selectItem itemLabel="Select Status" itemValue="Select Status"/>
+                        <f:selectItem itemLabel="Pending" itemValue="Pending"/>
+                        <f:selectItem itemLabel="Cleared" itemValue="Cleared"/>
+                        <p:ajax event="change" process="Status" listener="#{searchPaymentBean.filterPaymentList()}" update=":paymentDetailsForm"/>
+                    </p:selectOneMenu>
+
+                    <p:selectOneMenu  id="paymentMode" value="#{searchPaymentBean.paymentMode}"  styleClass="select_box">
+                        <f:selectItem itemLabel="Select Payment Mode" itemValue="Select Payment Mode"/>
+                        <f:selectItem itemLabel="Cash" itemValue="Cash"/>
+                        <f:selectItem itemLabel="Cheque" itemValue="Cheque"/>
+                        <f:selectItem itemLabel="NEFT" itemValue="NEFT"/>
+                        <p:ajax event="change" process="paymentMode" listener="#{searchPaymentBean.filterPaymentList()}" update=":paymentDetailsForm"/>
+                    </p:selectOneMenu>
+                    <p:selectOneMenu  id="bank" value="#{searchPaymentBean.fbsBank.bankId}" styleClass="select_box">
+                        <f:selectItem itemLabel="Select Bank" itemValue="0" />
+                        <f:selectItems value="#{searchPaymentBean.fbsBankList}" itemValue="#{bank.bankId}" itemLabel="#{bank.bankName}"  var="bank"  /> 
+                        <p:ajax event="change" process="bank" listener="#{searchPaymentBean.clrBank()}" update=":paymentDetailsForm"/>
+                    </p:selectOneMenu> 
+
+                    <p:inputText id="chequeNo" value="#{searchPaymentBean.chequeno}" > 
+                        <p:ajax  process="chequeNo"  event="keyup" listener="#{searchPaymentBean.populatePaymentListByChequeNo()}" update=":paymentDetailsForm"/>               
+                    </p:inputText>
+                    <p:watermark for="chequeNo" value="Cheque No/TransactionId"/>
+
+                    <p:inputText id="paidAmount" value="#{searchPaymentBean.paidAmount}" size="10"> 
+                        <p:ajax update=":paymentDetailsForm " process="paidAmount"  event="keyup" listener="#{searchPaymentBean.populatePaymentListByAmount()}"/>               
+                    </p:inputText>
+                    <p:watermark for="paidAmount" value="Amount"/>
+
+                    <p:inputText id="authorizeBy" value="#{searchPaymentBean.authorizeBy}" size="10"> 
+                        <p:ajax update=":paymentDetailsForm " process="authorizeBy"  event="keyup" listener="#{searchPaymentBean.populatePaymentListByAuthorizeBy()}"/>               
+                    </p:inputText>
+                    <p:watermark for="authorizeBy" value="Authorize By" />
+                </h:panelGrid>
+                <h:panelGrid columns="4">
+
+                    <h:outputLabel value="Select Date Filters:" for="dateMode" styleClass="select_box"></h:outputLabel> 
+                    <p:selectOneRadio id="dateMode" value="#{searchPaymentBean.dateMode}" >
+                        <f:selectItem id="pay" itemLabel="Payment Date" itemValue="paydate" />
+                        <f:selectItem  itemLabel="Cheque Date" itemValue="chqdate"  />
+                        <f:selectItem  itemLabel="Clearing Date" itemValue="clrdate"/>
+                    </p:selectOneRadio>
+                </h:panelGrid>
+                <h:panelGrid columns="4">
+
+                    <h:outputLabel value="Payment Date: " styleClass="select_box"></h:outputLabel>
+
+                    <p:calendar id="fromdate" value="#{searchPaymentBean.fromDate}" timeZone="IST" pattern="#{initParam['date-pattern']}">                                    
+                    </p:calendar>
+                    <p:watermark for="fromdate" value="From" />
+
+                    <p:calendar id="todate" value="#{searchPaymentBean.toDate}" timeZone="IST" pattern="#{initParam['date-pattern']}">                                       
+                    </p:calendar>
+                    <p:watermark for="todate" value="To" />
+
+
+                </h:panelGrid>
+                <p:commandButton value="Search" action="#{searchPaymentBean.populatePaymentListByDateMode()}" update=":paymentDetailsForm"/>
+                <p:button value="Reset"/>
+            </p:panel>
+        </h:form>
+        <div class="vertical-space"/>
+        <h:form id="paymentDetailsForm" styleClass="table-width">           
+            <p:dataTable   id="payments" var="payment" value="#{searchPaymentBean.fbsPaymentList}" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" >
+
+                <f:facet name="header">
+                    <div class="table-header">
+                        Payment Details
+                    </div>
+                </f:facet>
+                <p:column  headerText="Payment Id"> 
+
+                    <h:outputText value="#{payment.paymentId}"/>
+
+                </p:column>
+                <p:column  headerText="Unit Code"> 
+
+                    <h:outputText value="#{payment.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{payment.fbsBooking.fbsFlat.flatNo}"/>
+
+                </p:column>
+
+                <p:column headerText="Payment Date">  
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.paymentDate}" >
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                            </h:outputText>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar  value="#{payment.paymentDate}"/>
+
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column  headerText="Payment Mode">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.paymentMode}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{payment.paymentMode}"/>
+                        </f:facet>
+                    </p:cellEditor> 
+                </p:column>
+                <p:column headerText="Amount"  >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.paidAmount}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{payment.paidAmount}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column  headerText="Cheque No"  >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.chequeNo}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{payment.chequeNo}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column  headerText="Cheque Date"  >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.chequeDate}">
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                            </h:outputText>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar value="#{payment.chequeDate}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Trans.Id"  >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.transactionId}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{payment.transactionId}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Bank Name">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.drawnOn}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{payment.drawnOn}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column  headerText="Clearing Date">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.clearingDt}" >
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                            </h:outputText>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar  value="#{payment.clearingDt}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Clearing Bank" >                       
+                    <h:outputText value="#{payment.clearingBank}" />                          
+                </p:column>
+
+
+                <p:column  headerText="Status" >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{payment.status}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{payment.status}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>                                      
+
+            </p:dataTable>           
+        </h:form> 
+
+
+    </ui:define>
+
+</ui:composition>

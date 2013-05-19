@@ -1,0 +1,24 @@
+<chart palette='2' caption='Project wise collection' showLabels='1' showvalues='1' placeValuesInside='1' numberPrefix='Rs' showSum='1' decimals='0' useRoundEdges='1' legendBorderAlpha='0'>
+<categories>
+<category label='Project 1' />
+<category label='Project 2' />
+<category label='Project 3' />
+<category label='Project 4' />
+<category label='Project 5' />
+</categories>
+<dataset seriesName='Cleared' color='AFD8F8' showValues='0'>
+<set value='25601.34' />
+<set value='20148.82' />
+<set value='17372.76' />
+<set value='35407.15' />
+<set value='38105.68' />
+</dataset>
+<dataset seriesName='Pending' color='F6BD0F' showValues='0'>
+<set value='57401.85' />
+<set value='41941.19' />
+<set value='45263.37' />
+<set value='117320.16' />
+<set value='114845.27' />
+</dataset>
+ 
+</chart>

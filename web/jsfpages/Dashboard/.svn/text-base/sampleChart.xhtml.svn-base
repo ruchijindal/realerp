@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:fc="http://www.fusioncharts.com">
+
+    <ui:define name="title">
+        Company Chart
+    </ui:define>
+
+    <ui:define name="content">
+        <link href="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/assets/prettify/prettify.css" rel="stylesheet" type="text/css" />
+
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Charts/FusionCharts.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/assets/prettify/prettify.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/assets/ui/js/json2.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/assets/ui/js/lib.js" ></script>
+
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/Data/String/js/MSCol3D2.js" ></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/Data/String/js/Pie3D1.js" ></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/Data/String/js/StBar3D1.js" ></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/jsfpages/Dashboard/Gallery/Data/String/js/StCol3DLineDY1.js" ></script>
+
+        <script type="text/javascript">
+            FusionCharts.setCurrentRenderer("javascript");
+        </script>
+        <h:form rendered="#{dashBoardBean.renderDashboard}">
+
+            <h:panelGrid id="one1" columns="3" cellpadding="5">
+                <p:panel id="cpanel1111" header="Latest Bookings" style="height:315px; width: 600px; overflow:hidden;">
+                    <p:dataTable id="dataTable1" var="uabooking"   value="#{dashBoardBean.latestProjectBookingList}"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15"  paginator="false" rows="10" rowIndexVar="sn" >
+                        <p:column headerText="S No.">
+                            <h:outputText value="#{sn+1}"/>
+                        </p:column>
+                        <p:column headerText="Reg No.">
+                            <h:outputText value="#{uabooking.regNumber}"/>
+                        </p:column>
+                        <p:column headerText="Booking Date">
+                            <h:outputText value="#{uabooking.bookingDt}">
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Block">
+                            <h:outputText value="#{uabooking.fbsFlat.fbsFloor.fbsBlock.blockName}"/>
+                        </p:column>
+                        <p:column headerText="Unit Code">
+                            <p:commandLink value="#{uabooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr}-#{uabooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr}-#{uabooking.fbsFlat.flatNo}" 
+                                           action="#{dashBoardBean.bookingDetail(uabooking)}"  style="color:#{book.authorizeStatus eq 'UA' ? '#EF2F12': null}"/>
+                        </p:column>                       
+                        <p:column headerText="Applicant Name">
+                            <h:outputText value="#{dashBoardBean.showApplicant(uabooking.fbsFlat).applicantName}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{uabooking.authorizeStatus}"/>
+                        </p:column>
+                        <f:facet name="footer"  >
+                            <h:outputLink    value="${facesContext.externalContext.requestContextPath}/faces/jsfpages/Booking/bookingList.xhtml" >
+                                <h:outputText  value="View More"/>
+                            </h:outputLink>
+                        </f:facet>
+                    </p:dataTable>
+
+                </p:panel>
+                <p:panel id="cpanel1"   >
+                    <p:barChart id="basic" value="#{chartBean.bookingModel}" legendPosition="ne"  title="Booking Chart"  seriesColors="8E2323,336600" min="0"  max="300" style=" width: 500px; height:300px" yaxisLabel="Units" xaxisLabel="Projects"/>
+                </p:panel>
+                <p:panel id="cpanel11"  >
+                    <p:lineChart id="category" value="#{chartBean.topBroker}" legendPosition="e"   title="Top Five Broker" minY="0" xaxisLabel="Broker" yaxisLabel="Commission &amp; Booking"  style="width: 500px;height:300px "/>
+                </p:panel>
+            </h:panelGrid>
+
+            <h:panelGrid id="two" columns="3" cellpadding="5">
+
+                <p:panel id="cpanel222" header="Latest Payments" style="height:315px; overflow:hidden; width: 600px;" >
+                    <p:dataTable id="dataTable3" var="uaPayments"  value="#{dashBoardBean.latestProjectPaymentList}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" paginator="false" rows="10" rowIndexVar="sn" rowStyleClass="#{book.authorizeStatus eq 'UA' ? 'unauthorize': null}">
+
+                        <p:column headerText="Reciept No.">
+                            <h:outputText value="#{uaPayments.paymentId}"/>
+
+                        </p:column>
+                        <p:column headerText="Reg No.">
+                            <h:outputText value="#{uaPayments.fbsBooking.regNumber}"/>
+                        </p:column>
+                        <p:column headerText="Payment Date">
+                            <h:outputText value="#{uaPayments.paymentDate}">
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Unit Code">
+                            <p:commandLink value="#{uaPayments.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr}-#{uaPayments.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr}-#{uaPayments.fbsBooking.fbsFlat.flatNo}"
+                                           action="#{dashBoardBean.bookingDetail1(uaPayments)}"  style="color:#{book.authorizeStatus eq 'UA' ? '#EF2F12': null}"/>
+                        </p:column>
+                        <p:column headerText="Mode">
+                            <h:outputText value="#{uaPayments.paymentMode}"/>
+
+                        </p:column>
+                        <p:column headerText="Amount" style="text-align: right" >
+                            <h:outputText value="#{dashBoardBean.roundOfUptoTwoDecimal(uaPayments.paidAmount)}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{uaPayments.status}"/>
+
+                        </p:column>
+                        <f:facet name="footer">
+                            <h:outputLink  value="${facesContext.externalContext.requestContextPath}/faces/jsfpages/Payment/searchPayment.xhtml" >
+                                <h:outputText value="View More"/>
+                            </h:outputLink>
+                        </f:facet>
+                    </p:dataTable>
+
+
+
+
+                </p:panel>
+                <p:panel id="cpanel2"   >
+
+                    <p:pieChart id="sample" value="#{chartBean.companyCollectionModal}" legendPosition="w"  title="Total Collection Of Company" style="width:500px;height:300px" />
+
+                </p:panel>
+                <p:panel id="cpanel22" >
+
+                    <p:barChart id="horizontal" value="#{chartBean.projectWiseCollection}" legendPosition="se" style="width: 500px;height:300px"
+                                title="Project Wise Collection" orientation="horizontal" min="0"  yaxisLabel="Projects" xaxisLabel="Collection Amount"/>
+                </p:panel>
+            </h:panelGrid>
+        </h:form>
+        <h:form rendered="#{!dashBoardBean.renderDashboard}">
+
+            <p:panel id="cpanel2" header="Collection Detail Charts" >
+                <h:panelGrid id="two" columns="2" cellpadding="5">
+                    <p:panel id="projectBookingListId" header="Project Booking" style="height:315px; width: 600px; overflow:hidden;" >
+                        <p:dataTable id="dataTable1" var="booking"   value="#{dashBoardBean.latestProjectBookingList}"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"  paginator="false" rows="10" rowIndexVar="sn" >
+                            <p:column headerText="S No.">
+                                <h:outputText value="#{sn+1}"/>
+                            </p:column>
+                            <p:column headerText="Reg No.">
+                                <h:outputText value="#{booking.regNumber}"/>
+                            </p:column>
+                            <p:column headerText="Booking Date">
+                                <h:outputText value="#{booking.bookingDt}">
+                                    <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Block">
+                                <h:outputText value="#{booking.fbsFlat.fbsFloor.fbsBlock.blockName}"/>
+                            </p:column>
+                            <p:column headerText="Unit Code">
+                                <p:commandLink value="#{booking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr}-#{booking.fbsFlat.fbsFloor.fbsBlock.blockAbvr}-#{booking.fbsFlat.flatNo}"
+                                               action="#{dashBoardBean.bookingDetail(booking)}"/>
+                            </p:column>
+                            <p:column headerText="Applicant Name">
+                                <h:outputText value="#{dashBoardBean.showApplicant(booking.fbsFlat).applicantName}"/>
+                            </p:column>
+                            <p:column headerText="Status">
+                                <h:outputText value="#{booking.authorizeStatus}"/>
+                            </p:column>
+                            <f:facet name="footer"  >
+                                <h:outputLink    value="${facesContext.externalContext.requestContextPath}/faces/jsfpages/Booking/bookingList.xhtml" >
+                                    <h:outputText  value="View More"/>
+                                </h:outputLink>
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                    <p:panel id="projectBookingId" >
+                         
+
+                        <p:barChart id="basic" value="#{chartBean.bookingDetailForBlock}" legendPosition="ne"  title="Booking Detail For All Block"  seriesColors="8E2323,336600" min="0"  max="100" style=" width: 500px; height:300px" yaxisLabel="Units" xaxisLabel="Block"/>
+
+                    </p:panel>
+
+                    <p:panel id="cpanel222" header="Latest Payments" style="height:315px; overflow:hidden; width: 600px;" >
+                        <p:dataTable id="dataTable3" var="uaPayments"  value="#{dashBoardBean.latestProjectPaymentList}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" paginator="false" rows="10" rowIndexVar="sn">
+
+                            <p:column headerText="Reciept No.">
+                                <h:outputText value="#{uaPayments.paymentId}"/>
+
+                            </p:column>
+                            <p:column headerText="Reg No.">
+                                <h:outputText value="#{uaPayments.fbsBooking.regNumber}"/>
+                            </p:column>
+                            <p:column headerText="Payment Date">
+                                <h:outputText value="#{uaPayments.paymentDate}">
+                                    <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="UnitCode">
+                                <p:commandLink value="#{uaPayments.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr}-#{uaPayments.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr}-#{uaPayments.fbsBooking.fbsFlat.flatNo}"
+                                               action="#{dashBoardBean.bookingDetail1(uaPayments)}"/>
+                            </p:column>
+                            <p:column headerText="Mode">
+                                <h:outputText value="#{uaPayments.paymentMode}"/>
+
+                            </p:column>
+                            <p:column headerText="Amount">
+                                <h:outputText value="#{uaPayments.paidAmount}"/>
+                            </p:column>
+                            <p:column headerText="Status">
+                                <h:outputText value="#{uaPayments.status}"/>
+
+                            </p:column>
+                            <f:facet name="footer">
+                                <h:outputLink  value="${facesContext.externalContext.requestContextPath}/faces/jsfpages/Payment/searchPayment.xhtml" >
+                                    <h:outputText value="View More"/>
+                                </h:outputLink>
+                            </f:facet>
+                        </p:dataTable>
+
+
+
+
+                    </p:panel>
+                    <p:panel id="projectCollectionId" >
+                         
+                        <p:barChart id="basic1" value="#{chartBean.collectionForProject}" legendPosition="ne"  title="Collection Deatil For Last 7 Days"  seriesColors="8E2323,336600" min="0"   style=" width: 500px; height:300px" yaxisLabel="Amount" xaxisLabel="Days"/>
+
+                    </p:panel>
+
+
+                </h:panelGrid>
+            </p:panel>
+
+        </h:form>
+
+    </ui:define>
+
+
+
+</ui:composition>

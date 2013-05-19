@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"    
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Create Project
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="addProject" styleClass="table-width">
+            <p:panel header="Add Project">
+                <h:panelGrid columns="4" cellpadding="3">
+                    <h:outputLabel value="Project Name: *" for="projectName"></h:outputLabel>
+                    <p:inputText id="projectName" value="#{projectBean.fbsProject.projName}" required="true" requiredMessage="Project Name should be entered.">                      
+                    </p:inputText>
+
+                    <h:outputLabel value="Project Abvr: *" for="projectAbvr"></h:outputLabel>
+                    <p:inputText id="projectAbvr" value="#{projectBean.fbsProject.projAbvr}" required="true" requiredMessage="Project Abvr should be entered.">                      
+                    </p:inputText>
+
+                    <h:outputLabel value="Project Type: *" for="projectType"></h:outputLabel>
+                    <p:inputText id="projectType" value="#{projectBean.fbsProject.projType}" required="true" requiredMessage="Project Type should be entered."/>
+
+
+
+                    <h:outputLabel value="State: *" for="state"></h:outputLabel>
+                    <p:inputText id="state" value="#{projectBean.fbsProject.state}" required="true" requiredMessage="State should be entered." validatorMessage="Invalid State Name">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+                    </p:inputText>
+
+                    <h:outputLabel value="Start Date: *" for="startDate"></h:outputLabel>
+                    <p:calendar id="startDate" value="#{projectBean.fbsProject.startDt}" pattern="#{initParam['date-pattern']}" timeZone="IST" required="true" requiredMessage="Start Date should be entered." converterMessage="Invalid start date  format"/>
+
+                    <h:outputLabel value="End Date: *" for="endDate"></h:outputLabel>
+                    <p:calendar id="endDate" value="#{projectBean.fbsProject.endDt}" pattern="#{initParam['date-pattern']}" timeZone="IST" required="true" requiredMessage="End Date should be entered." converterMessage="Invalid end date  format"/>
+
+
+                    <h:outputLabel value="Address: *" for="address"></h:outputLabel>
+                    <p:inputTextarea id="address" value="#{projectBean.fbsProject.address}" required="true" requiredMessage="Address should be entered." rows="3" cols="20" autoResize="true" />
+                    <h:outputLabel value="City: *" for="city"></h:outputLabel>
+                    <p:inputText id="city" value="#{projectBean.fbsProject.city}" required="true" requiredMessage="City should be entered." validatorMessage="Invalid City Name">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+                    </p:inputText>
+                </h:panelGrid>
+                <p:commandButton value="Submit" actionListener="#{projectBean.addProject()}" update=":addProject,:messages,:projectList,:bottomForm"/>
+                <p:spacer width="10"/>
+                <p:button value="Reset" />
+                <br/>
+            </p:panel>
+        </h:form>
+        <div class="vertical-space"/>
+        <h:form id="projectList" styleClass="table-width">      
+            <p:dataTable id="projects" var="project" value="#{projectBean.fbsProjectList}" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">               
+
+                <f:facet name="header">
+                    <div class="table-header">
+                        Project Details
+                    </div>
+                </f:facet>
+                <p:column headerText="Project Name">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.projName}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{project.projName}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Project Abvr">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.projAbvr}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{project.projAbvr}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column  headerText="Project Code">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.projCode}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{project.projCode}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Project Type" >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.projType}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{project.projType}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Address"  >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.address}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputTextarea value="#{project.address}" autoResize="false" rows="2" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="City"  >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.city}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{project.city}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="State" >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.state}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{project.state}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Start Date" >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.startDt}" >
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                            </h:outputText>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar   value="#{project.startDt}" mode="popup" timeZone="IST" pattern="#{initParam['date-pattern']}" size="10"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Compeletion Date" >
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{project.endDt}">
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                            </h:outputText>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar   value="#{project.endDt}" mode="popup" pattern="#{initParam['date-pattern']}" timeZone="IST" size="10" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Options">
+                    <p:spacer width="5" />
+                    <p:commandLink id="rowEdit" action="#{projectBean.edit(project)}" title="Edit"  styleClass="ui-icon ui-icon-pencil" update=":editForm">                                               
+                    </p:commandLink>                    
+                    <p:commandLink id="image" action="#{projectBean.confirmDeleteProject(project)}"  title="Image" styleClass="ui-icon ui-icon-image"  onclick="uploadImage.show()" update=":projectList,:uploadImageForm">                           
+                    </p:commandLink>
+                    <p:commandLink id="delete" action="#{projectBean.confirmDeleteProject(project)}" title="Delete"  styleClass="ui-icon ui-icon-trash" 
+                                   onclick="delProject.show()" update=":delProjectForm" rendered="#{projectBean.checkProjectForDeletion(project)}">
+                    </p:commandLink>
+
+
+                </p:column>
+            </p:dataTable>                    
+        </h:form>        
+        <p:dialog id="delProjectDialog" header="Confirm Delete Project" widgetVar="delProject">
+            <h:form id="delProjectForm" >
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this project?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delProject.hide();" action="#{projectBean.deleteProject()}" update=":projectList"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delProject.hide();" action="#"/>
+            </h:form>
+        </p:dialog> 
+        <p:dialog id="uploadImageDialog" header="Upload Project Image" widgetVar="uploadImage">
+            <h:form id="uploadImageForm">
+                <h:panelGrid columns="2" cellpadding="3">
+
+                    <p:graphicImage value="/#{projectBean.delfbsProject.imagePath}"  width="100" height="100"/>
+                    <p:fileUpload fileUploadListener="#{projectBean.handleFileUpload}" mode="advanced"  sizeLimit="100000" update=":uploadImageForm,:projectList" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                </h:panelGrid>
+                <br/>             
+            </h:form>
+        </p:dialog> 
+
+        <h:form id="editForm">
+            <p:dialog id="editDialog" header="Edit Project" widgetVar="edit" visible="#{projectBean.renderDialog}" closable="false" draggable="false" resizable="false">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Project Name: *" for="projectName"></h:outputLabel>
+                    <p:inputText id="projectName" value="#{projectBean.editFbsProject.projName}" required="true" requiredMessage="Project Name should be entered.">                      
+                    </p:inputText>
+
+                    <h:outputLabel value="Project Abvr: *" for="projectAbvr"></h:outputLabel>
+                    <p:inputText id="projectAbvr" value="#{projectBean.editFbsProject.projAbvr}" required="true" requiredMessage="Project Abvr should be entered.">                      
+                    </p:inputText>
+
+                    <h:outputLabel value="Project Type: *" for="projectType"></h:outputLabel>
+                    <p:inputText id="projectType" value="#{projectBean.editFbsProject.projType}" required="true" requiredMessage="Project Type should be entered."/>
+
+                    <h:outputLabel value="City: *" for="city"></h:outputLabel>
+                    <p:inputText id="city" value="#{projectBean.editFbsProject.city}" required="true" requiredMessage="City should be entered." validatorMessage="Invalid City Name">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+                    </p:inputText>
+
+                    <h:outputLabel value="State: *" for="state"></h:outputLabel>
+                    <p:inputText id="state" value="#{projectBean.editFbsProject.state}" required="true" requiredMessage="State should be entered." validatorMessage="Invalid State Name">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+                    </p:inputText>
+
+                    <h:outputLabel value="Start Date: *" for="startDate"></h:outputLabel>
+                    <p:calendar id="startDate" value="#{projectBean.editFbsProject.startDt}" pattern="#{initParam['date-pattern']}" timeZone="IST" required="true" requiredMessage="Start Date should be entered." converterMessage="Invalid start date  format"/>
+
+                    <h:outputLabel value="End Date: *" for="endDate"></h:outputLabel>
+                    <p:calendar id="endDate" value="#{projectBean.editFbsProject.endDt}" pattern="#{initParam['date-pattern']}" timeZone="IST" required="true" requiredMessage="End Date should be entered." converterMessage="Invalid end date  format"/>
+
+
+                    <h:outputLabel value="Address: *" for="address"></h:outputLabel>
+                    <p:inputTextarea id="address" value="#{projectBean.editFbsProject.address}" required="true" requiredMessage="Address should be entered." rows="3" cols="18" autoResize="false" />
+
+                </h:panelGrid>  
+                <p:commandButton value="Save" action="#{projectBean.editProject()}" update=":projectList,:editForm"/>
+                <p:spacer width="5"/>
+                <p:button value="Cancel"/>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>   
+
+</ui:composition>

@@ -1,0 +1,139 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:head>
+        <title>Register Company</title>
+        <link href="${facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body onload="dlg.show()">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit id="top" position="north" gutter="0">
+                <h:form id="topForm">
+                    <div id="header">
+                        <a href="#" id="logo" title="Real Estate Erp"></a>
+                        <div id="company-info">
+                            <ul>
+                                <li><h:outputLabel value="SMP Technologies Pvt Ltd" style="font-weight: bold" /></li>
+                                <li><a href="http://www.smptechnologies.org"><h:outputLabel value="www.smptechnologies.org"/></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="left"  position="west">                  
+                <h:form id="sideBarForm"  >
+                    <p:menu>
+                        <p:submenu  label="Administrator">
+                            <p:menuitem   value="Register Company"  icon="ui-icon-home"   actionListener="#{loginBean.adminActiveMenu(0,'/faces/registerCompany.xhtml?requestType=admin')}" styleClass="#{loginBean.adminMenuIndex eq 0}_active_menu"   />
+                            <p:menuitem   value="Company Settings"  icon="ui-icon-home"   actionListener="#{loginBean.adminActiveMenu(1,'/faces/companySetting.xhtml?requestType=admin')}" styleClass="#{loginBean.adminMenuIndex eq 1}_active_menu"   />
+                            <p:menuitem   value="Edit Copyright"  icon="ui-icon-home"   actionListener="#{loginBean.adminActiveMenu(2,'/faces/editCopyright.xhtml?requestType=admin')}" styleClass="#{loginBean.adminMenuIndex eq 2}_active_menu"   />
+
+                        </p:submenu>
+                    </p:menu>  
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <h:form id="addCompany" styleClass="table-width">
+                    <p:messages id="msgs" />
+                    <p:panel header="Register New Company">                     
+
+                        <h:panelGrid columns="2" cellpadding="4">                         
+                            <h:outputLabel value="Company: *" for="selectCompany"></h:outputLabel>
+                            <p:selectOneMenu id="selectCompany" value="#{companySettingBean.fbsCompany.companyId}" styleClass="select_box" required="true" requiredMessage="Select Company" >
+                                <f:selectItem itemLabel="Select"/>
+                                <f:selectItems value="#{companySettingBean.fbsCompanyList}" var="company"  itemValue="#{company.companyId}" itemLabel="#{company.companyName}"/>                        
+                            </p:selectOneMenu>
+                            <h:outputLabel value="No of Projects: *" for="projects"></h:outputLabel>
+                            <p:inputText id="projects" value="#{companySettingBean.maxProjects}" required="true" requiredMessage="No of projects Required" converterMessage="Invalid  No of Projects">
+
+                            </p:inputText>                                
+                            <h:outputLabel value="No of Units (per Project): *" for="units"></h:outputLabel>
+                            <p:inputText id="units" value="#{companySettingBean.maxUnits}" required="true" requiredMessage="No of units Required" converterMessage="Invalid  No of Units">
+
+                            </p:inputText>
+                        </h:panelGrid>
+                        <p:commandButton value="Submit" action="#{companySettingBean.addCompanySettings()}"  update=":addCompany,:CompanyListForm,:addCompany:msgs"/>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Reset" action="#{companySettingBean.resetSettings()}"  update=":addCompany,:CompanyListForm" process="@this" />
+
+                    </p:panel>
+                </h:form>
+                <div class="vertical-space"/>                
+                <h:form id="CompanyListForm" styleClass="table-width">                   
+                    <p:panel header="Company Details">
+                        <p:dataTable var="company" value="#{companySettingBean.fbsCompanyList}"  paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom" rowIndexVar="sn" rowStyleClass="#{company.status eq 'deactivate' ? 'unauthorize': null}">                  
+
+                            <p:column headerText="SNo" >
+                                #{sn+1}
+                            </p:column>
+                            <p:column headerText="Company Name" >
+                                #{company.companyName}
+                            </p:column>
+                            <p:column headerText="No of projects" >
+                                #{company.maxProjects}
+                            </p:column>
+                            <p:column headerText="No of units" >
+                                #{company.maxFlats}
+                            </p:column>
+                            <p:column headerText="Option">
+                                <p:commandLink id="rowEdit" action="#{companySettingBean.confirmEditCompanySetting(company)}" title="Edit" styleClass="ui-icon ui-icon-pencil" update=":editForm"></p:commandLink>
+                            </p:column>
+                        </p:dataTable>   
+
+                    </p:panel>    
+                </h:form>
+                <h:form id="editForm">
+                    <p:dialog id="editDialog" header="Edit Company" widgetVar="edit" visible="#{companySettingBean.renderDialog}" closable="false" draggable="false" resizable="false">
+                        <h:panelGrid columns="2" cellpadding="4">                         
+                            <h:outputLabel value="Company Name " for="companyName"></h:outputLabel>
+                            <p:inputText id="companyName" value="#{companySettingBean.fbsCompany.companyName}" size="20" readonly="true"/>                             
+                            <h:outputLabel value="No of Projects: *" for="maxProject"></h:outputLabel>
+                            <p:inputText id="maxProject" value="#{companySettingBean.fbsCompany.maxProjects}" required="true" requiredMessage="No of projects Required" converterMessage="Invalid  No of Projects">                               
+                            </p:inputText>
+                            <h:outputLabel value="No of Units: *" for="maxUnit"></h:outputLabel>
+                            <p:inputText id="maxUnit" value="#{companySettingBean.fbsCompany.maxFlats}" required="true" requiredMessage="No of units Required" converterMessage="Invalid  No of Unit">                               
+                            </p:inputText>
+                        </h:panelGrid>
+                        <p:commandButton value="Save" actionListener="#{companySettingBean.editCompanySetting()}" update=":editForm,:CompanyListForm,:addCompany:msgs"/>
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Cancel" action="#{companySettingBean.resetSettings()}"  update=":addCompany,:CompanyListForm,:editForm" process="@this"/>
+
+                    </p:dialog>
+                </h:form>
+
+
+            </p:layoutUnit>
+
+
+            <p:layoutUnit id="bottom" position="south" gutter="0">               
+                <div id="footer"> 
+                    <h:form id="bottomForm" style="text-align: right;">
+                        <p:commandButton type="push" title="SMP Technologies Pvt Ltd © 2008-2012.All rights reserved"  value="©" onclick="copyright.show()"/>
+                        <p:dialog header="Copyright Information" widgetVar="copyright" showEffect="scale" hideEffect="scale" height="350"  width="400" styleClass="dialog1">
+                            <h:outputText  value="#{loginBean.copyRightMessage}">
+                            </h:outputText>
+                        </p:dialog>                    
+                        <p:spacer width="5"/>
+                        <p:commandButton value="Logout" action="#{loginBean.adminLogout()}" rendered="#{companySettingBean.rendetDataTable}"/>
+
+                    </h:form>
+                </div>
+            </p:layoutUnit>
+
+
+        </p:layout>
+    </h:body>
+</html>
+
+
+

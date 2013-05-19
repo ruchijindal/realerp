@@ -1,0 +1,9 @@
+<chart palette='4' showValues="0" showBorder="" forceYAxisValueDecimals='1'  yAxisValueDecimals='2' caption='Collection of last 7 days'>
+  <set label="Mon" value="11874" /> 
+  <set label="Tue" value="15557" /> 
+  <set label="Wed" value="" /> 
+  <set label="Thu" value="11071" /> 
+  <set label="Fri" value="11152" /> 
+  <set label="Sat" value="" /> 
+  <set label="Sun" value="7520" />  
+  </chart>

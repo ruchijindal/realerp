@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"    
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Complaint Details
+    </ui:define>
+
+    <ui:define name="content">
+        <p:accordionPanel id="accordian" activeIndex="1" styleClass="table-width">
+            <p:ajax process="accordian" event="tabChange"  />  
+            <p:tab title="New Complaint"> 
+                <h:form id="addComplaint" >
+
+                    <h:panelGrid columns="4" cellpadding="4">
+                        <h:outputLabel value="Project: " for="project"></h:outputLabel>
+                        <h:outputText value="#{complaintBean.fbsProject.projName}" rendered="#{!complaintBean.renderProject}"/>
+                        <p:selectOneMenu  id="project" value="#{complaintBean.fbsProject.projId}" styleClass="select_box" rendered="#{complaintBean.renderProject}">
+                            <f:selectItem itemLabel="Select" itemValue="0"/>                       
+                            <f:selectItems var="project" value="#{complaintBean.fbsProjectList}" itemLabel="#{project.projName}" itemValue="#{project.projId}"/>                        
+                        </p:selectOneMenu>
+                        <h:outputLabel/><h:outputLabel/>
+                        <h:outputLabel value="Category: " for="categoryName" styleClass="select_box"></h:outputLabel>
+                        <p:selectOneMenu id="categoryName" value="#{complaintBean.fbsComplaint.complaintCategory}" styleClass="select_box">
+                            <f:selectItem itemLabel="Select Category" />
+                            <f:selectItem itemLabel="Sales" itemValue="Sales" />
+                            <f:selectItem itemLabel="Billing"  itemValue="Billing"/> 
+                            <f:selectItem itemLabel="Booking"  itemValue="Booking"/> 
+                            <f:selectItem itemLabel="Payment"  itemValue="Payment"/>  
+                            <f:selectItem itemLabel="General"  itemValue="General"/>  
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Priority:" for="priority" styleClass="select_box"></h:outputLabel>
+                        <p:selectOneMenu id="priority" value="#{complaintBean.fbsComplaint.priority}" styleClass="select_box">
+                            <f:selectItem itemLabel="Select Priorty"/>
+                            <f:selectItem itemLabel="Low" itemValue="Low"/>
+                            <f:selectItem itemLabel="Medium" itemValue="Medium"/>
+                            <f:selectItem itemLabel="High" itemValue="High"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Name: *" for="name"></h:outputLabel>
+                        <p:inputText id="name" value="#{complaintBean.fbsComplaint.name}" required="true"   requiredMessage=" Name Should Be Entered" validatorMessage="Invalid Name">
+                            <f:validateRegex pattern="#{initParam['name']}" />
+                        </p:inputText>
+                        <h:outputLabel value="Telephone: * " for="phone"></h:outputLabel>
+                        <p:inputText id="phone" value="#{complaintBean.fbsComplaint.phone}" required="true"   requiredMessage="Telephone No. Should Be Entered" validatorMessage="Invalid Telephone No">
+                            <f:validateRegex pattern="#{initParam['telephoneNo']}"/>
+                        </p:inputText>
+                        <h:outputLabel value="Address: * " for="address"></h:outputLabel>
+                        <p:inputText id="address" value="#{complaintBean.fbsComplaint.address}" required="true" requiredMessage="Address Should Be Entered"/>
+                        <h:outputLabel value="Email: " for="email"></h:outputLabel>
+                        <p:inputText id="email" value="#{complaintBean.fbsComplaint.email}" required="true" requiredMessage="EmailId Should Be Enter in Proper Format Like abs@gmail.com" validatorMessage="Invalid Email Id">
+                            <f:validateRegex pattern="#{initParam['email']}" />
+                        </p:inputText>
+                        <h:outputLabel value="Subject: * " for="subject"></h:outputLabel>
+                        <p:inputText id="subject" value="#{complaintBean.fbsComplaint.subject}" required="true" requiredMessage=" Subject Should Be Entered"/>
+                        <h:outputLabel value="Complaint Date: * " for="complaintDt"></h:outputLabel>
+                        <p:calendar id="complaintDt" value="#{complaintBean.fbsComplaint.complaintDt}" mode="popup"  required="true" requiredMessage=" Complaint Date should Be entered" pattern="#{initParam['date-pattern']}" timeZone="IST" converterMessage="Invalid Complaint Date Format"/>
+                        <h:outputLabel value="Complaint: * " for="complaint"></h:outputLabel>
+                        <p:inputTextarea id="complaint" value="#{complaintBean.fbsComplaint.complaint}" rows="3" cols="20" autoResize="false" />
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" action="#{complaintBean.addComplaint()}" update=":complaintDetail,:messages"  />
+                    <p:spacer width="10"/>
+                    <p:button value="Reset" />
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Search Complaint"> 
+                <h:form id="searchComplaint" >
+
+                    <p:selectOneButton id="searchType" value="#{complaintBean.searchType}">  
+                        <f:selectItem itemLabel="Quick Search" itemValue="1" />  
+                        <f:selectItem itemLabel="Advanced Search" itemValue="2" />  
+                        <p:ajax process="searchType" event="change"  listener="#{complaintBean.renderSearchingdetails()}" update=":accordian:searchComplaint" /> 
+                    </p:selectOneButton>
+
+                    <table>
+                        <tr>
+                            <td><h:outputLabel value="Project: " for="project"></h:outputLabel></td>
+                            <td><h:outputText  value="#{complaintBean.fbsProject.projName}" rendered="#{!complaintBean.renderProject}"/>
+                                <p:selectOneMenu  id="project" value="#{complaintBean.fbsProject.projId}" styleClass="select_box" rendered="#{complaintBean.renderProject}">
+                                    <f:selectItem itemLabel="Select" itemValue="0"/>                       
+                                    <f:selectItems var="project" value="#{complaintBean.fbsProjectList}" itemLabel="#{project.projName}" itemValue="#{project.projId}"/>
+                                    <p:ajax event="change" process="project" listener="#{complaintBean.filterComplaintList()}" update=":complaintDetail"/>
+                                </p:selectOneMenu></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputLabel value="Statys / Priority: " for="Status"></h:outputLabel>
+                            </td>
+                            <td>
+                                <p:selectOneMenu  id="Status" value="#{complaintBean.status}" styleClass="select_box">
+                                    <f:selectItem itemLabel="Select Status" itemValue="Select Status"/>                       
+                                    <f:selectItem itemLabel="Open" itemValue="Open" />
+                                    <f:selectItem itemLabel="Closed" itemValue="Closed" />
+                                    <p:ajax event="change" process="Status" listener="#{complaintBean.filterComplaintList()}" update=":complaintDetail"/>
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:selectOneMenu  id="Priority" value="#{complaintBean.priority}" styleClass="select_box">
+                                    <f:selectItem itemLabel="Select Priority" itemValue="Select Priority"/>                       
+                                    <f:selectItem itemLabel="Low" itemValue="Low"/>
+                                    <f:selectItem itemLabel="Medium" itemValue="Medium"/>
+                                    <f:selectItem itemLabel="High" itemValue="High"/>
+                                    <p:ajax event="change" process="Priority" listener="#{complaintBean.filterComplaintList()}" update=":complaintDetail"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p:separator rendered="#{complaintBean.renderDetails}"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>  
+                                <h:outputLabel value="Complaint Date: " rendered="#{complaintBean.renderDetails}"/> 
+                            </td>
+                            <td> <p:calendar id="fromDate"  value="#{complaintBean.fromDate}" pattern="#{initParam['date-pattern']}" timeZone="IST" rendered="#{complaintBean.renderDetails}" >
+                                    <p:ajax process="fromDate" event="dateSelect"  update=":complaintDetail" listener="#{complaintBean.handleDateSelectForFromDate}"/>
+                                </p:calendar>
+                                <p:watermark for="fromDate" value="From"/>
+                            </td>
+                            <td colspan="3"> 
+                                <p:calendar id="toDate"  value="#{complaintBean.toDate}" pattern="#{initParam['date-pattern']}" timeZone="IST" rendered="#{complaintBean.renderDetails}">
+                                    <p:ajax process="toDate" event="dateSelect"  update=":complaintDetail" listener="#{complaintBean.handleDateSelectForToDate}"/>
+                                </p:calendar>
+                                <p:watermark for="toDate" value="To"/> 
+                            </td>
+                        </tr>
+                        <tr><td>
+                                <h:outputLabel value="Ohter Details: "  rendered="#{complaintBean.renderDetails}"/>  
+                            </td>
+                            <td>
+                                <p:inputText id="complaintId" value="#{complaintBean.complainId}"  rendered="#{complaintBean.renderDetails}"> 
+                                    <p:ajax  process="complaintId"  event="keyup" listener="#{complaintBean.populateComplaintListByComplaintId()}"  update=":complaintDetail"/>               
+                                </p:inputText>
+                                <p:watermark for="complaintId" value="Complaint Id" rendered="#{complaintBean.renderDetails}"/>
+                            </td>
+                            <td>
+                                <p:inputText id="applicantName" value="#{complaintBean.applicantName}" rendered="#{complaintBean.renderDetails}"> 
+                                    <p:ajax  process="applicantName"  event="keyup" listener="#{complaintBean.populateComplaintListByApplicantName()}" update=":complaintDetail"/>               
+                                </p:inputText>
+                                <p:watermark for="applicantName" value="Applicant Name" rendered="#{complaintBean.renderDetails}"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+
+
+                    </table>
+                  
+                    <p:button value="Reset"/>   
+
+                </h:form>
+            </p:tab>
+        </p:accordionPanel>
+        <div class="vertical-space"/>
+        <h:form id="complaintDetail" styleClass="table-width" >
+            <p:dataTable id="complaints" var="complaint" value="#{complaintBean.fbsComplaintList}" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"    paginatorPosition="bottom" styleClass=".ui-datatable th .ui-datatable-liner">                
+                <f:facet name="header"> 
+                    <div class="table-header">
+                        Complaint Details        
+                    </div>
+                </f:facet>
+
+                <p:column headerText="Complaint Id">
+                    <h:outputText value="#{complaint.complaintId}"/>                    
+                </p:column>
+
+                <p:column headerText="Name">                    
+                    <h:outputText value="#{complaint.name}"/>
+                </p:column>
+
+                <p:column headerText="Address">                   
+                    <h:outputText value="#{complaint.address}"/>                       
+                </p:column>
+
+                <p:column headerText="Telephone" >                   
+                    <h:outputText value="#{complaint.phone}"/>                       
+                </p:column>
+
+                <p:column headerText="Email" >                   
+                    <h:outputText value="#{complaint.email}"/>                       
+                </p:column>
+
+                <p:column headerText="Subject" >                 
+                    <h:outputText value="#{complaint.subject}"/>                        
+                </p:column>
+
+                <p:column headerText="Category" >                 
+                    <h:outputText value="#{complaint.complaintCategory}"/>                        
+                </p:column>
+
+                <p:column headerText="Priority" >                 
+                    <h:outputText value="#{complaint.priority}"/>                        
+                </p:column>                
+
+                <p:column headerText="Complaint Date" >                   
+                    <h:outputText value="#{complaint.complaintDt}"><f:convertDateTime pattern="dd-MM-yyyy" timeZone="IST"/></h:outputText>                        
+                </p:column>
+                <p:column headerText="Options">
+                    <p:commandLink id="link" action="#{complaintBean.confirmDeleteComplaint(complaint)}"  title="Delete" styleClass="ui-icon ui-icon-trash" onclick="delComplaint.show()" update=":delComplaintForm"/>
+
+                    <p:commandLink styleClass="ui-icon ui-icon-info"  title="Detail" update=":detailForm" action="#{complaintBean.showComplaintDetail(complaint)}"/>                  
+                </p:column>
+            </p:dataTable>          
+        </h:form>
+
+        <p:dialog id="delComplaintDialog" header="Confirm Delete Complaint" widgetVar="delComplaint">
+            <h:form id="delComplaintForm" >
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Complaint?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delComplaint.hide();" action="#{complaintBean.deleteComplaint()}" update=":complaintDetail"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delComplaint.hide();" action="#"/>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="detailForm">
+            <p:dialog id="showDetail" header="Complaint Detail" widgetVar="complaintDetail" closable="false" visible="#{complaintBean.renderDialog}">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel for="complaintId" value="Complaint Id: "/>
+                    <h:outputText id="complaintId" value="#{complaintBean.editComplaint.complaintId}"/>
+
+                    <h:outputLabel for="name" value="Name: "/>
+                    <p:inputText id="name" value="#{complaintBean.editComplaint.name}"/>
+
+                    <h:outputLabel for="address" value="Address: "/>
+                    <p:inputText id="address" value="#{complaintBean.editComplaint.address}"/>
+
+                    <h:outputLabel for="telephone" value="Telephone: "/>
+                    <p:inputText id="telephone" value="#{complaintBean.editComplaint.phone}"/>
+
+                    <h:outputLabel for="email" value="Email: "/>
+                    <p:inputText id="email" value="#{complaintBean.editComplaint.email}"/>
+
+                    <h:outputLabel for="subject" value="Subject: "/>
+                    <p:inputText id="subject" value="#{complaintBean.editComplaint.subject}"/>
+
+                    <h:outputLabel value="Complaint Date:" for="complaintdate"/>
+                    <p:calendar id="complaintdate" value="#{complaintBean.editComplaint.complaintDt}"  mode="popup"  pattern="dd-MM-yyyy"  timeZone="IST" required="true" /> 
+
+                    <h:outputLabel for="complaint1" value="Complaint: "/>
+                    <p:inputTextarea id="complaint1" value="#{complaintBean.editComplaint.complaint}"/>                    
+                </h:panelGrid>
+                <p:commandButton value="Save" action="#{complaintBean.editComplaintdialog()}" update=":complaintDetail,:detailForm" />
+                <p:spacer width="5"/>
+                <p:commandButton value="Detail" action="#{complaintBean.detail(complaintBean.editComplaint)}"  />
+                <p:spacer width="5"/>
+                <p:button value="Cancel"/>
+
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,316 @@
+
+
+/***********************Font Resizing******************/
+.ui-widget {
+    font-size: .75em;
+
+}
+
+/************************HEADER************************/
+
+#header {
+    clear: both;
+    overflow: none;
+    background: url("../images/bg-header.png");
+    height: 60px;
+    background-repeat: repeat-x;
+
+}
+#smplogo {
+    background-image:url("../images/smplogo.png");
+    height: 50px;
+    float: left;
+    width: 100px;
+    text-indent:-9999px;
+    display: block;
+    margin: 5px 0px 5px 5px;
+    background-repeat: no-repeat;
+}
+
+#logo {
+    background-image:url("../images/logo-realestate.png");
+    height: 50px;
+    float: left;
+    width: 320px;
+    text-indent:-9999px;
+    display: block;
+    margin: 5px 0px 5px 5px;
+}
+
+#company-info {
+    font-size: 12px;
+    float: right;
+    height: 30px;
+    margin: 5px 5px 5px 0px;
+}
+
+#company-info ul {
+    list-style: none;
+}
+
+/*********** FOOTER*************/
+#footer {
+    clear: both;
+    overflow: none;
+    background: url("../images/bg-header.png");
+    height: 25px;
+    background-repeat: repeat-x;
+    padding:0.2em 0.2em 0.5em 0.0em;
+
+}
+
+#logout {
+    font-size: 12px;
+    float: right;
+    height: 30px;
+
+}
+#logout ul {
+    list-style: none;
+
+}
+
+/***************************** for wizard tab buttorn **********************/
+
+.ui-wizard-step-title{
+    font-size: 95%;
+}
+
+
+
+/*******************Parking allot Status***********************************/
+
+.unbooked
+{
+    color: #2EAA14;
+    font-weight: bold;
+}
+.booked
+{
+
+    color: #cd0a0a;
+    font-weight: bold;
+}
+
+/****************************Conditionla Coloring************************************************/
+.rowStyle{
+    background:#e1f4fb;
+}
+
+
+/*************************select box ****************************************/
+
+.select_box{
+    width:150px;
+}
+
+/**********************password recovery****************************/
+.mail 
+{
+    color:#3baae3;
+    font-weight: bold;
+}
+/*********************** tree arrow *************************************/
+.ui-widget-content1 .ui-icon {
+    background-image: url("/RealErp/faces/javax.faces.resource/images/ui-icons_056b93_256x240.png?ln=primefaces-start");
+}
+
+/*******************************Data Grid***********************************************/
+
+.datagrid
+{
+    width: 940px;
+
+}
+
+
+.datagridpanel
+{
+    width: 200px;     
+    text-align: center;
+}
+
+/*************************************fieldset*********************************************************/
+
+.fieldsetStyle
+{
+    height: 180px;
+}
+
+.left
+{
+    text-align: left;
+    display: block;
+    margin: 5px 5px 10px 0px;
+}
+
+.right{
+    text-align: right;    
+    display: block;    
+    margin: 5px 5px 10px 0px;
+}
+/*********************************Button*****************************************************/
+.booked-Button{
+    background: #EF2F12 url("") repeat-x;
+    margin: 0;
+    border: 1px solid #999999;
+    font-weight: bold;
+    padding: 7px 10px 7px 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 2px #444;
+    -webkit-box-shadow: 0 1px 2px #444;
+    box-shadow: 0 1px 2px #444;
+    text-shadow: 1px 0 0 #cccccc;
+    text-align: center;
+    color: #ffffff;
+    font-size: 10px;
+
+    height: 35px;
+}
+.unbooked-Button{
+
+    height: 35px;
+    background: #2EAA14 url("") repeat-x;
+    margin: 0;
+    border: 1px solid #999999;
+    font-weight: bold;
+    padding: 7px 10px 7px 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 2px #444;
+    -webkit-box-shadow: 0 1px 2px #444;
+    box-shadow: 0 1px 2px #444;
+    text-shadow: 1px 0 0 #cccccc;
+    text-align: center;
+    color: #ffffff;
+    font-size: 10px;
+}
+
+.Booked{
+    background: #EF2F12 url("") repeat-x;
+    margin: 0;
+    border: 1px solid #999999;
+    font-weight: bold;
+    padding: 7px 10px 7px 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 2px #444;
+    -webkit-box-shadow: 0 1px 2px #444;
+    box-shadow: 0 1px 2px #444;
+    text-shadow: 1px 0 0 #cccccc;
+    text-align: center;
+    color: #ffffff;
+    font-size: 10px;
+    width: 20px;
+    height: 20px;
+}
+.Unbooked{
+    width: 20px;
+    height: 20px;
+    background: #2EAA14 url("") repeat-x;
+    margin: 0;
+    border: 1px solid #999999;
+    font-weight: bold;
+    padding: 7px 10px 7px 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 2px #444;
+    -webkit-box-shadow: 0 1px 2px #444;
+    box-shadow: 0 1px 2px #444;
+    text-shadow: 1px 0 0 #cccccc;
+    text-align: center;
+    color: #ffffff;
+    font-size: 10px;
+}
+.floor{
+    width: 100px;
+    height: 35px;
+    background: #f5f3f3 url("") repeat-x;
+    margin: 0;
+    border: 1px solid #999999;
+    font-weight: bold;
+    padding: 7px 10px 7px 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 2px #444;
+    -webkit-box-shadow: 0 1px 2px #444;
+    box-shadow: 0 1px 2px #444;
+    text-shadow: 1px 0 0 #cccccc;
+    text-align: center;
+    color: #444;
+    font-size: 10px;
+}
+
+
+/***************************************** Table Formating ****************************/
+
+.table-width{
+    width: 960px;
+}
+.table-header{
+    text-align: left;
+}
+
+.ui-growl-message p{
+    visibility: hidden;
+}
+ 
+
+.ui-button-icon-left.ui-icon.ui-icon-triangle-1-s{
+    background-position:0px -16px;
+} 
+
+.ui-tree-icon.ui-icon{
+ background-image: url("/RealErp/faces/javax.faces.resource/images/ui-icons_056b93_256x240.png?ln=primefaces-start");   
+}
+.ui-icon{
+    display: inline-block;
+}
+
+/******************************** for sidebar active menu ***********************************/
+.true_active_menu{
+    background: url("/RealErp/faces/javax.faces.resource/images/ui-bg_gloss-wave_50_6eac2c_500x100.png?ln=primefaces-start") repeat-x scroll 50% 50% #6EAC2C;
+    border: 1px solid #ACDD4A;
+    color: #ffffff;
+    
+    font-weight: normal;
+}
+
+.ui-menuitem-link.ui-state-hover{
+     background: url("/RealErp/faces/javax.faces.resource/images/ui-bg_gloss-wave_50_6eac2c_500x100.png?ln=primefaces-start") repeat-x scroll 50% 50% #6EAC2C;
+}
+
+/*****************************Misc******************************/
+.vertical-space {
+    height: 8px;
+    display: block;
+}
+
+.alignamt{
+    text-align:right;    
+}
+
+.radioalign{
+    alignment-adjust: middle;
+}
+
+
+.errorPage{
+    font-family: calibri,verdana;
+    font-size: 300px;
+    
+}
+
+.ui-inputfield {
+   width: 150px;
+}
+
+.unauthorize{
+    color:  #cd0a0a;
+}
+ .even
+ {
+     background:#aed0ea;
+   
+ }

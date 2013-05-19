@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"    
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Edit Company Information
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="editCompany" styleClass="table-width"> 
+            <p:commandButton value="Ping To Server" action="#{loginBean.testPingToserver()}" process="@this" update=":messages"/>
+            <div class="vertical-space"/>
+            <p:panel header="Update Company Details">
+                <h:panelGrid columns="2" cellpadding="5" >                  
+                    <h:outputLabel value="Company Name: * " for="companyName"></h:outputLabel>
+                    <p:inputText id="companyName" value="#{loginBean.editFbsCompany.companyName}" size="20" required="true" requiredMessage="Company Name is required"/>                    
+                    <h:outputLabel value="Company Abvr: *" for="companyAbrv"></h:outputLabel>
+                    <p:inputText id="companyAbrv" value="#{loginBean.editFbsCompany.companyAbrv}" size="20" required="true" requiredMessage="Company Abvr is required"/>                   
+                    <h:outputLabel value="Telephone No.: " for="telNumber"></h:outputLabel>
+                    <p:inputText id="telNumber" value="#{loginBean.editFbsCompany.telNumber}" size="20" maxlength="11" validatorMessage="Invalid Telephone No">
+                        <f:validateRegex pattern="#{initParam['telephoneNo']}"/>
+                    </p:inputText>               
+                    <h:outputLabel value="Mobile: *" for="mobile"></h:outputLabel>
+                    <p:inputText id="mobile" value="#{loginBean.editFbsCompany.mobile}" size="20" maxlength="10" required="true" requiredMessage="Mobile No is required" validatorMessage="Invalid Mobile No">
+                        <f:validateRegex pattern="#{initParam['mobileNo']}"/>                       
+                    </p:inputText>
+                    <h:outputLabel value="Email: *" for="email"></h:outputLabel>
+                    <p:inputText id="email" value="#{loginBean.editFbsCompany.email}" size="20" required="true" requiredMessage="Email Id is required" validatorMessage="Invalid Email Id">
+                        <f:validateRegex pattern="#{initParam['email']}" />
+                    </p:inputText>
+                    <h:outputLabel value="Website: " for="website"></h:outputLabel>
+                    <p:inputText id="website" value="#{loginBean.editFbsCompany.website}" size="20" validatorMessage="Invalid Website URL">
+                        <f:validateRegex pattern="#{initParam['website']}"/>
+                    </p:inputText>
+
+                    <h:outputLabel value="Address: *" for="address"></h:outputLabel>
+                    <p:inputTextarea id="address" value="#{loginBean.editFbsCompany.address}" rows="3" cols="20" autoResize="false" required="true" requiredMessage="Address is required"/>
+                </h:panelGrid>
+                <p:commandButton value="Update" action="#{loginBean.editCompanyInformation()}"  update=":messages,:editCompany,:topForm"/>
+                <p:spacer width="5"/>
+                <p:button value="Cancel"/>
+            </p:panel>
+        </h:form>
+        <h:form id="companyMail" styleClass="table-width">
+            <div class="vertical-space"/>
+            <p:panel header="Company Mail Settings">
+                <h:panelGrid columns="2" cellpadding="5" >                  
+                    <h:outputLabel value="Reply Id :* " for="from"></h:outputLabel>
+                    <p:inputText id="from" value="#{loginBean.fbsMailsetting.replyId}" size="20" required="true" requiredMessage="Reply Id is required"/>                    
+                    <h:outputLabel value="Port: *" for="port"></h:outputLabel>
+                    <p:inputText id="port" value="#{loginBean.fbsMailsetting.port}" size="20" required="true" requiredMessage="Port is required"/>                   
+                    <h:outputLabel value="User Id: *" for="user"></h:outputLabel>
+                    <p:inputText id="user" value="#{loginBean.fbsMailsetting.user}" size="20" required="true" requiredMessage="User Id is required"/>                      
+                    <h:outputLabel value="Password: *" for="password"></h:outputLabel>
+                    <p:inputText id="password" value="#{loginBean.fbsMailsetting.password}" size="20" required="true" requiredMessage="Password is required"/>
+                    <h:outputLabel value="Host: *" for="host"></h:outputLabel>
+                    <p:inputText id="host" value="#{loginBean.fbsMailsetting.host}" size="20" required="true" requiredMessage="Host is required"/>
+                </h:panelGrid>
+                <p:commandButton value="Update" action="#{loginBean.addCompanyMailSetting()}"  update=":messages,:companyMail,:topForm"/>
+                <p:spacer width="5"/>
+                <p:button value="Cancel"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

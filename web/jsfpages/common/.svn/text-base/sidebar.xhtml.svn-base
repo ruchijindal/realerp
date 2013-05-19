@@ -1,0 +1,75 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns="http://www.w3.org/1999/xhtml">
+
+    <h:form id="sideBarForm"  >
+        <p:menu  rendered="#{!loginBean.renderProjectMenu}" >
+            <p:submenu  label="Home">
+                <p:menuitem   value="Dashboard"  icon="ui-icon-home"   actionListener="#{loginBean.activeMenu(0,'/faces/jsfpages/Dashboard/sampleChart.xhtml')}" styleClass="#{loginBean.menuIndex eq 0}_active_menu"   />
+            </p:submenu>
+            <p:submenu  label="Booking" rendered="#{loginBean.viewBoking}" >
+                <p:menuitem   value="Quick Booking"  icon="ui-icon-cart"   actionListener="#{loginBean.activeMenu(1,'/faces/jsfpages/Booking/booking.xhtml')}" styleClass="#{loginBean.menuIndex eq 1}_active_menu" rendered="#{loginBean.addBooking}" />
+                <p:menuitem  value="Booking List" icon="ui-icon-note"   actionListener="#{loginBean.activeMenu(2,'/faces/jsfpages/Booking/bookingList.xhtml')}" styleClass="#{loginBean.menuIndex eq 2}_active_menu" rendered="#{loginBean.viewBoking}" />
+                <p:menuitem  value="Graphical Enquiry" icon="ui-icon-image" actionListener="#{loginBean.activeMenu(3,'/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=0')}" styleClass="#{loginBean.menuIndex eq 3}_active_menu" rendered="#{loginBean.viewBoking}" />
+            </p:submenu>
+            <p:submenu label="Payment" rendered="#{loginBean.viewPayment}" >
+                <p:menuitem value="Quick Payment"  icon="ui-icon-suitcase" actionListener="#{loginBean.activeMenu(4,'/faces/jsfpages/Payment/quickPayment.xhtml')}" styleClass="#{loginBean.menuIndex eq 4}_active_menu" rendered="#{loginBean.addPayment}" />
+
+            </p:submenu>
+            <p:submenu label="Broker" rendered="#{loginBean.viewBrokerPayment}" >
+                <p:menuitem value="Broker Payments"  icon="ui-icon-suitcase" actionListener="#{loginBean.activeMenu(6,'/faces/jsfpages/Broker/brokerPayment.xhtml')}" styleClass="#{loginBean.menuIndex eq 6}_active_menu" rendered="#{loginBean.viewBrokerPayment}" />
+                <p:menuitem value="Broker Bookings"  icon="ui-icon-calculator" actionListener="#{loginBean.activeMenu(7,'/faces/jsfpages/Broker/brokerWiseBooking.xhtml')}" styleClass="#{loginBean.menuIndex eq 7}_active_menu" rendered="#{loginBean.viewBrokerPayment}" />
+
+            </p:submenu>
+            <p:submenu label="Reports"   >
+                <p:menuitem value="All Reports"  icon="ui-icon-print" actionListener="#{loginBean.activeMenu(9,'/faces/jsfpages/Report/masterReport.xhtml')}" styleClass="#{loginBean.menuIndex eq 9}_active_menu" />
+                <p:menuitem value="Reports Archive"  icon="ui-icon-clipboard"  actionListener="#{loginBean.activeMenu(10,'/faces/jsfpages/Report/reportArchive.xhtml')}" styleClass="#{loginBean.menuIndex eq 10}_active_menu"  />
+            </p:submenu>
+            
+            <p:submenu label="Company Settings" rendered="#{loginBean.companySetting}" >
+                <p:menuitem value="Add Project"   icon="ui-icon-plus" actionListener="#{loginBean.activeMenu(11,'/faces/jsfpages/Company/setProject.xhtml')}" styleClass="#{loginBean.menuIndex eq 11}_active_menu" rendered="#{loginBean.companySetting}"  />
+                <p:menuitem value="Add Bank"   icon="ui-icon-plus" actionListener="#{loginBean.activeMenu(12,'/faces/jsfpages/Company/bankSetting.xhtml')}" styleClass="#{loginBean.menuIndex eq 12}_active_menu" rendered="#{loginBean.companySetting}" />
+                <p:menuitem value="Add Broker"  icon="ui-icon-plus" actionListener="#{loginBean.activeMenu(13,'/faces/jsfpages/Broker/setBroker.xhtml')}" styleClass="#{loginBean.menuIndex eq 13}_active_menu"   />
+                <p:menuitem value="Broker Category "  icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(14,'/faces/jsfpages/Broker/setBrokerCategory.xhtml')}" styleClass="#{loginBean.menuIndex eq 14}_active_menu"  />
+                <p:menuitem value="Discount"   icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(15,'/faces/jsfpages/Company/discountSetting.xhtml')}" styleClass="#{loginBean.menuIndex eq 15}_active_menu" rendered="#{loginBean.companySetting}" />
+                <p:menuitem value="Interest Rate"   icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(16,'/faces/jsfpages/Company/interestSetting.xhtml')}" styleClass="#{loginBean.menuIndex eq 16}_active_menu" rendered="#{loginBean.companySetting}"   />
+                <p:menuitem value="Service Tax"   icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(17,'/faces/jsfpages/Company/serviceTaxSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 17}_active_menu" rendered="#{loginBean.companySetting}"   />
+                <p:menuitem value="Update Company"  icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(18,'/faces/jsfpages/Company/editCompanyInformation.xhtml')}" styleClass="#{loginBean.menuIndex eq 18}_active_menu" rendered="#{loginBean.companySetting}"  />
+            </p:submenu>
+            <p:submenu label="Complaints" rendered="#{loginBean.viewComplain}">
+                <p:menuitem value="Complaint"  icon="ui-icon-document" actionListener="#{loginBean.activeMenu(35,'/faces/jsfpages/Complaint/registerComplaint.xhtml')}" styleClass="#{loginBean.menuIndex eq 35}_active_menu"  rendered="#{loginBean.addComplain}" />
+            </p:submenu>   
+            <p:submenu label="User Settings " rendered="#{loginBean.companySetting}"   >
+                <p:menuitem value="Add User"    icon="ui-icon-person" actionListener="#{loginBean.activeMenu(19,'/faces/jsfpages/User/setUser.xhtml')}" styleClass="#{loginBean.menuIndex eq 19}_active_menu" rendered="#{loginBean.companySetting}"   />
+                <p:menuitem value="Add Role" icon="ui-icon-gear" actionListener="#{loginBean.activeMenu(20,'/faces/jsfpages/User/setUserRole.xhtml')}" styleClass="#{loginBean.menuIndex eq 20}_active_menu" rendered="#{loginBean.companySetting}" />
+            </p:submenu>       
+        </p:menu>
+        <p:menu rendered="#{loginBean.renderProjectMenu}">
+            <p:submenu  label="Home">
+                <p:menuitem   value="Dashboard"  icon="ui-icon-home"   actionListener="#{loginBean.activeMenu(0,'/faces/jsfpages/Dashboard/sampleChart.xhtml')}" styleClass="#{loginBean.menuIndex eq 0}_active_menu"   />
+            </p:submenu>
+            <p:submenu label="Booking" rendered="#{loginBean.viewBoking}" >
+                <p:menuitem value="Quick Booking"  icon="ui-icon-cart" actionListener="#{loginBean.activeMenu(21,'/faces/jsfpages/Booking/booking.xhtml')}" styleClass="#{loginBean.menuIndex eq 21}_active_menu"  rendered="#{loginBean.addBooking}" />
+                <p:menuitem value="Booking List" icon="ui-icon-note" actionListener="#{loginBean.activeMenu(22,'/faces/jsfpages/Booking/bookingList.xhtml')}" styleClass="#{loginBean.menuIndex eq 22}_active_menu"  rendered="#{loginBean.viewBoking}" />
+                <p:menuitem value="Graphical Enquiry"  icon="ui-icon-image" actionListener="#{loginBean.activeMenu(23,'/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=1')}" styleClass="#{loginBean.menuIndex eq 23}_active_menu"  rendered="#{loginBean.viewBoking}" />
+            </p:submenu>
+            <p:submenu label="Payment" rendered="#{loginBean.viewPayment}" >
+                <p:menuitem value="Quick Payment"  icon="ui-icon-suitcase" actionListener="#{loginBean.activeMenu(24,'/faces/jsfpages/Payment/quickPayment.xhtml')}" styleClass="#{loginBean.menuIndex eq 24}_active_menu"  rendered="#{loginBean.addPayment}" />
+            </p:submenu>          
+            <p:submenu label="Complaints" rendered="#{loginBean.viewComplain}">
+                <p:menuitem value="Complaint"  icon="ui-icon-document" actionListener="#{loginBean.activeMenu(26,'/faces/jsfpages/Complaint/registerComplaint.xhtml')}" styleClass="#{loginBean.menuIndex eq 26}_active_menu"  rendered="#{loginBean.addComplain}" />
+            </p:submenu>            
+            <p:submenu label="Project Settings" rendered="#{loginBean.viewProject}" >
+                <p:menuitem value="Block Settings" icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(28,'/faces/jsfpages/ProjectSetting/blockSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 28}_active_menu"  rendered="#{loginBean.viewProject}" />
+                <p:menuitem value="Flat Type"   icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(29,'/faces/jsfpages/ProjectSetting/flatTypeSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 29}_active_menu"  rendered="#{loginBean.addProject}" />
+                <p:menuitem value="Plan Name"  icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(30,'/faces/jsfpages/ProjectSetting/planNameSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 30}_active_menu"  rendered="#{loginBean.addProject}" />
+                <p:menuitem value="Payment Plan"  icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(31,'/faces/jsfpages/ProjectSetting/payPlanSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 31}_active_menu"  rendered="#{loginBean.addProject}" />
+                <p:menuitem value="PLC Details"    icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(32,'/faces/jsfpages/ProjectSetting/plcSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 32}_active_menu"  rendered="#{loginBean.addProject}" />
+                <p:menuitem value="Other Charges"    icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(33,'/faces/jsfpages/ProjectSetting/chargesSettings.xhtml')}" styleClass="#{loginBean.menuIndex eq 33}_active_menu"  rendered="#{loginBean.addProject}" />
+                <p:menuitem value="Parking Details"    icon="ui-icon-wrench" actionListener="#{loginBean.activeMenu(34,'/faces/jsfpages/ProjectSetting/parkingTypeSetting.xhtml')}" styleClass="#{loginBean.menuIndex eq 34}_active_menu"  rendered="#{loginBean.addProject}" />
+            </p:submenu>
+        </p:menu>
+    </h:form>
+</ui:composition>

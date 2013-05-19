@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/manager
+END
+CompanyManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/manager/CompanyManager.java
+END
+BlockManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/1035/RealErp/src/java/org/smp/realerp/manager/BlockManager.java
+END
+PaymentManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1011/RealErp/src/java/org/smp/realerp/manager/PaymentManager.java
+END
+BrokerManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/1099/RealErp/src/java/org/smp/realerp/manager/BrokerManager.java
+END
+ProjectManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1072/RealErp/src/java/org/smp/realerp/manager/ProjectManager.java
+END
+BookingManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1164/RealErp/src/java/org/smp/realerp/manager/BookingManager.java
+END
+LoginManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/1200/RealErp/src/java/org/smp/realerp/manager/LoginManager.java
+END
+CalculationManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/manager/CalculationManager.java
+END
+ComplaintManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/1088/RealErp/src/java/org/smp/realerp/manager/ComplaintManager.java
+END
+UserManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/manager/UserManager.java
+END

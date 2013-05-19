@@ -1,0 +1,813 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:define name="title">
+        Booking
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="bookingForm" enctype="multipart/form-data" styleClass="table-width" >
+            <p:wizard widgetVar="wiz"  flowListener="#{bookingBean.flowListener}"  >
+
+                <p:tab id="flatinfo" title="Flat Info"  >
+
+                    <p:panel header="Flat Details">
+
+                        <p:growl showDetail="true" />
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="2" cellspacing="4"  columnClasses="label, value" width="300" >
+                                <h:outputText value="Project Name: *"/>
+                                <p:selectOneMenu  id="project" value="#{bookingBean.fbsProject.projId}" styleClass="select_box"  rendered="#{bookingBean.renderProject}">
+                                    <f:selectItem itemLabel="Select" itemValue="0" />
+                                    <f:selectItems value="#{bookingBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  />
+                                    <p:ajax event="change" process="project" listener="#{bookingBean.populateBlock()}" update=":bookingForm:block,:bookingForm:floor,:bookingForm:flat,:bookingForm:flatSpecification,:bookingForm:discount,:bookingForm:broker,:bookingForm:parking,:bookingForm:otherdetails,:bookingForm:flatplc,:bookingForm:flatcharges,:bookingForm:planname"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="#{bookingBean.fbsProject.projName}" rendered="#{!bookingBean.renderProject}"/>
+
+                                <h:outputText value="Block Name: *" />
+                                <p:selectOneMenu id="block" value="#{bookingBean.fbsBlock.blockId}" styleClass="select_box" rendered="#{!bookingBean.renderFlat}" >
+                                    <f:selectItem itemLabel="Select" itemValue="0" />
+                                    <f:selectItems value="#{bookingBean.fbsBlockList}"  itemValue="#{block.blockId}" itemLabel="#{block.blockName}" var="block"  />
+                                    <p:ajax event="change" process="block" listener="#{bookingBean.populateFloor()}" update=":bookingForm:floor,:bookingForm:flat,:bookingForm:flatSpecification,:bookingForm:flatplc,"/>                                
+                                </p:selectOneMenu>
+                                <h:outputLabel value="#{bookingBean.fbsBlock.blockName}" rendered="#{bookingBean.renderFlat}"/>
+                                <h:outputText value="Floor No: *" />
+                                <p:selectOneMenu id="floor" value="#{bookingBean.fbsFloor.floorId}" styleClass="select_box" rendered="#{!bookingBean.renderFlat}">
+                                    <f:selectItem itemLabel="Select" itemValue="0" />
+                                    <f:selectItems value="#{bookingBean.fbsFloorList}"  var="floor" itemLabel="#{bookingBean.convertFloorNo(floor.floorNo)}" itemValue="#{floor.floorId}" />
+                                    <p:ajax event="change" process="floor" listener="#{bookingBean.populateFlat()}" update=":bookingForm:flat,:bookingForm:flatSpecification,:bookingForm:flatplc,"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="#{bookingBean.convertFloorNo(bookingBean.fbsFloor.floorNo)}" rendered="#{bookingBean.renderFlat}"/>
+                                <h:outputText value="Unit Code: *" />
+                                <p:selectOneMenu id="flat" value="#{bookingBean.fbsFlat.unitCode}" styleClass="select_box" rendered="#{!bookingBean.renderFlat}" >
+                                    <f:selectItem itemLabel="Select" itemValue="0"/>
+                                    <f:selectItems value="#{bookingBean.fbsFlatList}" var="flat" itemLabel="#{bookingBean.fbsProject.projAbvr}-#{bookingBean.fbsBlock.blockAbvr} - #{flat.flatNo}" itemValue="#{flat.unitCode}" />
+                                    <p:ajax event="change" process="flat" listener="#{bookingBean.populateFlatSpecification()}" update=":bookingForm:flatSpecification,:bookingForm:flatplc"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="#{bookingBean.fbsProject.projAbvr}-#{bookingBean.fbsBlock.blockAbvr} - #{bookingBean.fbsFlat.flatNo}" rendered="#{bookingBean.renderFlat}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2"  >
+                                <h:outputLabel value="Booking Date:" />                                                                                         
+                                <p:calendar pattern="#{initParam['date-pattern']}" value="#{bookingBean.fbsBooking.bookingDt}" styleClass="select_box" timeZone="IST" converterMessage="Invalid  booking date  format"/>                                  
+                                <h:outputText value="Payment Plan: *" />
+                                <p:selectOneMenu value="#{bookingBean.fbsPlanname.planId}" id="planname" styleClass="select_box" >
+                                    <f:selectItem itemLabel="Select" itemValue="0"/>
+                                    <f:selectItems value="#{bookingBean.fbsPlannameList}" var="planname" itemLabel="#{planname.planName}" itemValue="#{planname.planId}"/>
+                                    <p:ajax event="change" process="planname" listener="#{bookingBean.populatePlanname()}" />
+                                </p:selectOneMenu>
+                                <h:outputText value="Discount Type: *" />
+                                <p:selectOneMenu value="#{bookingBean.fbsDiscount.discountId}" id="discount" styleClass="select_box" >
+                                    <f:selectItem itemLabel="Select" itemValue="0"/>
+                                    <f:selectItems value="#{bookingBean.fbsDiscountList}" var="discount" itemLabel="#{discount.discountType}" itemValue="#{discount.discountId}"/>
+                                    <p:ajax event="change" process="discount" listener="#{bookingBean.populateDiscount()}" />
+                                </p:selectOneMenu>
+                                <h:outputText value="Broker Name: *" />
+                                <p:selectOneMenu id="broker" value="#{bookingBean.fbsBroker.brokerId}"  styleClass="select_box" >
+                                    <f:selectItem itemLabel="Select" itemValue="0"/>
+                                    <f:selectItems value="#{bookingBean.fbsBrokerList}" var="broker" itemValue="#{broker.brokerId}" itemLabel="#{broker.brName}"/>               
+                                    <p:ajax event="change" process="broker" listener="#{bookingBean.populateBrokerDetails()}" update=":bookingForm:brokerdetails"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:panel>
+                    <div class="vertical-space"/>
+                    <p:panel header="Flat Specification" id="otherdetails" >
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="2" columnClasses="label, value"  width="300" >                                                          
+
+                                <p:dataTable id="flatSpecification" var="#" value="#" >
+
+                                    <p:column  headerText="Project Code" >
+                                        <h:outputLabel id="projectCode" value="#{bookingBean.fbsProject.projCode}"></h:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="Flat Type">
+                                        <h:outputText id="flatType" value="#{bookingBean.fbsFlatType.flatType}"/>
+                                    </p:column>
+                                    <p:column headerText="Flat Specification">
+                                        <h:outputText id="flatSpecification" value="#{bookingBean.fbsFlatType.flatSpecification}"/>
+                                    </p:column>
+                                    <p:column headerText="Flat SBA">
+                                        <h:outputText id="flatsba" value="#{bookingBean.fbsFlatType.flatSba}"/>
+                                    </p:column>
+                                    <p:column headerText="Flat BA">
+                                        <h:outputText id="flatba" value="#{bookingBean.fbsFlatType.flatBa}"/>
+                                    </p:column>
+                                    <p:column headerText="Flat CA">
+                                        <h:outputText id="flatca" value="#{bookingBean.fbsFlatType.flatCa}"/>
+                                    </p:column>
+                                    <p:column headerText="Flat BSP">
+                                        <h:outputText id="flatbsp" value="#{bookingBean.fbsFlatType.flatBsp}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                                <p:dataTable id="brokerdetails" var="broker" value="#">
+                                    <p:column  headerText="Broker Category" >
+                                        <h:outputLabel id="brokercategory" value="#{bookingBean.selectedfbsBroker.fbsBrokerCat.categoryName}"></h:outputLabel>
+                                    </p:column>
+                                    <p:column  headerText="Broker Id" >
+                                        <h:outputLabel id="brokername" value="#{bookingBean.selectedfbsBroker.brokerId}"></h:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="Broker Commission">
+                                        <h:outputText id="brokercomision" value="#{bookingBean.selectedfbsBroker.fbsBrokerCat.brokerPercent}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+                    </p:panel>
+                    <div class="vertical-space" />
+                    <p:panel header="Other Details"  >
+                        <h:panelGrid columns="3">
+                            <p:dataTable id="parking" value="#{bookingBean.fbsParkingTypeList}" var="parking" >
+                                <p:column  headerText="Paking Type">
+                                    <h:outputLabel value="#{parking.name}"></h:outputLabel>
+                                </p:column>
+                                <p:column  headerText="Paking Charge">
+                                    <h:outputLabel value="#{parking.charges}"></h:outputLabel>
+                                </p:column>
+                                <p:column headerText="Available Parking">
+                                    <h:outputText   value="#{bookingBean.countAvailableParking(parking)}"/>
+                                </p:column>
+                                <p:column headerText="Alloted Parking" >
+                                    <p:selectOneMenu id="parkingAllot" value="#{parking.noOfParking}">
+                                        <f:selectItem itemValue="0" itemLabel="0"/>
+                                        <f:selectItem itemValue="1" itemLabel="1"/>
+                                        <f:selectItem itemValue="2" itemLabel="2"/>
+                                        <f:selectItem itemValue="3" itemLabel="3"/>
+                                        <f:selectItem itemValue="4" itemLabel="4"/>
+                                        <f:selectItem itemValue="5" itemLabel="5"/>
+                                        <p:ajax event="change" process="parkingAllot" listener="#{bookingBean.checkNoOfParking(parking)}" update=":messages"/>
+
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dataTable id="flatplc" var="plc" value="#{bookingBean.fbsPlcList}">
+                                <p:column  headerText="PLC Name">
+                                    <h:outputText value="#{plc.plcName}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Rs./seq.ft.">
+                                    <h:outputText  id="id_PlcCharge" value="#{plc.plcCharge}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dataTable id="flatcharges" var="charge" value="#{bookingBean.fbsChargeList}">
+                                <p:column  headerText="Charge Name">
+                                    <h:outputText value="#{charge.chargeName}"></h:outputText>
+                                </p:column>
+                                <p:column headerText="Charge Value">
+                                    <h:outputText  id="id_" value="#{charge.amount}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>                        
+                    </p:panel>
+
+                </p:tab>
+
+                <p:tab id="applicantdetails" title="Applicant Details" >
+
+                    <p:panel header="Applicant Details">
+
+                        <h:panelGrid id="applicantdetail" columns="8">
+                            <h:outputLabel value="Applicant Name:* " for="applicantname"></h:outputLabel>
+                            <p:inputText id="applicantname" value="#{bookingBean.fbsApplicant.applicantName}" onblur="#{bookingBean.setApplicant()}" required="true" requiredMessage="Applicant Name Should Be Entered" validatorMessage="Invalid Applicant Name ">
+                                <p:ajax process="applicantname" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+
+                            <h:outputLabel value="S/W/D:* " for="swd"></h:outputLabel>
+                            <p:inputText id="swd" value="#{bookingBean.fbsApplicant.SWD}" required="true" requiredMessage="S/W/D Should Be Entered" validatorMessage="Invalid S/W/D">
+                                <p:ajax process="swd" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="Nationality:* " for="nationality"></h:outputLabel>
+                            <p:inputText id="nationality" value="#{bookingBean.fbsApplicant.nationality}" required="true" requiredMessage="Nationality Should Be Entered" validatorMessage="Invalid Nationality">
+                                <p:ajax process="nationality" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="DOB:* " for="dob"></h:outputLabel>
+                            <p:calendar pattern="#{initParam['date-pattern']}"  id="dob" value="#{bookingBean.fbsApplicant.dob}"  required="true" requiredMessage="DOB Should Be Entered" converterMessage="Invalid DOB  format">
+                                <p:ajax process="dob" event="dateSelect" listener="#{bookingBean.setApplicant()}"/>
+                            </p:calendar>
+                            <h:outputLabel value="Profession:* " for="profession"></h:outputLabel>
+                            <p:inputText id="profession" value="#{bookingBean.fbsApplicant.profession}" required="true" requiredMessage="Profession Should Be Entered" validatorMessage="Invalid Profession"  >
+                                <p:ajax process="profession" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="Res. Address:* " for="resadd"></h:outputLabel>
+                            <p:inputText id="resadd" value="#{bookingBean.fbsApplicant.resAdd}" required="true" requiredMessage="Res. Address Should Be Entered">
+                                <p:ajax process="resadd" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Off. Address " for="offadd"></h:outputLabel>
+                            <p:inputText id="offadd" value="#{bookingBean.fbsApplicant.offAdd}" >
+                                <p:ajax process="offadd" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="PAN No.:* " for="panno"></h:outputLabel>
+                            <p:inputText id="panno" value="#{bookingBean.fbsApplicant.panNo}" required="true" requiredMessage="PAN NO. Should Be Entered">
+                                <p:ajax process="panno" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="DL No. " for="dlno"></h:outputLabel>
+                            <p:inputText id="dlno" value="#{bookingBean.fbsApplicant.dlNo}" >
+                                <p:ajax process="dlno" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Passport No. " for="passno"></h:outputLabel>
+                            <p:inputText id="passno" value="#{bookingBean.fbsApplicant.passportNo}" >
+                                <p:ajax process="passno" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Telephone " for="telephone"></h:outputLabel>
+                            <p:inputText id="telephone" value="#{bookingBean.fbsApplicant.telephone}" validatorMessage="Invalid Telephone">
+                                <p:ajax process="telephone" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['telephoneNo']}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Mobile:* " for="mobile"></h:outputLabel>
+                            <p:inputText id="mobile" value="#{bookingBean.fbsApplicant.mobile}" required="true" requiredMessage="Mobile No. Should Be In Digit" validatorMessage="Invalid Mobile">
+                                <p:ajax process="mobile" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['mobileNo']}"/>
+                            </p:inputText>
+                            <h:outputLabel value="FAX " for="fax"></h:outputLabel>
+                            <p:inputText id="fax" value="#{bookingBean.fbsApplicant.fax}" >
+                                <p:ajax process="fax" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Email " for="email"></h:outputLabel>
+                            <p:inputText id="email" value="#{bookingBean.fbsApplicant.email}" validatorMessage="Invalid Email Id">
+                                <p:ajax process="email" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['email']}" />
+                            </p:inputText>
+                            <h:outputLabel value="Photo" for="photo"></h:outputLabel>
+                            <p:fileUpload fileUploadListener="#{bookingBean.applicantImageUpload}"  mode="advanced"    auto="true"  sizeLimit="100000"    allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>  
+                        </h:panelGrid>
+
+                    </p:panel>
+                    <p:panel header="CoApplicant Details">
+
+                        <h:panelGrid id="coapplicantdetail" columns="8">
+                            <h:outputLabel value="Applicant Name:* " for="coapplicantname"></h:outputLabel>
+                            <p:inputText id="coapplicantname" value="#{bookingBean.fbsCoApplicant.applicantName}" required="true" requiredMessage="Co-Applicant Name Should Be Entered" validatorMessage="Invalid Applicant Name">
+                                <p:ajax process="coapplicantname" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="S/W/D:* " for="coswd"></h:outputLabel>
+                            <p:inputText id="coswd" value="#{bookingBean.fbsCoApplicant.SWD}" required="true" requiredMessage="S/W/D Should Be Entered" validatorMessage="Invalid S/W/D">
+                                <p:ajax process="coswd" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="Nationality:* " for="conationality"></h:outputLabel>
+                            <p:inputText id="conationality" value="#{bookingBean.fbsCoApplicant.nationality}" required="true" requiredMessage="Nationality Should Be Entered" validatorMessage="Invalid Nationality">
+                                <p:ajax process="conationality" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="DOB:* " for="codob"></h:outputLabel>
+                            <p:calendar pattern="#{initParam['date-pattern']}" id="codob" value="#{bookingBean.fbsCoApplicant.dob}" required="true" requiredMessage="DOB Should Be Entered" mode="popup" timeZone="IST" converterMessage="Invalid DOB">
+                                <p:ajax process="codob" event="dateSelect" listener="#{bookingBean.setApplicant()}"/>
+                            </p:calendar>
+                            <h:outputLabel value="Profession:* " for="coprofession"></h:outputLabel>
+                            <p:inputText id="coprofession" value="#{bookingBean.fbsCoApplicant.profession}" required="true" requiredMessage="Profession Should Be Entered" validatorMessage="Invalid Profession">
+                                <p:ajax process="coprofession" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['name']}" />
+                            </p:inputText>
+                            <h:outputLabel value="Res. Address:* " for="coresadd"></h:outputLabel>
+                            <p:inputText id="coresadd" value="#{bookingBean.fbsCoApplicant.resAdd}" required="true" requiredMessage="Res Address Should Be Entered" >
+                                <p:ajax process="email" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Off. Address " for="cooffadd"></h:outputLabel>
+                            <p:inputText id="cooffadd" value="#{bookingBean.fbsCoApplicant.offAdd}" >
+                                <p:ajax process="coresadd" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+
+                            <h:outputLabel value="PAN No:* " for="copanno"></h:outputLabel>
+                            <p:inputText id="copanno" value="#{bookingBean.fbsCoApplicant.panNo}" required="true" requiredMessage="PAN NO. Should Be Entered">
+                                <p:ajax process="copanno" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="DL No. " for="codlno"></h:outputLabel>
+                            <p:inputText id="codlno" value="#{bookingBean.fbsCoApplicant.dlNo}" >
+                                <p:ajax process="codlno" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Passport No. " for="copassno"></h:outputLabel>
+                            <p:inputText id="copassno" value="#{bookingBean.fbsCoApplicant.panNo}" >
+                                <p:ajax process="copassno" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Telephone " for="cotelephone"></h:outputLabel>
+                            <p:inputText id="cotelephone" value="#{bookingBean.fbsCoApplicant.telephone}"   maxlength="12" validatorMessage="Invalid Telephone">
+                                <p:ajax process="cotelephone" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['telephoneNo']}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Mobile:* " for="comobile"></h:outputLabel>
+                            <p:inputText id="comobile" value="#{bookingBean.fbsCoApplicant.mobile}"   maxlength="10" required="true" requiredMessage="Mobile No. Should Be In Digit"  validatorMessage="Invalid Mobile">
+                                <p:ajax process="comobile" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                                <f:validateRegex pattern="#{initParam['mobileNo']}"/> 
+                            </p:inputText>
+                            <h:outputLabel value="FAX " for="cofax"></h:outputLabel>
+                            <p:inputText id="cofax" value="#{bookingBean.fbsCoApplicant.fax}" >
+                                <p:ajax process="cofax" event="blur" listener="#{bookingBean.setApplicant()}"/>
+                            </p:inputText>
+                            <h:outputLabel value="Email " for="coemail"></h:outputLabel>
+                            <p:inputText id="coemail" value="#{bookingBean.fbsCoApplicant.email}" validatorMessage="Invalid Email Id">
+                                <p:ajax process="coemail" event="blur" listener="#{bookingBean.setApplicant()}" />
+                                <f:validateRegex pattern="#{initParam['email']}" />
+                            </p:inputText>
+                            <h:outputLabel value="Photo" for="cophoto"></h:outputLabel>
+                            <p:fileUpload fileUploadListener="#{bookingBean.coApplicantImageUpload}"  mode="advanced"   auto="true"  sizeLimit="100000"    allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>  
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="Remarks">
+                        <h:panelGrid id="Remarks" columns="2" cellpadding="5">
+                            <h:outputLabel value="Remarks" for="remarks"></h:outputLabel>  
+                            <p:inputTextarea id="remarks" value="#{bookingBean.fbsBooking.remark}" rows="4" cols="40"/>
+                        </h:panelGrid> 
+                    </p:panel>
+
+                </p:tab>                
+
+
+                <p:tab id="confirm" title="Confirmation" >
+                    <p:panel header="Confirmation">
+                        <table width="940" border="2">
+                            <tr>
+                                <td width="50%" style="font-size: 16px;text-align: center;" >Applicant Detail</td>
+                                <td width="50%" style="font-size: 16px;text-align: center;" align="center" >Co Applicant Detail</td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <table cellpadding="2" width="100%" >
+                                        <tr>
+                                            <td width="40%">
+                                                <h:outputLabel value="Applicant Name: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.applicantName}" />
+                                            </td>
+                                            <td width="40%">
+                                                <h:outputLabel value="S/W/D:" />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.SWD}" />
+                                            </td>
+                                            <td style="border: 2px;" width="20%">
+                                                <p:graphicImage url="/resources/documents/applicant_image/#{bookingBean.sessionId}.png" width="40px;" height="50px;" />
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="DOB: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.dob}">
+                                                    <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                                                </h:outputText>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Nationality: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.nationality}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Profession: " />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.profession}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Email: " />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.email}"/> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Res. Address: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.resAdd}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Off. Address: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.offAdd}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="PAN No: " />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.panNo}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="DL No: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.dlNo}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+
+                                                <h:outputLabel value="Passport No: " />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.passportNo}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="DL No: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.dlNo}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+
+                                                <h:outputLabel value="Passport No: " />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.passportNo}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Mobile: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.mobile}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Telephone: " />
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.telephone}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="FAX: "/>
+                                                <h:outputText  value="#{bookingBean.fbsApplicant.fax}"/>
+                                            </td>
+                                        </tr>
+
+
+                                    </table>
+
+
+
+                                </td>
+
+                                <td width="50%">
+                                    <table cellpadding="2" width="100%" >
+                                        <tr>
+                                            <td width="40%">
+                                                <h:outputLabel value="Applicant Name: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.applicantName}" />
+                                            </td>
+                                            <td width="40%">
+                                                <h:outputLabel value="S/W/D:" />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.SWD}" />
+                                            </td>
+                                            <td style="border: 2px;" width="20%">
+                                                <p:graphicImage url="/resources/documents/applicant_image/#{bookingBean.sessionId}.co.png" width="40px;" height="50px;" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="DOB: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.dob}">
+                                                    <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                                                </h:outputText>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Nationality: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.nationality}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Profession: " />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.profession}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Email: " />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.email}"/> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Res. Address: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.resAdd}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Off. Address: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.offAdd}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="PAN No: " />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.panNo}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="DL No: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.dlNo}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+
+                                                <h:outputLabel value="Passport No: " />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.passportNo}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="DL No: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.dlNo}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td width="50%">
+
+                                                <h:outputLabel value="Passport No: " />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.passportNo}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Mobile: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.mobile}"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="Telephone: " />
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.telephone}"/>
+                                            </td>
+
+                                            <td width="50%">
+                                                <h:outputLabel value="FAX: "/>
+                                                <h:outputText  value="#{bookingBean.fbsCoApplicant.fax}"/>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="font-size: 16px;text-align: center;" >Flat Detail</td>
+                                <td width="50%" style="font-size: 16px;text-align: center;" align="center" >Broker Detail</td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <table cellpadding="2" width="100%">
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Project Name: " />
+                                                <h:outputText value="#{bookingBean.fbsProject.projName}" /> 
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="Block name: " />
+                                                <h:outputText value="#{bookingBean.fbsBlock.blockName}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Floor No: " />
+                                                <h:outputText value="#{bookingBean.convertFloorNo(bookingBean.fbsFloor.floorNo)}" />
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="Unit Code: " />
+                                                <h:outputText value="#{bookingBean.fbsProject.projAbvr}-#{bookingBean.fbsBlock.blockAbvr} - #{ bookingBean.selectedfbsFlat.flatNo}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText  value="Payment Plan: "/>
+                                                <h:outputText  value="#{bookingBean.selectedfbsPlanname.planName}"/>
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="Discount Type: " />
+                                                <h:outputText value="#{bookingBean.fbsDiscount.discountType}" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <td width="50%">
+                                    <table cellpadding="2" width="100%" >
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText  value="Broker Code: "/>
+                                                <h:outputText  value="#{bookingBean.selectedfbsBroker.brokerId}"/>
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText  value="Broker Name: "/>
+                                                <h:outputText  value="#{bookingBean.selectedfbsBroker.brName}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText  value="Broker Category: "/>
+                                                <h:outputText  value="#{bookingBean.selectedfbsBroker.fbsBrokerCat.categoryName}"/>
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="font-size: 16px;text-align: center;" >Total</td>
+                                <td width="50%" style="font-size: 16px;text-align: center;" align="center" >Other Details</td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <table cellpadding="2" width="100%" style="border-color: #4297D7">
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Super Area(sqft) : " />
+
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="#{bookingBean.fbsFlatType.flatSba}" /> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Basic Rate(Rs/sqft) :" />
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="#{bookingBean.fbsFlatType.flatBsp}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100%">
+                                                MULTIPLY :
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100%">
+                                                ----------------------------------------------------------
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Basic Sale Price :" />
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="#{bookingBean.fbsFlatType.flatSba * bookingBean.fbsFlatType.flatBsp}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Plan Discount : #{bookingBean.fbsPlanname.discount}%" />
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="#{(bookingBean.fbsFlatType.flatSba * bookingBean.fbsFlatType.flatBsp)*bookingBean.fbsPlanname.discount/10}" />
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Other Discount : #{bookingBean.fbsDiscount.percentage}%" />
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="#{(bookingBean.fbsFlatType.flatSba * bookingBean.fbsFlatType.flatBsp)*bookingBean.fbsDiscount.percentage/10}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100%">
+                                                LESS :
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="100%">
+                                                ----------------------------------------------------------
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="50%">
+                                                <h:outputText value="Net Basic Sale Price :" />
+                                            </td>
+                                            <td width="50%">
+                                                <h:outputText value="#{bookingBean.fbsFlatType.flatSba * bookingBean.fbsFlatType.flatBsp}" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <td width="50%" align="center">
+                                    <h4>PLC Details</h4>
+                                    <table  cellpadding="2" width="100%" border="2" >
+
+                                        <thead  >
+                                            <td width="20%">
+                                                S.No.
+                                            </td>
+                                            <td width="40%">
+                                                PLC Name
+                                            </td>
+                                            <td width="40%">
+                                                PLC Charge
+                                            </td>
+                                        </thead>
+                                        <c:set var="count" value="1"/>
+                                        <c:forEach  items="#{bookingBean.fbsPlcList}" var="plc">
+                                            <tr>
+                                                <td>
+                                                    #{count} 
+                                                </td>
+                                                <td>
+                                                    #{plc.plcName}
+                                                </td>
+                                                <td>
+                                                    #{plc.plcCharge}
+                                                </td>
+                                                <c:set var="count" value="#{count + 1}"/>
+                                            </tr>
+                                        </c:forEach>
+
+                                    </table>
+                                    <h4> Other Charges</h4>
+                                    <table  cellpadding="2" width="100%" border="2"  >
+
+                                        <thead  >
+                                            <td width="20%">
+                                                S.No.
+                                            </td>
+                                            <td width="40%">
+                                                Description
+                                            </td>
+                                            <td width="40%">
+                                                Amount(Rs)
+                                            </td>
+                                        </thead>
+                                        <c:set var="count" value="1"/>
+                                        <c:forEach  items="#{bookingBean.fbsChargeList}" var="charge">
+                                            <tr>
+                                                <td>
+                                                    #{count} 
+                                                </td>
+                                                <td>
+                                                    #{charge.chargeName}
+                                                </td>
+                                                <td>
+                                                    #{charge.amount}
+                                                </td>
+                                                <c:set var="count" value="#{count + 1}"/>
+                                            </tr>
+                                        </c:forEach>
+
+                                    </table>
+                                    <h4> Parking Details</h4>
+                                    <table  cellpadding="2" width="100%" border="2" >
+
+                                        <thead  >
+                                            <td width="20%">
+                                                S.No.
+                                            </td>
+                                            <td width="40%">
+                                                Parking Type
+                                            </td>
+                                            <td width="20%">
+                                                Amount(Rs)
+                                            </td>
+                                            <td width="20%">
+                                                No of Parking
+                                            </td>
+                                        </thead>
+                                        <c:set var="count" value="1"/>
+                                        <c:forEach  items="#{bookingBean.fbsParkingTypeList}" var="parking">
+                                            <tr>
+                                                <td>
+                                                    #{count} 
+                                                </td>
+                                                <td>
+                                                    #{parking.name}
+                                                </td>
+                                                <td>
+                                                    #{parking.charges}
+                                                </td>
+                                                <td>
+                                                    #{parking.noOfParking}
+                                                </td>
+                                                <c:set var="count" value="#{count + 1}"/>
+                                            </tr>
+                                        </c:forEach>
+
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                    <p:commandButton value="Finish"
+                                     actionListener="#{bookingBean.addBooking()}" style="float: right; margin-top: 3px;" />
+                </p:tab>
+
+            </p:wizard>
+
+        </h:form>
+
+
+    </ui:define>
+
+
+</ui:composition>

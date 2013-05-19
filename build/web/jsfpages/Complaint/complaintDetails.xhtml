@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Complaint Details
+    </ui:define>   
+
+    <ui:define name="content">
+        <h:form id="complaintDetails" styleClass="table-width">
+            <p:breadCrumb>
+                <p:menuitem value="Dashboard" url="#" />
+                <p:menuitem value="Complaint" url="/faces/jsfpages/Complaint/complaintList.xhtml"/>               
+                <p:menuitem value="Complaint Id: #{complaintDetailBean.fbsComplaint.complaintId}" url="#"/>
+            </p:breadCrumb>
+            <p:panel header="Complaint Details">
+                <h:panelGrid columns="6" cellpadding="5" > 
+                    <h:outputLabel value="Complaint Id:" for="complaintId"/>
+                    <h:outputLabel id="complaintId" value="#{complaintDetailBean.fbsComplaint.complaintId}"/>
+                    <h:outputLabel value="Project Name: " for="projName"/>
+                    <h:outputLabel id="projName" value="#{complaintDetailBean.fbsComplaint.fbsProject.projName}"/>
+                    <h:outputLabel value="Name:" for="name"/>
+                    <h:outputLabel id="name" value="#{complaintDetailBean.fbsComplaint.name}"/>
+                    <h:outputLabel value="Address:" for="address"/>
+                    <h:outputLabel id="address" value="#{complaintDetailBean.fbsComplaint.address}"/>
+                    <h:outputLabel value="Email:" for="email"/>
+                    <h:outputLabel id="email" value="#{complaintDetailBean.fbsComplaint. email}"/>
+                    <h:outputLabel value="Subject:" for="subject"/>
+                    <h:outputLabel id="subject" value="#{complaintDetailBean.fbsComplaint.subject}"/>
+                    <h:outputLabel value="Compalint Date:" for="cdate"/>
+                    <h:outputLabel id="cdate" value="#{complaintDetailBean.fbsComplaint.complaintDt}" >
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/></h:outputLabel>
+                    <p:selectOneRadio id="replyMode" value="#{complaintDetailBean.renderType}" >
+                        <f:selectItem itemLabel="Reply" itemValue="Reply"/>
+                        <f:selectItem itemLabel="Complaint" itemValue="Complaint"/>
+                        <p:ajax process="replyMode" update=":complaintDetails" event="change" listener="#{complaintDetailBean.renderModeDetails()}" />
+                    </p:selectOneRadio>
+                    
+                </h:panelGrid>
+                <h:panelGrid columns="5" >
+                    <h:outputLabel for="Status" value="Select:"/>
+                    <p:selectOneMenu  id="Status" value="#{complaintDetailBean.fbsComplaintReply.status}" styleClass="select_box">
+                        <f:selectItem itemLabel="Select Status" itemValue="0" />
+                        <f:selectItem itemLabel="Open" itemValue="Open" />
+                        <f:selectItem itemLabel="Closed" itemValue="Closed" />
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Reply*" for="reply" rendered="#{complaintDetailBean.renderType eq 'Reply'}"/>
+                    <h:outputLabel value="Complain*" for="complain" rendered="#{complaintDetailBean.renderType eq 'Complaint'}"/>
+                    <p:inputTextarea id="reply"  value="#{complaintDetailBean.fbsComplaintReply.message}" required="true" requiredMessage="Please Enter something in reply field."  />
+                    <p:commandButton value="Add" action="#{complaintDetailBean.replyComplaint()}" />
+                </h:panelGrid>
+               
+                <p:dataTable id="complaints" var="complaint" value="#{complaintDetailBean.fbsComplaintReplyList}" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15"    paginatorPosition="bottom" styleClass=".ui-datatable th .ui-datatable-liner">
+                    <p:column headerText="Type"  style="width: 700px" >
+                        <h:outputText value="#{complaint.type}"/>
+                    </p:column>
+                    <p:column headerText="Message"  style="width: 700px" >
+                        <h:outputText value="#{complaint.message}"/>
+                    </p:column>
+                    <p:column headerText="Date "  >
+                        <h:outputText value="#{complaint.messageDate}">
+                            <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Status">
+                        <h:outputText value="#{complaint.status}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>  
+</ui:composition>

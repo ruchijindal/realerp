@@ -1,0 +1,382 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Cancelled Booking Detail
+    </ui:define>
+    
+    <ui:define name="content">
+        <h:form id="cancelledBookingDetail" styleClass="table-width">          
+            <p:breadCrumb>
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="Booking List" url="/faces/jsfpages/Booking/bookingList.xhtml" />
+                <p:menuitem value="#{cancelledBookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{cancelledBookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{cancelledBookingDetailBean.fbsFlat.flatNo}" url="#"/>
+            </p:breadCrumb>          
+
+            <p:panel header="Unit Code: #{cancelledBookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{cancelledBookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{cancelledBookingDetailBean.fbsFlat.flatNo}" toggleable="true" collapsed="false" toggleSpeed="500">
+                <p:tabView id="unitTabView">
+                    <p:tab title="Unit Details">
+                        <table width="100%">
+                            <tr>  
+                                <td width="50%">
+                                    <table cellpadding="4" cellspacing="4">  
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Reg No: " for="regNo"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="regNo" value="#{cancelledBookingDetailBean.fbsBooking.regNumber}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Project: " for="projName"></h:outputLabel>
+                                            </td>
+                                            <td>  
+                                                <h:outputLabel id="projName" value="#{cancelledBookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projName}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>  
+                                                <h:outputLabel value="Block: " for="blockname"></h:outputLabel>
+                                            </td>
+                                            <td> 
+                                                <h:outputLabel id="blockname" value="#{cancelledBookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockName}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Floor: " for="floorno"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="floorno" value="#{cancelledBookingDetailBean.convertFloorNo(cancelledBookingDetailBean.fbsFlat.fbsFloor.floorNo)}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Flat Type: " for="flattype"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flattype" value="#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatType}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Flat Specification: " for="flatSpecification"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatSpecification" value="#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatSpecification}"></h:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Flat SBA(sqft.): " for="flatsba"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatsba" value="#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatSba}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Flat BA(sqft.): " for="flatba"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatba" value="#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatBa}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Flat CA(sqft.): " for="flatca"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatca" value="#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatCa}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Flat BR(Rs/sqft.):" for="flatbsp"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatbsp" value="#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatBsp}"></h:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Plan Discount: " for="planDiscount"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="planDiscount" value="#{cancelledBookingDetailBean.fbsPlanname.planName.concat(' (').concat(cancelledBookingDetailBean.fbsPlanname.discount).concat('%)')}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Other Discount:" for="otherDiscount"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="otherDiscount" value="#{cancelledBookingDetailBean.fbsDiscount.discountType.concat(' (').concat(cancelledBookingDetailBean.fbsDiscount.percentage).concat('%)')}"></h:outputLabel>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="25%">
+                                    <p:panel style="width: 150px;height: 150px;" >
+                                        <p:graphicImage title="2D Image" alt="2D Image" value="/resources/documents/flat_image/#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatTypeId.toString().concat('-').concat('2D')}.png"  width="120" height="120"/>  
+                                    </p:panel> 
+                                </td>
+                                <td width="25%">
+                                    <p:panel style="width: 150px;height: 150px;" >
+                                        <p:graphicImage title="3D Image" alt="3D Image" value="/resources/documents/flat_image/#{cancelledBookingDetailBean.fbsFlat.fbsFlatType.flatTypeId.toString().concat('-').concat('3D')}.png"  width="120" height="120"/>  
+                                    </p:panel> 
+                                </td>
+                            </tr>
+                        </table>
+                    </p:tab>
+                    <p:tab title="PLC Details">
+                        <h:panelGrid columns="1">
+                            <p:dataTable var="plc" value="#{cancelledBookingDetailBean.fbsPlcAllotList}" rowIndexVar="sn">                           
+                                <p:column headerText="SNo">
+                                    <h:outputText value="#{sn+1}"/>
+                                </p:column>
+                                <p:column headerText="Plc Name">
+                                    <h:outputText value="#{plc.fbsPlc.plcName}"/>
+                                </p:column>
+                                <p:column headerText="Charges(Rs/sqft)">
+                                    <h:outputText value="#{plc.fbsPlc.plcCharge}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Parking Details">
+                        <p:dataTable  id="parkingTable" value="#{cancelledBookingDetailBean.fbsParkingList}" var="parking" rowIndexVar="sn">                         
+                            <f:facet name="header">
+                                Alloted Parking List
+                            </f:facet>
+                            <p:column headerText="SNo">
+                                <h:outputText value="#{sn+1}"/>
+                            </p:column>
+                            <p:column  headerText="Paking No">
+                                <h:outputLabel value="#{parking.fbsParkingType.parkingAbvr.concat(parking.name)}"></h:outputLabel>
+                            </p:column>
+                            <p:column  headerText="Paking Type">
+                                <h:outputLabel value="#{parking.fbsParkingType.name}"></h:outputLabel>
+                            </p:column>
+                            <p:column  headerText="Paking Charge">
+                                <h:outputLabel value="#{cancelledBookingDetailBean.roundOfUptoTwoDecimal(parking.fbsParkingType.charges)}"></h:outputLabel>
+                            </p:column>                            
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel header="Applicant Details" toggleable="true" collapsed="false" toggleSpeed="500">  
+                <table width="100%">
+                    <tr>
+                        <td width="50%">
+                            <p:panel header="First Applicant Detail">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Name: " for="applicantname"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="applicantname"  value="#{cancelledBookingDetailBean.fbsApplicant.applicantName}"/></td>
+                                        <td width="20%"><h:outputLabel value="S/W/D: " for="swd"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="swd" value="#{cancelledBookingDetailBean.fbsApplicant.SWD}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Nationality:" for="nationality"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="nationality" value="#{cancelledBookingDetailBean.fbsApplicant.nationality}"/></td>
+                                        <td width="20%"><h:outputLabel value="DOB: " for="dob"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="dob" value="#{cancelledBookingDetailBean.fbsApplicant.dob}">
+                                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Profession: " for="profession"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="profession" value="#{cancelledBookingDetailBean.fbsApplicant.profession}"/></td>
+                                        <td width="20%"><h:outputLabel value="Mobile: " for="mobileno"></h:outputLabel>   </td>                       
+                                        <td width="30%"> <h:outputText id="mobileno"  value="#{cancelledBookingDetailBean.fbsApplicant.mobile}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Email Id: " for="emailid"></h:outputLabel>  </td>                         
+                                        <td width="30%"><h:outputText id="emailid"  value="#{cancelledBookingDetailBean.fbsApplicant.email}"  /></td>
+                                        <td width="20%"><h:outputLabel value="Pan No: " for="panno"></h:outputLabel> </td>                          
+                                        <td width="30%"> <h:outputText id="panno"  value="#{cancelledBookingDetailBean.fbsApplicant.panNo}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Address: " for="address"></h:outputLabel>   </td>                        
+                                        <td colspan="3" width="80%">  <h:outputText id="address"  value="#{cancelledBookingDetailBean.fbsApplicant.resAdd}" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <p:commandButton value="View Image" action="#{cancelledBookingDetailBean.setImagePath(cancelledBookingDetailBean.fbsApplicant.applicantId)}" update=":uploadimgFrom"/>
+                            </p:panel>
+                        </td>
+                        <td width="50%">
+                            <p:panel header="Co-Applicant Detail">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Name: " for="coapplicantname"></h:outputLabel> </td>                          
+                                        <td width="30%"><h:outputText id="coapplicantname"  value="#{cancelledBookingDetailBean.fbsCoApplicant.applicantName}"  /></td>
+                                        <td width="20%"> <h:outputLabel value="S/W/D: " for="coswd"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="coswd" value="#{cancelledBookingDetailBean.fbsCoApplicant.SWD}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Nationality:" for="conationality"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="conationality" value="#{cancelledBookingDetailBean.fbsCoApplicant.nationality}"/></td>
+                                        <td width="20%"><h:outputLabel value="DOB: " for="codob"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="codob" value="#{cancelledBookingDetailBean.fbsCoApplicant.dob}">
+                                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Profession: " for="coprofession"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="coprofession" value="#{cancelledBookingDetailBean.fbsCoApplicant.profession}"/></td>
+                                        <td width="20%"><h:outputLabel value="Mobile: " for="comobileno"></h:outputLabel></td>                          
+                                        <td width="30%"><h:outputText id="comobileno"  value="#{cancelledBookingDetailBean.fbsCoApplicant.mobile}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Email Id: " for="coemailid"></h:outputLabel>  </td>                         
+                                        <td width="30%"><h:outputText id="coemailid"  value="#{cancelledBookingDetailBean.fbsCoApplicant.email}" /></td>
+                                        <td width="20%"> <h:outputLabel value="Pan No: " for="copanno"></h:outputLabel> </td>                          
+                                        <td width="30%"><h:outputText id="copanno"  value="#{cancelledBookingDetailBean.fbsCoApplicant.panNo}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Address: " for="coaddress"></h:outputLabel> </td>
+                                        <td colspan="3" width="80%">
+                                            <h:outputText id="coaddress"  value="#{cancelledBookingDetailBean.fbsCoApplicant.resAdd}"/>
+                                        </td>
+                                    </tr>
+                                </table>   
+                                  <p:commandButton value="View Image" action="#{cancelledBookingDetailBean.setImagePath(cancelledBookingDetailBean.fbsCoApplicant.applicantId)}" update=":uploadimgFrom"/>
+                            </p:panel>
+                        </td>
+                    </tr>
+                </table>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel id="paymentPanel" header="Payment Details" toggleable="true" collapsed="true" toggleSpeed="500">                
+                <p:dataTable  id="payments" var="payment" value="#{cancelledBookingDetailBean.fbsPaymentList}" paginator="true" rows="5"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" rowIndexVar="sn">              
+
+                    <p:column  headerText="SNo" >
+                        <h:outputText value="#{sn+1}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{payment.paymentId}" headerText="Receipt No" >
+                        <h:outputText value="#{payment.paymentId}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{payment.paymentDate}" headerText="Received Date"> 
+                        <h:outputText value="#{payment.paymentDate}" >
+                            <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Mode"  >                  
+                        <h:outputText value="#{payment.paymentMode}"/>                      
+                    </p:column>
+
+                    <p:column headerText="User Id">
+                        <h:outputText value="#{payment.userId}"/>
+                    </p:column>
+
+                    <p:column headerText="Amount" style="text-align: right">                  
+                        <h:outputText value="#{cancelledBookingDetailBean.roundOfUptoTwoDecimal(payment.paidAmount)}"/>
+                    </p:column>
+
+                    <p:column  headerText="Status">
+                        <h:outputText value="#{payment.status}"/>                        
+                    </p:column>                    
+                </p:dataTable>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel id="brokerPaymentPanel" header="Broker Details" toggleable="true" collapsed="true" toggleSpeed="500">
+
+                <h:panelGrid columns="4" cellspacing="2" cellpadding="2">
+                    <h:outputLabel value="Category: " for="selectCategory"></h:outputLabel>
+                    <h:outputText id="selectCategory" value="#{cancelledBookingDetailBean.fbsBroker.fbsBrokerCat.categoryName}"/>
+
+                    <h:outputLabel value="Broker Name:" for="brName" ></h:outputLabel>
+                    <h:outputText id="brName" value="#{cancelledBookingDetailBean.fbsBroker.brName}"  />
+
+                    <h:outputLabel value="Broker Address:" for="brAdd"></h:outputLabel>
+                    <h:outputText id="brAdd" value="#{cancelledBookingDetailBean.fbsBroker.brAdd}"/>
+
+                    <h:outputLabel value="Mobile:" for="brMobile"></h:outputLabel>
+                    <h:outputText id="brMobile"  value="#{cancelledBookingDetailBean.fbsBroker.brMobile}"/>
+
+                    <h:outputLabel value="Office Phone:" for="brPhone"></h:outputLabel>
+                    <h:outputText id="brPhone" value="#{cancelledBookingDetailBean.fbsBroker.brPhone}"/>
+
+                    <h:outputLabel value="Mail-ID:" for="brMail"></h:outputLabel>
+                    <h:outputText  id="brMail" value="#{cancelledBookingDetailBean.fbsBroker.brMail}"/>
+
+                    <h:outputLabel value="Website:  " for="site"></h:outputLabel>
+                    <h:outputText  id="site" value="#{cancelledBookingDetailBean.fbsBroker.site}" />
+                </h:panelGrid>
+                <div class="vertical-space"/>
+                <p:dataTable id="brokerpayments" var="payment" value="#{cancelledBookingDetailBean.fbsBrokerPaymentList}" paginator="true" rows="5"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom"  rowIndexVar="sn">
+                    <f:facet name="header">
+                        Broker Payment List
+                    </f:facet>
+
+                    <p:column  headerText="SNo"  >
+                        <h:outputText value="#{sn+1}" />
+                    </p:column>
+
+                    <p:column  headerText="Receipt No" sortBy="#{payment.paymentId}">
+                        <h:outputText value="#{payment.paymentId}" />
+                    </p:column>
+
+                    <p:column  headerText="Broker Name" sortBy="#{payment.fbsBroker.brName}">
+                        <h:outputText value="#{payment.fbsBroker.brName}"/>
+                    </p:column>
+
+                    <p:column  headerText="Received Date" sortBy="#{payment.paymentDate}">
+                        <h:outputText value="#{payment.paymentDate}"><f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/></h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Mode" >                        
+                        <h:outputText value="#{payment.paymentMode}"/>                          
+                    </p:column>
+
+                    <p:column headerText="User Id">
+                        <h:outputText value="#{payment.userId}"/>
+                    </p:column>
+
+                    <p:column headerText="Amount" style="text-align: right">                      
+                        <h:outputText value="#{cancelledBookingDetailBean.roundOfUptoTwoDecimal(payment.amount)}"/>
+                    </p:column>
+
+                    <p:column  headerText="Status">
+                        <h:outputText value="#{payment.status}"/>                       
+                    </p:column>                  
+                </p:dataTable>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel id="documentPanel" header="Document Detail" toggleable="true" collapsed="true" toggleSpeed="500">               
+                <p:panel header="Document ">
+                    <p:dataTable id="documentListID" var="document" value="#{cancelledBookingDetailBean.applicantFileList}" paginator="true" rows="20"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,15,25"   paginatorPosition="bottom">
+
+                        <p:column   headerText="Name" sortBy="#{document.name}">
+                            <h:outputText value="#{document.name}"/>
+                        </p:column>
+                        <p:column   headerText="Last Modified" sortBy="#{cancelledBookingDetailBean.lastModifiedDate(document)}">
+                            <h:outputText value="#{cancelledBookingDetailBean.lastModifiedDate(document)}">
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column   headerText="Size" sortBy="#{cancelledBookingDetailBean.fileSizeCount(document)}">
+                            <h:outputText value="#{cancelledBookingDetailBean.fileSizeCount(document)}"/>
+                        </p:column>                      
+
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+        </h:form> 
+         <h:form id="uploadimgFrom" enctype="multipart/form-data">
+            <p:dialog id="uploadImageDialog" header="User Image" widgetVar="uploadImage" visible="#{cancelledBookingDetailBean.renderDialog}">
+                <h:panelGrid id="grid" columns="2" cellpadding="4">
+                    <p:graphicImage url="/#{cancelledBookingDetailBean.uploadImagePath}"  width="100" height="100" alt="Image Not Found" cache="false"/>              
+                                      
+                </h:panelGrid>               
+            </p:dialog> 
+        </h:form>
+    </ui:define>
+</ui:composition>

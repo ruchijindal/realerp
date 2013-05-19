@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"    
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Parking Detail List
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="addparkingtype" styleClass="table-width"> 
+            <p:breadCrumb>
+                <p:menuitem value="Dashboard" url="#" />
+                <p:menuitem value="Parking" url="/faces/jsfpages/ProjectSetting/parkingTypeSetting.xhtml"/>
+                <p:menuitem value="#{parkingBean.showFbsParkingType.name}" url="#"/>
+            </p:breadCrumb>
+            <p:panel header="Parking Type Details">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Parking Type Name: " for="parkingTypeName"></h:outputLabel>
+                    <p:inputText id="parkingTypeName" value="#{parkingBean.showFbsParkingType.name}" readonly="true"/>
+
+                    <h:outputLabel value="Parking Abvr: " for="parkingAbvr"></h:outputLabel>
+                    <p:inputText id="parkingAbvr" value="#{parkingBean.showFbsParkingType.parkingAbvr}" readonly="true"/>
+
+                    <h:outputLabel value="No Of Parking: " for="noOfParking"></h:outputLabel>
+                    <p:inputText id="noOfParking" value="#{parkingBean.showFbsParkingType.noOfParking}" readonly="true"/>
+
+                    <h:outputLabel value="Charges: " for="charges"></h:outputLabel>
+                    <p:inputText id="charges" value="#{parkingBean.showFbsParkingType.charges}" readonly="true"/>
+                </h:panelGrid>
+
+                <br/>
+            </p:panel>
+        </h:form> 
+        <div class="vertical-space"/>
+        <h:form id="parkingList" styleClass="table-width">            
+            <p:dataTable var="parking" value="#{parkingBean.fbsParkingList}"  paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom">                                 
+                <f:facet name="header">
+                    <div class="table-header">
+                        Parking Type Details
+                    </div>
+                </f:facet>
+                <p:column headerText="Parking No">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{parking.fbsParkingType.parkingAbvr.concat(parking.name)}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{parking.name}" readonly="true"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Charges">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{parking.charges}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{parking.charges}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column> 
+                <p:column headerText="Status">
+                    <h:outputLabel value="#{parking.fbsBooking eq null ? 'unbooked' : 'booked'}"  styleClass="#{parking.fbsBooking eq null ? 'unbooked' : 'booked'}"/>
+                </p:column>
+                <p:column headerText="Option">
+                    <p:commandLink  action="#{parkingBean.confirmDeleteParking(parking)}" styleClass="ui-icon ui-icon-trash" onclick="delParking.show()" update=":delParkingForm"
+                                    title="Delete" rendered="#{parking.fbsBooking eq null}" >                                                 
+                    </p:commandLink>
+                </p:column>
+
+            </p:dataTable>            
+          
+
+        </h:form>
+
+        <p:dialog id="parkingDialog" header="Confirm Delete Parking" widgetVar="delParking">
+            <h:form id="delParkingForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Parking?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delParking.hide();" action="#{parkingBean.deleteParking()}" update=":parkingList"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delParking.hide();" action="#"/>
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+
+
+</ui:composition>

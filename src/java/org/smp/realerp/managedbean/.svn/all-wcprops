@@ -1,0 +1,209 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/managedbean
+END
+ChartBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/1176/RealErp/src/java/org/smp/realerp/managedbean/ChartBean.java
+END
+ComplaintDetailBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/projects/!svn/ver/1192/RealErp/src/java/org/smp/realerp/managedbean/ComplaintDetailBean.java
+END
+CancelledBookingDetailBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/projects/!svn/ver/1162/RealErp/src/java/org/smp/realerp/managedbean/CancelledBookingDetailBean.java
+END
+BrokerCategoryBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/projects/!svn/ver/974/RealErp/src/java/org/smp/realerp/managedbean/BrokerCategoryBean.java
+END
+PayPlanBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/1016/RealErp/src/java/org/smp/realerp/managedbean/PayPlanBean.java
+END
+BrokerPaymentBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/projects/!svn/ver/1149/RealErp/src/java/org/smp/realerp/managedbean/BrokerPaymentBean.java
+END
+ComplaintBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/1192/RealErp/src/java/org/smp/realerp/managedbean/ComplaintBean.java
+END
+BookingDetailBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/projects/!svn/ver/1209/RealErp/src/java/org/smp/realerp/managedbean/BookingDetailBean.java
+END
+PlanBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/1016/RealErp/src/java/org/smp/realerp/managedbean/PlanBean.java
+END
+LoginBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/1197/RealErp/src/java/org/smp/realerp/managedbean/LoginBean.java
+END
+PlcBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/1016/RealErp/src/java/org/smp/realerp/managedbean/PlcBean.java
+END
+PaymentBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/1120/RealErp/src/java/org/smp/realerp/managedbean/PaymentBean.java
+END
+UserRoleBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/managedbean/UserRoleBean.java
+END
+SearchPaymentBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/projects/!svn/ver/769/RealErp/src/java/org/smp/realerp/managedbean/SearchPaymentBean.java
+END
+BrokerWiseBookingBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/projects/!svn/ver/1152/RealErp/src/java/org/smp/realerp/managedbean/BrokerWiseBookingBean.java
+END
+BankBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/920/RealErp/src/java/org/smp/realerp/managedbean/BankBean.java
+END
+BookingBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/1099/RealErp/src/java/org/smp/realerp/managedbean/BookingBean.java
+END
+BrokerBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1089/RealErp/src/java/org/smp/realerp/managedbean/BrokerBean.java
+END
+ProjectBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/1173/RealErp/src/java/org/smp/realerp/managedbean/ProjectBean.java
+END
+ParkingBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/1062/RealErp/src/java/org/smp/realerp/managedbean/ParkingBean.java
+END
+BookingListBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/managedbean/BookingListBean.java
+END
+ServiceTaxBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/1187/RealErp/src/java/org/smp/realerp/managedbean/ServiceTaxBean.java
+END
+ReportMasterBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/managedbean/ReportMasterBean.java
+END
+DashBoardBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/1130/RealErp/src/java/org/smp/realerp/managedbean/DashBoardBean.java
+END
+ChargeBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1016/RealErp/src/java/org/smp/realerp/managedbean/ChargeBean.java
+END
+FlatTypeBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/1102/RealErp/src/java/org/smp/realerp/managedbean/FlatTypeBean.java
+END
+CompanySettingBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/managedbean/CompanySettingBean.java
+END
+ReportArchiveBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/projects/!svn/ver/1155/RealErp/src/java/org/smp/realerp/managedbean/ReportArchiveBean.java
+END
+TransferBookingBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/projects/!svn/ver/1164/RealErp/src/java/org/smp/realerp/managedbean/TransferBookingBean.java
+END
+BlockBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/1184/RealErp/src/java/org/smp/realerp/managedbean/BlockBean.java
+END
+UserBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/1209/RealErp/src/java/org/smp/realerp/managedbean/UserBean.java
+END
+InterestBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/920/RealErp/src/java/org/smp/realerp/managedbean/InterestBean.java
+END
+FlatDataModelBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/projects/!svn/ver/433/RealErp/src/java/org/smp/realerp/managedbean/FlatDataModelBean.java
+END
+DiscountBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/940/RealErp/src/java/org/smp/realerp/managedbean/DiscountBean.java
+END

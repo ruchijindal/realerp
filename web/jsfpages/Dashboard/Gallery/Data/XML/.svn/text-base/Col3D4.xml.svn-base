@@ -1,0 +1,14 @@
+<chart caption='Top 10 brokers' xAxisName='Broker' yAxisName='Units' showValues='0' decimals='0' formatNumberScale='0' labelDisplay='Stagger'>
+<set label='Broker 1' value='46' />
+<set label='Broker 2' value='85' />
+<set label='Broker 3' value='67' />
+<set label='Broker 4' value='49' />
+<set label='Broker 5' value='76' />
+<set label='Broker 6' value='96' />
+<set label='Broker 7' value='62' />
+<set label='Broker 8' value='62' />
+<set label='Broker 9' value='37' />
+<set label='Broker 10' value='49' />
+ 
+ 
+</chart>	

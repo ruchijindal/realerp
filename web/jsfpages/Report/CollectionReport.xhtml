@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Collection Report
+    </ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="collectionReportForm" styleClass="table-width">
+
+            <p:panel id="dateSearchPanel" header="Search" >
+                <h:outputLabel value="Date Between:  " for="txt_startdate"> </h:outputLabel>
+                <p:calendar id="txt_startdate" value="#{reportMasterBean.startDate}"   mode="popup" pattern="dd-MM-yyyy" timeZone="IST" required="true" requiredMessage="Start Date should be entered."/>
+                <h:outputLabel value="- " for="txt_enddate">
+                </h:outputLabel>
+                <p:calendar id="txt_enddate" value="#{reportMasterBean.endDate}"  mode="popup" pattern="dd-MM-yyyy" timeZone="IST" required="true" requiredMessage="End Date should be entered."/>
+                <br/><br/>
+                <p:commandButton value="Search" action="#{reportMasterBean.generateReportbetweenStartDateAndEndDate()}" update="collectionReportForm" />
+                <p:commandButton value="Reset" style="margin-left: 5px" />
+            </p:panel>
+            
+            <div class="vertical-space"/>
+            <p:dataTable id="paymentCollection" var="collection" value="#{reportMasterBean.fbsPaymentList}" styleClass="table-width" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom"  >
+
+                <f:facet name="header">
+                    <div class="table-header">
+                        Collection Details
+                    </div>
+                </f:facet>
+                <p:column  headerText="RegistrationNumber" sortBy="#{collection.fbsBooking.regNumber}" style="width: 150px" >
+                    <h:outputText value="#{collection.fbsBooking.regNumber}"/>
+                </p:column>
+                <p:column  headerText="Payment Date"  style="width: 150px">
+                    <h:outputText value="#{collection.paymentDate}"><f:convertDateTime pattern="dd-MM-yyyy" timeZone="IST"/></h:outputText>
+                </p:column>
+                <p:column  headerText="Status"  style="width: 150px" >
+                    <h:outputText value="#{collection.status}"/>
+                </p:column>
+                <p:column headerText="Total Amount" sortBy="#{collection.paidAmount}"  style="width: 150px" styleClass="alignamt">
+                    <h:outputText value="#{reportMasterBean.roundOfUptoTwoDecimal(collection.paidAmount)}" />
+                </p:column>
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="3" footerText="Total Collection:" style="text-align:right; font-weight: bold"  />
+                        <p:column footerText="#{reportMasterBean.roundOfUptoTwoDecimal(reportMasterBean.totalPaymentCollectionForCompany())}" style="text-align:right; font-weight: bold"/>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3" footerText="Cleared Amount" style="text-align:right; font-weight: bold"  />
+                        <p:column footerText="#{ reportMasterBean.roundOfUptoTwoDecimal(reportMasterBean.totalClearedPaymentCollectionForCompany())}" style="text-align:right; font-weight: bold"/>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3" footerText="Pending Amount" style="text-align:right; font-weight: bold"  />
+                        <p:column footerText="#{reportMasterBean.roundOfUptoTwoDecimal(reportMasterBean.totalPendingPaymnetCollectionForCompany())}" style="text-align:right; font-weight: bold"/>
+                    </p:row>
+                </p:columnGroup>
+            </p:dataTable>
+            <p:commandButton type="push" value="Collection Report" action="#{reportMasterBean.generateReportPDFBetweenStartDateAndEndDate()}"    />
+        </h:form>
+    </ui:define>
+</ui:composition>

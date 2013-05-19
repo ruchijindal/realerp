@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.0"
+              xmlns="http://java.sun.com/xml/ns/javaee" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <navigation-rule>
+        <from-view-id>/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>unitDetail</from-outcome>
+            <to-view-id>/jsfpages/Booking/bookingDetail.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>flatDetail</from-outcome>
+            <to-view-id>/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=2</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule> 
+
+
+</faces-config>

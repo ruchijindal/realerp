@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"     
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Add User
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="addUser" styleClass="table-width" >
+            <p:panel header="Add User">
+                <h:panelGrid columns="4" cellpadding="2">
+                    <h:outputLabel value="Select Role: * " for="rollId"></h:outputLabel>
+                    <p:selectOneMenu id="rollId" value="#{userBean.fbsUser.rollId}" styleClass="select_box" required="true" requiredMessage="User Role should be selected" >
+                        <f:selectItem itemLabel="Select User Role" />
+                        <f:selectItems value="#{userBean.fbsUserList}" var="user"  itemValue="#{user.rollId}" itemLabel="#{user.roleName}"/>                        
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Name: * " for="userName"></h:outputLabel>
+                    <p:inputText id="userName" value="#{userBean.fbsLogin.userName}" required="true" requiredMessage="Username should be entered." validatorMessage="Invalid Name" >
+                        <f:validateRegex pattern="#{initParam['name']}" />
+                    </p:inputText>
+
+                    <h:outputLabel value="User Id: * " for="userId"></h:outputLabel>
+                    <p:inputText id="userId" value="#{userBean.fbsLogin.userId}" required="true" requiredMessage="UserID should be entered."/>
+
+                    <h:outputLabel for="password" value="Password:" />
+                    <p:password id="password" value="#{userBean.fbsLogin.password}" feedback="true" match="confirmPassword" label="Password" required="true" validatorMessage="Password and Confirm Password should be same." 
+                                minLength="8" maxlength="20" requiredMessage="Password Required">
+                        <f:validateRegex pattern="#{initParam['password']}"/>
+                    </p:password>                    
+
+                    <h:outputLabel for="confirmPassword" value="Confirm Password:" />
+                    <p:password id="confirmPassword" value="#{userBean.fbsLogin.password}" feedback="true" label="Confirm Password" required="true" 
+                                requiredMessage="Confirm Password Required"  minLength="8" maxlength="20" validatorMessage="Invalid Password Format">  
+                        <f:validateRegex pattern="#{initParam['password']}"/>
+                    </p:password> 
+
+                    <h:outputLabel value="Mobile: * " for="mobile"></h:outputLabel>
+                    <p:inputText id="mobile" value="#{userBean.fbsLogin.mobile}" required="true" requiredMessage="Mobile No should be entered." validatorMessage="Invalid Mobile No" maxlength="10">
+                        <f:validateRegex pattern="#{initParam['mobileNo']}"/>  
+                    </p:inputText>
+
+                    <h:outputLabel value="Email: * " for="email"></h:outputLabel>
+                    <p:inputText id="email" value="#{userBean.fbsLogin.email}" required="true" requiredMessage="Email Id should be entered." validatorMessage="Invalid Email Id" >
+                        <f:validateRegex pattern="#{initParam['email']}" />         
+                    </p:inputText>
+
+                    <h:outputLabel value="Website:  " for="website"></h:outputLabel>
+                    <p:inputText id="website" value="#{userBean.fbsLogin.website}" validatorMessage="Invalid Website URL">
+                        <f:validateRegex pattern="#{initParam['website']}"/>
+                    </p:inputText>
+
+                    <h:outputLabel value="Address: * " for="address"></h:outputLabel>
+                    <p:inputTextarea id="address" value="#{userBean.fbsLogin.address}" rows="3" cols="20"  required="true" requiredMessage="Address should be entered."/>
+                </h:panelGrid>
+                <div class="vertical-space"/>
+                <p:panel header="Project Rights" >                   
+                        <p:tree value="#{userBean.root}" var="node" id="checkboxTree" selectionMode="checkbox"  selection="#{userBean.selectedProjects}">  
+                            <p:treeNode>  
+                                <h:outputText value="#{node.projName}" />  
+                            </p:treeNode>  
+                        </p:tree>
+
+                </p:panel>
+                <div class="vertical-space"/>
+
+                <p:commandButton value="Submit" action="#{userBean.addUser()}" update=":addUser,:userList"/>
+                <p:spacer width="10"/>
+                <p:button value="Reset" />
+
+            </p:panel>
+        </h:form>
+        <div class="vertical-space"/>
+        <h:form id="userList" styleClass="table-width">
+
+            <p:dataTable id="users" var="user" value="#{userBean.showUserList}" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"    paginatorPosition="bottom">
+                <p:ajax event="rowEdit" listener="#{userBean.editUser(user)}"/>
+                <f:facet name="header">
+                    <div class="table-header">
+                        User Details
+                    </div>
+                </f:facet>
+                <p:column  headerText="User Id">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.userId}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.userId}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="User Role">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.fbsUser.roleArv}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:selectOneMenu id="rollId1" value="#{user.fbsUser.rollId}">                                   
+                                <f:selectItems value="#{userBean.fbsUserList}" var="user1"  itemValue="#{user1.rollId}" itemLabel="#{user1.roleName}"/>                        
+                            </p:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column  headerText="Name">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.userName}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.userName}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>                 
+                <p:column headerText="Created By">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.createdBy}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.createdBy}" readonly="true"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Mobile">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.mobile}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.mobile}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Address">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.address}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.address}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Email">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.email}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.email}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Website">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{user.website}"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:inputText value="#{user.website}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Options">
+                    <p:commandLink id="rowEdit" action="#{userBean.edit(user)}" title="Edit" styleClass="ui-icon ui-icon-pencil" update=":editForm"></p:commandLink>
+
+                    <p:commandLink id="link" action="#{userBean.confirmDeleteUser(user)}"  styleClass="ui-icon ui-icon-trash" title="Delete"  onclick="delUser.show()" update=":delUserForm">
+
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+        <p:dialog id="delUserDialog" header="Confirm Delete User" widgetVar="delUser">
+            <h:form id="delUserForm" >
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this user?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delUser.hide();" action="#{userBean.deleteUser()}" update=":userList"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delUser.hide();" action="#"/>
+            </h:form>
+        </p:dialog> 
+        <h:form id="editForm">
+            <p:dialog id="editUserDialog" header="Edit User"  widgetVar="edit" visible="#{userBean.renderDialog}" closable="false" draggable="false" resizable="false">
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="User Role: *" for="euserRole"></h:outputLabel>
+                    <p:selectOneMenu  id="euserRole" value="#{userBean.fbsUser.rollId}" styleClass="select_box" required="true" requiredMessage="User Role should be selected" >
+                        <f:selectItem itemLabel="Select User Role" />
+                        <f:selectItems value="#{userBean.fbsUserList}" var="user"  itemValue="#{user.rollId}" itemLabel="#{user.roleName}"/>                        
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Name: *" for="ename"></h:outputLabel>
+                    <p:inputText id="ename" value="#{userBean.editFbsLogin.userName}" required="true" requiredMessage="User Name should be entered." validatorMessage="Invalid Name">
+                        <f:validateRegex pattern="#{initParam['name']}" /> 
+                    </p:inputText>
+                    <h:outputLabel value="Mobile: * " for="emobile"></h:outputLabel>
+                    <p:inputText id="emobile" value="#{userBean.editFbsLogin.mobile}" required="true" requiredMessage="Mobile No should be entered." validatorMessage="Invalid Mobile No" maxlength="10">
+                        <f:validateRegex pattern="#{initParam['mobileNo']}"/>  
+                    </p:inputText>
+                    <h:outputLabel value="Email:  " for="eemail"></h:outputLabel>
+                    <p:inputText id="eemail" value="#{userBean.editFbsLogin.email}" required="true" requiredMessage="Email Id should be entered." validatorMessage="Invalid Email Id" >
+                        <f:validateRegex pattern="#{initParam['email']}" />
+                    </p:inputText>
+                    <h:outputLabel value="Website:  " for="ewebsite"></h:outputLabel>
+                    <p:inputText id="ewebsite" value="#{userBean.editFbsLogin.website}" validatorMessage="Invalid Website URL">
+                        <f:validateRegex pattern="#{initParam['website']}"/>
+                    </p:inputText>
+
+                    <h:outputLabel value="Address:  " for="eaddress"></h:outputLabel>
+                    <p:inputTextarea id="eaddress" value="#{userBean.editFbsLogin.address}" rows="3" cols="20" />
+                </h:panelGrid>
+                <p:commandButton value="Save" actionListener="#{userBean.editUser()}" update=":editForm,:userList"/>
+                <p:spacer width="5"/>
+                <p:button value="Cancel"/>
+
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

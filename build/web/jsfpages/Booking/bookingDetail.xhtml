@@ -1,0 +1,1001 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Booking Detail
+    </ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="bookingDetail" styleClass="table-width">
+            <p:breadCrumb rendered="#{bookingDetailBean.renderBreadCrum}">
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="Project" url="/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=0"  update=":graphicalEnquiryForm" rendered="#{bookingDetailBean.renderProjectBreadCrum()}"/>
+                <p:menuitem value="Block" url="/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=1"  update=":graphicalEnquiryForm" />
+                <p:menuitem value="Flat" url="/faces/jsfpages/GraphicalEnquiry/graphicalEnquiry.xhtml?chkRender=2"  update=":graphicalEnquiryForm" />
+                <p:menuitem value="#{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{bookingDetailBean.fbsFlat.flatNo}" url="#"/>
+            </p:breadCrumb>
+            <p:breadCrumb rendered="#{!bookingDetailBean.renderBreadCrum}">
+                <p:menuitem value="Dashboard" url="/faces/jsfpages/Dashboard/sampleChart.xhtml" />
+                <p:menuitem value="#{bookingDetailBean.breadCrumName}" url="#{bookingDetailBean.url}" rendered="#{bookingDetailBean.breadCrumName ne 'Dashboard'}"/>
+                <p:menuitem value="#{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{bookingDetailBean.fbsFlat.flatNo}" url="#"/>
+            </p:breadCrumb>
+
+            <p:panel header="Unit Code: #{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{bookingDetailBean.fbsFlat.flatNo}" toggleable="true" collapsed="false" toggleSpeed="500">
+
+                <p:commandButton value="Consumer Report" rendered="#{!bookingDetailBean.renderBookingButton}" process="@this"
+                                 action="#{bookingDetailBean.consumerReport()}"/>
+                <p:commandButton value="Due Letter" rendered="#{!bookingDetailBean.renderBookingButton}" process="@this"
+                                 action="#{bookingDetailBean.dueLetterReport()}"/>
+                <p:commandButton id="mail" value="Mail With Attachment" type="button" process="@this" rendered="#{!bookingDetailBean.renderBookingButton}" onclick="sendMail.show()"/>
+
+                <div class="vertical-space"/>
+                <p:tabView id="unitTabView">
+                    <p:tab title="Unit Details">
+                        <table width="100%">
+                            <tr>  
+                                <td width="50%">
+                                    <table cellpadding="4" cellspacing="4">  
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Reg No: " for="regNo"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="regNo" value="#{bookingDetailBean.fbsBooking.regNumber}" rendered="#{bookingDetailBean.fbsBooking.regNumber ne null}"/>
+                                                <h:outputLabel id="regNo1" value="NA" rendered="#{bookingDetailBean.fbsBooking.regNumber eq null}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Project: " for="projName"></h:outputLabel>
+                                            </td>
+                                            <td>  
+                                                <h:outputLabel id="projName" value="#{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.fbsProject.projName}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>  
+                                                <h:outputLabel value="Block: " for="blockname"></h:outputLabel>
+                                            </td>
+                                            <td> 
+                                                <h:outputLabel id="blockname" value="#{bookingDetailBean.fbsFlat.fbsFloor.fbsBlock.blockName}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Floor: " for="floorno"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="floorno" value="#{bookingDetailBean.convertFloorNo(bookingDetailBean.fbsFlat.fbsFloor.floorNo)}"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Flat Type: " for="flattype"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flattype" value="#{bookingDetailBean.fbsFlat.fbsFlatType.flatType}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Flat Specification: " for="flatSpecification"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatSpecification" value="#{bookingDetailBean.fbsFlat.fbsFlatType.flatSpecification}"></h:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Flat SBA(sqft.): " for="flatsba"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatsba" value="#{bookingDetailBean.fbsFlat.fbsFlatType.flatSba}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Flat BA(sqft.): " for="flatba"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatba" value="#{bookingDetailBean.fbsFlat.fbsFlatType.flatBa}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Flat CA(sqft.): " for="flatca"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatca" value="#{bookingDetailBean.fbsFlat.fbsFlatType.flatCa}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Flat BR(Rs/sqft.):" for="flatbsp"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="flatbsp" value="#{bookingDetailBean.fbsFlat.fbsFlatType.flatBsp}"></h:outputLabel>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Plan Discount: " for="planDiscount"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="planDiscount" value="#{bookingDetailBean.fbsPlanname.planName.concat(' (').concat(bookingDetailBean.fbsPlanname.discount).concat('%)')}"/>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Other Discount:" for="otherDiscount"></h:outputLabel>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel id="otherDiscount" value="#{bookingDetailBean.fbsDiscount.discountType.concat(' (').concat(bookingDetailBean.fbsDiscount.percentage).concat('%)')}"></h:outputLabel>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="25%">
+                                    <p:panel style="width: 150px;height: 150px;" >
+                                        <p:graphicImage title="2D Image" alt="2D Image" value="/resources/documents/flat_image/#{bookingDetailBean.fbsFlat.fbsFlatType.flatTypeId.toString().concat('-').concat('2D')}.png"  width="120" height="120"/>  
+                                    </p:panel> 
+                                </td>
+                                <td width="25%">
+                                    <p:panel style="width: 150px;height: 150px;" >
+                                        <p:graphicImage title="3D Image" alt="3D Image" value="/resources/documents/flat_image/#{bookingDetailBean.fbsFlat.fbsFlatType.flatTypeId.toString().concat('-').concat('3D')}.png"  width="120" height="120"/>  
+                                    </p:panel> 
+                                </td>
+                            </tr>
+                        </table>
+                    </p:tab>
+                    <p:tab title="PLC Details">
+                        <h:panelGrid columns="1">
+                            <p:dataTable var="plc" value="#{bookingDetailBean.fbsPlcAllotList}" rowIndexVar="sn">                           
+                                <p:column headerText="SNo">
+                                    <h:outputText value="#{sn+1}"/>
+                                </p:column>
+                                <p:column headerText="Plc Name">
+                                    <h:outputText value="#{plc.fbsPlc.plcName}"/>
+                                </p:column>
+                                <p:column headerText="Charges(Rs/sqft)">
+                                    <h:outputText value="#{plc.fbsPlc.plcCharge}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Parking Details" rendered="#{!bookingDetailBean.renderBookingButton}">
+                        <p:commandButton value="Add Parking"  process="@this" action="#{bookingDetailBean.populateParkingTypeList()}" update=":addParkingForm"/>
+                        <div class="vertical-space"/>
+                        <p:dataTable  id="parkingTable" value="#{bookingDetailBean.fbsParkingList}" var="parking" rowIndexVar="sn">                         
+                            <f:facet name="header">
+                                Alloted Parking List
+                            </f:facet>
+                            <p:column headerText="SNo">
+                                <h:outputText value="#{sn+1}"/>
+                            </p:column>
+                            <p:column  headerText="Paking No">
+                                <h:outputLabel value="#{parking.fbsParkingType.parkingAbvr.concat(parking.name)}"></h:outputLabel>
+                            </p:column>
+                            <p:column  headerText="Paking Type">
+                                <h:outputLabel value="#{parking.fbsParkingType.name}"></h:outputLabel>
+                            </p:column>
+                            <p:column  headerText="Paking Charge">
+                                <h:outputLabel value="#{bookingDetailBean.roundOfUptoTwoDecimal(parking.fbsParkingType.charges)}"></h:outputLabel>
+                            </p:column> 
+                            <p:column headerText="Option">
+                                <p:commandLink  action="#{bookingDetailBean.confirmDeleteParking(parking)}" styleClass="ui-icon ui-icon-trash" onclick="delParking.show()" update=":delParkingForm" process="@this"
+                                                title="Delete">                                                 
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:tab>
+                </p:tabView>
+                <div class="vertical-space"/>
+                <p:commandButton value="Book Flat" rendered="#{bookingDetailBean.renderBookingButton}" action="#{bookingDetailBean.redirectBookingForm()}"/>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel header="Applicant Details" rendered="#{!bookingDetailBean.renderBookingButton}" toggleable="true" collapsed="false" toggleSpeed="500">                
+                <p:commandButton value="Previous Applicant Details" action="#{bookingDetailBean.previousApplicantDetails()}" process="@this"/>
+                <p:commandButton value="Transfer Booking" action="#{bookingDetailBean.transferBooking()}" process="@this"/>
+                <p:commandButton value="Cancel Booking"  process="@this" onclick="cancelBooking.show();"/> 
+                <div class="vertical-space"/>
+                <table width="100%">
+                    <tr>
+                        <td width="50%">
+                            <p:panel header="First Applicant Detail">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Name: " for="applicantname"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="applicantname"  value="#{bookingDetailBean.fbsApplicant.applicantName}"/></td>
+                                        <td width="20%"><h:outputLabel value="S/W/D: " for="swd"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="swd" value="#{bookingDetailBean.fbsApplicant.SWD}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Nationality:" for="nationality"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="nationality" value="#{bookingDetailBean.fbsApplicant.nationality}"/></td>
+                                        <td width="20%"><h:outputLabel value="DOB: " for="dob"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="dob" value="#{bookingDetailBean.fbsApplicant.dob}">
+                                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Profession: " for="profession"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="profession" value="#{bookingDetailBean.fbsApplicant.profession}"/></td>
+                                        <td width="20%"><h:outputLabel value="Mobile: " for="mobileno"></h:outputLabel>   </td>                       
+                                        <td width="30%"> <h:outputText id="mobileno"  value="#{bookingDetailBean.fbsApplicant.mobile}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Email Id: " for="emailid"></h:outputLabel>  </td>                         
+                                        <td width="30%"><h:outputText id="emailid"  value="#{bookingDetailBean.fbsApplicant.email}"  /></td>
+                                        <td width="20%"><h:outputLabel value="Pan No: " for="panno"></h:outputLabel> </td>                          
+                                        <td width="30%"> <h:outputText id="panno"  value="#{bookingDetailBean.fbsApplicant.panNo}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Address: " for="address"></h:outputLabel>   </td>                        
+                                        <td colspan="3" width="80%">  <h:outputText id="address"  value="#{bookingDetailBean.fbsApplicant.resAdd}" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="vertical-space"/>
+                                <p:commandButton value="Edit" process="@this" action="#{bookingDetailBean.editApplicantDeatil(1)}" update=":editFirstApplicantForm"/>
+                                <p:spacer width="5"/>
+                                <p:commandButton value="Upload Image" action="#{bookingDetailBean.setImagePath(bookingDetailBean.fbsApplicant.applicantId)}" update=":uploadimgFrom"/>
+                            </p:panel>                           
+                        </td>
+                        <td width="50%">
+                            <p:panel header="Co-Applicant Detail">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Name: " for="coapplicantname"></h:outputLabel> </td>                          
+                                        <td width="30%"><h:outputText id="coapplicantname"  value="#{bookingDetailBean.fbsCoApplicant.applicantName}"  /></td>
+                                        <td width="20%"> <h:outputLabel value="S/W/D: " for="coswd"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="coswd" value="#{bookingDetailBean.fbsCoApplicant.SWD}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"> <h:outputLabel value="Nationality:" for="conationality"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="conationality" value="#{bookingDetailBean.fbsCoApplicant.nationality}"/></td>
+                                        <td width="20%"><h:outputLabel value="DOB: " for="codob"></h:outputLabel></td>
+                                        <td width="30%"><h:outputText id="codob" value="#{bookingDetailBean.fbsCoApplicant.dob}">
+                                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Profession: " for="coprofession"></h:outputLabel></td>
+                                        <td width="30%"> <h:outputText id="coprofession" value="#{bookingDetailBean.fbsCoApplicant.profession}"/></td>
+                                        <td width="20%"><h:outputLabel value="Mobile: " for="comobileno"></h:outputLabel></td>                          
+                                        <td width="30%"><h:outputText id="comobileno"  value="#{bookingDetailBean.fbsCoApplicant.mobile}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Email Id: " for="coemailid"></h:outputLabel>  </td>                         
+                                        <td width="30%"><h:outputText id="coemailid"  value="#{bookingDetailBean.fbsCoApplicant.email}" /></td>
+                                        <td width="20%"> <h:outputLabel value="Pan No: " for="copanno"></h:outputLabel> </td>                          
+                                        <td width="30%"><h:outputText id="copanno"  value="#{bookingDetailBean.fbsCoApplicant.panNo}" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%"><h:outputLabel value="Address: " for="coaddress"></h:outputLabel> </td>
+                                        <td colspan="3" width="80%">
+                                            <h:outputText id="coaddress"  value="#{bookingDetailBean.fbsCoApplicant.resAdd}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="vertical-space"/>
+                                <p:commandButton value="Edit" process="@this" action="#{bookingDetailBean.editApplicantDeatil(2)}" update=":editCoApplicantForm"/>                           
+                                <p:spacer width="5"/>
+                                <p:commandButton value="Upload Image" action="#{bookingDetailBean.setImagePath(bookingDetailBean.fbsCoApplicant.applicantId)}" update=":uploadimgFrom"/>
+
+                            </p:panel>
+                        </td>
+                    </tr>
+                </table>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel id="paymentPanel" header="Payment Details" toggleable="true" collapsed="true"  rendered="#{!bookingDetailBean.renderBookingButton}" toggleSpeed="500">
+                <p:commandButton value="Add Payment" action="#{bookingDetailBean.showAddPaymentForm()}" update=":addPaymentForm"/>
+                <div class="vertical-space"/>
+                <p:dataTable  id="payments" var="payment" value="#{bookingDetailBean.fbsPaymentList}" paginator="true" rows="5"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom" rowIndexVar="sn">              
+
+                    <p:column  headerText="SNo" >
+                        <h:outputText value="#{sn+1}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{payment.paymentId}" headerText="Receipt No" >
+                        <h:outputText value="#{payment.paymentId}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{payment.paymentDate}" headerText="Received Date"> 
+                        <h:outputText value="#{payment.paymentDate}" >
+                            <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Mode"  >                  
+                        <h:outputText value="#{payment.paymentMode}"/>                      
+                    </p:column>
+
+                    <p:column headerText="User Id">
+                        <h:outputText value="#{payment.userId}"/>
+                    </p:column>
+
+                    <p:column headerText="Amount" style="text-align: right">                  
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(payment.paidAmount)}"/>
+                    </p:column>
+
+                    <p:column  headerText="Status">
+                        <h:outputText value="#{payment.status}"  rendered="#{!loginBean.authorizePayment}"  />
+                        <p:commandLink value="#{payment.status}" rendered="#{loginBean.authorizePayment}"  action="#{bookingDetailBean.showPaymentStatus(payment)}" update=":authForm" process="@this"/>
+                    </p:column>
+
+                    <p:column headerText="Options"> 
+                        <p:commandLink  styleClass="ui-icon ui-icon-info" update=":detailForm" action="#{bookingDetailBean.showPaymentDetail(payment)}" title="Detail" process="@this"/>
+                        <p:commandLink action="#{bookingDetailBean.generateReceipt(payment)}" title="Payment Receipt" styleClass="ui-icon ui-icon-document" process="@this"/>
+                        <p:commandLink  action="#{bookingDetailBean.delPayment(payment)}" styleClass="ui-icon ui-icon-trash" onclick="delPayment.show()" update=":delPaymentForm" process="@this"
+                                        title="Delete" rendered="#{(payment.status eq 'Pending') and (payment.userId eq loginBean.login.userId or loginBean.authorizePayment) }" >                                                 
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel id="brokerPaymentPanel" header="Broker Details" toggleable="true" collapsed="true"  rendered="#{!bookingDetailBean.renderBookingButton}" toggleSpeed="500">
+                <p:commandButton value="Add Broker Payment" action="#{bookingDetailBean.showAddPaymentForm()}" update=":addBrPaymentForm"/>
+                <div class="vertical-space"/>
+                <h:panelGrid columns="4" cellspacing="2" cellpadding="2">
+                    <h:outputLabel value="Category: " for="selectCategory"></h:outputLabel>
+                    <h:outputText id="selectCategory" value="#{bookingDetailBean.fbsBroker.fbsBrokerCat.categoryName}"/>
+
+                    <h:outputLabel value="Broker Name:" for="brName" ></h:outputLabel>
+                    <h:outputText id="brName" value="#{bookingDetailBean.fbsBroker.brName}"  />
+
+                    <h:outputLabel value="Broker Address:" for="brAdd"></h:outputLabel>
+                    <h:outputText id="brAdd" value="#{bookingDetailBean.fbsBroker.brAdd}"/>
+
+                    <h:outputLabel value="Mobile:" for="brMobile"></h:outputLabel>
+                    <h:outputText id="brMobile"  value="#{bookingDetailBean.fbsBroker.brMobile}"/>
+
+                    <h:outputLabel value="Office Phone:" for="brPhone"></h:outputLabel>
+                    <h:outputText id="brPhone" value="#{bookingDetailBean.fbsBroker.brPhone}"/>
+
+                    <h:outputLabel value="Mail-ID:" for="brMail"></h:outputLabel>
+                    <h:outputText  id="brMail" value="#{bookingDetailBean.fbsBroker.brMail}"/>
+
+                    <h:outputLabel value="Website:  " for="site"></h:outputLabel>
+                    <h:outputText  id="site" value="#{bookingDetailBean.fbsBroker.site}" />
+                </h:panelGrid>
+                <div class="vertical-space"/>
+                <p:dataTable id="brokerpayments" var="payment" value="#{bookingDetailBean.fbsBrokerPaymentList}" paginator="true" rows="5"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom"  rowIndexVar="sn">
+                    <f:facet name="header">
+                        Broker Payment List
+                    </f:facet>
+
+                    <p:column  headerText="SNo"  >
+                        <h:outputText value="#{sn+1}" />
+                    </p:column>
+
+                    <p:column  headerText="Receipt No" sortBy="#{payment.paymentId}">
+                        <h:outputText value="#{payment.paymentId}" />
+                    </p:column>
+
+                    <p:column  headerText="Broker Name" sortBy="#{payment.fbsBroker.brName}">
+                        <h:outputText value="#{payment.fbsBroker.brName}"/>
+                    </p:column>
+
+                    <p:column  headerText="Received Date" sortBy="#{payment.paymentDate}">
+                        <h:outputText value="#{payment.paymentDate}"><f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/></h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Mode" >                        
+                        <h:outputText value="#{payment.paymentMode}"/>                          
+                    </p:column>
+
+                    <p:column headerText="User Id">
+                        <h:outputText value="#{payment.userId}"/>
+                    </p:column>
+
+                    <p:column headerText="Amount" style="text-align: right">                      
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(payment.amount)}"/>
+                    </p:column>
+
+                    <p:column  headerText="Status">
+                        <h:outputText value="#{payment.status}"  rendered="#{!loginBean.authorizePayment}"  />
+                        <p:commandLink value="#{payment.status}" rendered="#{loginBean.authorizePayment}"  action="#{bookingDetailBean.showBrokerPaymentStatus(payment)}" update=":brokerAuthForm" process="@this"/>
+                    </p:column>
+                    <p:column headerText="Options"> 
+                        <p:commandLink  styleClass="ui-icon ui-icon-info" update=":detailBrForm" action="#{bookingDetailBean.showBrokerPaymentDetail(payment)}" title="Detail" process="@this"/>
+                        <p:commandLink action="#{bookingDetailBean.generateBrokerPaymentReceipt(payment)}" title="Payment Receipt" styleClass="ui-icon ui-icon-document" process="@this"/>
+
+                        <p:commandLink  action="#{bookingDetailBean.confirmDeleteBrokerPayment(payment)}" styleClass="ui-icon ui-icon-trash" onclick="delBrPayment.show()" update=":delBrPaymentForm" process="@this"
+                                        title="Delete" rendered="#{(payment.status eq 'Pending') and (payment.userId eq loginBean.login.userId or loginBean.authorizePayment) }" >                                                 
+                        </p:commandLink>
+                    </p:column>
+
+                </p:dataTable>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel id="documentPanel" header="Document Detail" toggleable="true" collapsed="true"  rendered="#{!bookingDetailBean.renderBookingButton}" toggleSpeed="500">
+                <p:commandButton value="Upload Document" onclick="uploadDocument.show();"/> 
+                <div class="vertical-space"/>
+                <p:panel header="Document ">
+                    <p:dataTable id="documentListID" var="document" value="#{bookingDetailBean.applicantFileList}" paginator="true" rows="20"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="10,15,25"   paginatorPosition="bottom">
+
+                        <p:column   headerText="Name" sortBy="#{document.name}">
+                            <h:outputText value="#{document.name}"/>
+                        </p:column>
+                        <p:column   headerText="Last Modified" sortBy="#{bookingDetailBean.lastModifiedDate(document)}">
+                            <h:outputText value="#{bookingDetailBean.lastModifiedDate(document)}">
+                                <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column   headerText="Size" sortBy="#{bookingDetailBean.fileSizeCount(document)}">
+                            <h:outputText value="#{bookingDetailBean.fileSizeCount(document)}"/>
+                        </p:column>
+                        <p:column   headerText="Option">
+                            <p:commandLink value="Download"  action="#{bookingDetailBean.downloadDocument(document.absolutePath)}"   process="@this"/>
+                            <p:spacer width="5"/>
+                            <p:commandLink  action="#{bookingDetailBean.confirmRemoveDocument(document)}" styleClass="ui-icon ui-icon-trash"  
+                                            onclick="delDoc.show();" process="@this" update=":delDocForm" title="Delete">                                                 
+                            </p:commandLink>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+
+            <div class="vertical-space"/>
+            <p:panel id="reportPanel" header="Report Archive" toggleable="true" collapsed="true"  rendered="#{!bookingDetailBean.renderBookingButton}" toggleSpeed="500">
+
+                <p:dataTable id="report" var="archieve" value="#{bookingDetailBean.filteredFbsReportList}" paginator="true" rows="20"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom" >
+
+                    <f:facet name="header">
+                        <div class="facetheader">
+                            Report Details
+                        </div>
+                    </f:facet>
+
+                    <p:column  headerText="ReportId">
+                        <h:outputText value="#{archieve.id}"/>
+                    </p:column>
+
+                    <p:column  headerText="Date">
+                        <h:outputText value="#{archieve.date}"><f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"/></h:outputText>
+                    </p:column>
+
+                    <p:column  headerText="Recieved Amt" >
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.recievedAmt)}"/>
+                    </p:column>
+
+                    <p:column headerText="Current Installment" >
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.curInstallment)}"/>
+                    </p:column>
+
+                    <p:column headerText="Out Credit">
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.outCredit)}"/>
+                    </p:column>
+
+                    <p:column headerText="Amt Payable">
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.amountPayable)}"/>
+                    </p:column>
+
+                    <p:column headerText="Service Tax" >
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.serviceTax)}"/>
+                    </p:column>
+
+                    <p:column headerText="Total Cost" >
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.totalCost)}"/>
+                    </p:column>
+
+                    <p:column headerText="Remaining Amt." >
+                        <h:outputText value="#{bookingDetailBean.roundOfUptoTwoDecimal(archieve.remainingAmt)}"/>
+                    </p:column>
+
+                    <p:column headerText="Option">
+                        <p:commandLink action="#{bookingDetailBean.dueLetterReportArchive(archieve)}" title="Due Letter" styleClass="ui-icon ui-icon-document"/>
+                    </p:column>
+
+                </p:dataTable>
+
+            </p:panel>
+
+        </h:form>
+        <h:form id="addParkingForm">
+            <p:dialog id="addParking" header="Add Parking" widgetVar="addParking" visible="#{bookingDetailBean.renderDialog}">
+                <p:dataTable id="parking" value="#{bookingDetailBean.fbsParkingTypeList}" var="parking" >
+                    <f:facet name="header">
+                        Parking List
+                    </f:facet>
+                    <p:column  headerText="Paking Type">
+                        <h:outputLabel value="#{parking.name}"></h:outputLabel>
+                    </p:column>
+                    <p:column  headerText="Paking Charge">
+                        <h:outputLabel value="#{parking.charges}"></h:outputLabel>
+                    </p:column>
+                    <p:column headerText="Available Parking">
+                        <h:outputText   value="#{bookingDetailBean.countAvailableParking(parking)}"/>
+                    </p:column>
+                    <p:column headerText="Alloted Parking" >
+                        <p:selectOneMenu id="parkingAllot" value="#{parking.noOfParking}">
+                            <f:selectItem itemValue="0" itemLabel="0"/>
+                            <f:selectItem itemValue="1" itemLabel="1"/>
+                            <f:selectItem itemValue="2" itemLabel="2"/>
+                            <f:selectItem itemValue="3" itemLabel="3"/>
+                            <f:selectItem itemValue="4" itemLabel="4"/>
+                            <f:selectItem itemValue="5" itemLabel="5"/>
+                            <p:ajax event="change" process="parkingAllot" listener="#{bookingDetailBean.checkNoOfParking(parking)}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:dataTable>
+                <div class="vertical-space"/>
+                <p:commandButton value="Save" action="#{bookingDetailBean.addParking()}" process="@this" update=":addParkingForm,:bookingDetail:unitTabView:parkingTable"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" action="#{bookingDetailBean.populateParkingTypeList()}" process="@this" update=":addParkingForm"/>          
+            </p:dialog>
+        </h:form>
+        <p:dialog id="parkingDialog" header="Confirm Delete Parking" widgetVar="delParking">
+            <h:form id="delParkingForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Parking?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delParking.hide();" action="#{bookingDetailBean.deleteParking()}" update=":bookingDetail:unitTabView:parkingTable" process="@this"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delParking.hide();" action="#" process="@this"/>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="docDialog" header="Confirm Delete Document" widgetVar="delDoc">
+            <h:form id="delDocForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Document?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delDoc.hide();" action="#{bookingDetailBean.removeDocument()}" update=":bookingDetail:documentPanel"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delDoc.hide();" action="#" process="@this"/>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="uploadDocument" header="Upload Image" widgetVar="uploadDocument">
+            <h:form enctype="multipart/form-data">
+                <p:fileUpload fileUploadListener="#{bookingDetailBean.handleFileUpload}"                                      
+                              mode="advanced"
+                              update=":bookingDetail:documentListID" oncomplete="uploadDocument.hide();"/>             
+
+            </h:form>
+        </p:dialog> 
+        <h:form id="detailBrForm">
+            <p:dialog id="showBrDetail" header="Broker Payment Detail" widgetVar="paymentBrDetail" closable="false" visible="#{bookingDetailBean.renderDialog}" resizable="false" draggable="false">
+
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel for="receiptNo" value="Receipt No.: "/>
+                    <h:outputText id="receiptNo" value="#{bookingDetailBean.fbsBrPayment.paymentId}"/>
+
+                    <h:outputLabel value="Mode: *" for="paymentMode"/>
+                    <p:selectOneRadio id="paymentMode" value="#{bookingDetailBean.fbsBrPayment.paymentMode}"  required="true" requiredMessage="Payment Mode should be entered." >
+                        <f:selectItem  itemLabel="Cash"  itemValue="Cash"/>
+                        <f:selectItem  itemLabel="Cheque" itemValue="Cheque"/>
+                        <f:selectItem  itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT"/> 
+                        <p:ajax process="paymentMode" update=":detailBrForm" event="change" listener="#{bookingDetailBean.renderModeDetails(bookingDetailBean.fbsBrPayment.paymentMode)}" />
+                    </p:selectOneRadio> 
+
+                    <h:outputLabel for="amount" value="Amount :*"/>
+                    <p:inputText id="amount" value="#{bookingDetailBean.fbsBrPayment.amount}"  required="true" requiredMessage="Amount Required">
+                        <p:ajax process="amount" event="blur" listener="#{bookingDetailBean.checkBrokerAmount('chkEdit')}"/>
+                    </p:inputText>
+
+                    <h:outputLabel for="paymentDate" value="Received Date: *"/>
+                    <p:calendar id="paymentDate" value="#{bookingDetailBean.fbsBrPayment.paymentDate}" pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+
+                    <h:outputLabel  value="Cheque No: *" for="chequeno" rendered="#{bookingDetailBean.renderCheque}"/>
+                    <p:inputText id="chequeno" value="#{bookingDetailBean.fbsBrPayment.chequeNo}"  rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Cheque No  should be entered."/>
+
+                    <h:outputLabel value="Cheque Date: *" for="chequedate" rendered="#{bookingDetailBean.renderCheque}"/>
+                    <p:calendar id="chequedate" value="#{bookingDetailBean.fbsBrPayment.chequeDate}" rendered="#{bookingDetailBean.renderCheque}" mode="popup"  pattern="#{initParam['date-pattern']}"  timeZone="IST" required="true" requiredMessage="Cheque Date should be entered."/>
+
+                    <h:outputLabel  value="Bank Name: *" for="drawnon" rendered="#{bookingDetailBean.renderCheque}"/> 
+                    <p:inputText id="drawnon" value="#{bookingDetailBean.fbsBrPayment.drawnOn}"  rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Bank Name should be entered."  />
+
+                    <h:outputLabel  value="Transaction ID: *" for="transactionId"  rendered="#{bookingDetailBean.renderNeft}"/>
+                    <p:inputText id="transactionId" value="#{bookingDetailBean.fbsBrPayment.transactionId}"  rendered="#{bookingDetailBean.renderNeft}" required="true" requiredMessage="TransactionID should be entered." />
+
+                    <h:outputLabel  value="Transaction Bank: *" for="transactionBank" rendered="#{bookingDetailBean.renderNeft}"/> 
+                    <p:inputText id="transactionBank" value="#{bookingDetailBean.fbsBrPayment.drawnOn}"  rendered="#{bookingDetailBean.renderNeft}" required="true" requiredMessage="TransactionBank should be entered." />
+
+                    <h:outputLabel value="Authorized By: " rendered="#{bookingDetailBean.fbsBrPayment.status eq 'Cleared'}"/>
+                    <p:inputText value="#{bookingDetailBean.fbsBrPayment.authorizedBy}" rendered="#{bookingDetailBean.fbsBrPayment.status eq 'Cleared'}"/>
+
+                    <h:outputLabel value="Clearing Bank" rendered="#{bookingDetailBean.fbsBrPayment.status eq 'Cleared' and bookingDetailBean.renderCheque }"/>
+                    <p:inputText  value="#{bookingDetailBean.fbsBrPayment.clearingBank}"   rendered="#{bookingDetailBean.fbsBrPayment.status eq 'Cleared' and bookingDetailBean.renderCheque}" />
+
+                    <h:outputLabel value="Clearing Date" rendered="#{bookingDetailBean.fbsBrPayment.status eq 'Cleared'}"/>                   
+                    <p:inputText value="#{bookingDetailBean.fbsBrPayment.clearingDt}" rendered="#{bookingDetailBean.fbsBrPayment.status eq 'Cleared'}" >
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                    </p:inputText>
+
+                    <h:outputLabel value="Remark: " for="remark"/>
+                    <p:inputTextarea id="remark" value="#{bookingDetailBean.fbsBrPayment.remark}" rows="3" cols="18" autoResize="false"></p:inputTextarea>
+
+                </h:panelGrid>
+                <p:commandButton value="Save" action="#{bookingDetailBean.editBrokerPayment()}" disabled="#{ ((loginBean.authorizePayment ne true ) and  loginBean.login.userId ne bookingDetailBean.fbsBrPayment.userId  ) or (bookingDetailBean.fbsBrPayment.status eq 'Cleared') }"  
+                                 update=":bookingDetail:brokerpayments,:detailBrForm"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" onclick="paymentBrDetail.hide();"  process="@this" action="#{bookingDetailBean.resetBrokerPayment()}"/>
+
+            </p:dialog> 
+        </h:form>
+
+        <h:form id="addBrPaymentForm">
+            <p:dialog header="Add Broker Payment" widgetVar="addBrPayment" visible="#{bookingDetailBean.renderDialog}" 
+                      closable="false" resizable="false" draggable="false" style="width: 300px;height: 500px;">
+
+                <h:panelGrid id="addBrokerPayment" columns="2">
+                    <h:outputLabel for="mode" value="Mode: *" />  
+                    <p:selectOneRadio id="mode" value="#{bookingDetailBean.fbsBrPayment.paymentMode}" required="true" requiredMessage="Payment Mode should be entered">  
+                        <f:selectItem itemLabel="Cash" itemValue="Cash" />  
+                        <f:selectItem itemLabel="Cheque" itemValue="Cheque" />  
+                        <f:selectItem itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT" />
+                        <p:ajax process="mode" event="change" listener="#{bookingDetailBean.renderModeDetails(bookingDetailBean.fbsBrPayment.paymentMode)}" 
+                                update=":addBrPaymentForm"/>
+                    </p:selectOneRadio>  
+
+                    <h:outputLabel for="amount" value="Amount: *"/>
+                    <p:inputText id="amount" value="#{bookingDetailBean.fbsBrPayment.amount}" required="true" requiredMessage="Amount should be entered">
+                        <p:ajax event="blur" process="amount" listener="#{bookingDetailBean.checkBrokerAmount('nonEdit')}"/>  
+                    </p:inputText>
+
+                    <h:outputLabel for="paymentDate" value="Received Date: *"/>
+                    <p:calendar id="paymentDate" value="#{bookingDetailBean.fbsBrPayment.paymentDate}" pattern="#{initParam['date-pattern']}" timeZone="IST" required="true" requiredMessage="Payment Date should be entered">
+                        <p:ajax process="paymentDate" event="dateSelect" listener="#{bookingDetailBean.setOnBlur()}"/>
+                    </p:calendar>
+
+
+                    <h:outputLabel  value="Cheque No: *" for="chequeno" rendered="#{bookingDetailBean.renderCheque}" />
+                    <p:inputText id="chequeno" value="#{bookingDetailBean.fbsBrPayment.chequeNo}" rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Cheque No. should be entered" />
+
+
+                    <h:outputLabel value="Cheque Date: *" for="chequedate" rendered="#{bookingDetailBean.renderCheque}"/>
+                    <p:calendar id="chequedate" value="#{bookingDetailBean.fbsBrPayment.chequeDate}" mode="popup"  pattern="#{initParam['date-pattern']}" rendered="#{bookingDetailBean.renderCheque}" timeZone="IST" required="true" requiredMessage="Cheque Date should be entered"/>
+
+
+                    <h:outputLabel  value="Bank Name: *" for="drawnon" rendered="#{bookingDetailBean.renderCheque}"/> 
+                    <p:inputText id="drawnon" value="#{bookingDetailBean.fbsBrPayment.drawnOn}" rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Bank Name should be entered"/> 
+
+
+                    <h:outputLabel  value="Transaction ID: *" for="transactionId" rendered="#{bookingDetailBean.renderNeft}"/>
+                    <p:inputText id="transactionId" value="#{bookingDetailBean.fbsBrPayment.transactionId}" rendered="#{bookingDetailBean.renderNeft}"  required="true" requiredMessage="TransactionID should be entered" />
+
+
+                    <h:outputLabel  value="Transaction Bank: *" for="transactionBank" rendered="#{bookingDetailBean.renderNeft}"/> 
+                    <p:inputText id="transactionBank" value="#{bookingDetailBean.fbsBrPayment.drawnOn}" rendered="#{bookingDetailBean.renderNeft}" required="true" requiredMessage="TransactionBank should be entered"/>  
+
+
+                    <h:outputLabel for="remark" value="Remark:"/>
+                    <p:inputTextarea id="remark" value="#{bookingDetailBean.fbsBrPayment.remark}" rows="3" cols="18" autoResize="false">
+                        <p:ajax process="remark" event="blur" listener="#{bookingDetailBean.setOnBlur()}"/>
+                    </p:inputTextarea>
+                </h:panelGrid>
+                <p:commandButton value="Save" update=":bookingDetail:brokerpayments,:addBrPaymentForm" 
+                                 action="#{bookingDetailBean.addBrokerPayment()}"/>                                
+                <p:commandButton value="Cancel" onclick="addBrPayment.hide();" update=":bookingDetail:brokerpayments" action="#{bookingDetailBean.resetBrokerPayment()}"
+                                 process="@this"/> 
+            </p:dialog>
+        </h:form>
+        <p:dialog id="paymentBrDialog" header="Confirm Delete Payment" widgetVar="delBrPayment">
+            <h:form id="delBrPaymentForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Payment?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delBrPayment.hide();" action="#{bookingDetailBean.deleteBrokerPayment()}" update=":bookingDetail:brokerpayments" process="@this"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delBrPayment.hide();" action="#" process="@this"/>
+            </h:form>
+        </p:dialog>
+
+
+        <h:form id="brokerAuthForm">
+            <p:dialog id="statusDialog" header="Payment Status" widgetVar="brpaymentstatus" closable="false" resizable="false" draggable="false" visible="#{bookingDetailBean.renderDialog}" >
+                <h:outputLabel value="Do you want to change the status of this payment?"/>
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Clearing Bank: " rendered="#{bookingDetailBean.fbsBrPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}"/>
+                    <p:selectOneMenu id="clrBank" value="#{bookingDetailBean.fbsBank.bankId}" rendered="#{bookingDetailBean.fbsBrPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}" styleClass="select_box">  
+                        <f:selectItem itemLabel="Select" itemValue="0" />  
+                        <f:selectItems var="bank" value="#{bookingDetailBean.fbsBankList}" itemLabel="#{bank.bankName}" itemValue="#{bank.bankId}"/>
+                        <p:ajax process="clrBank" event="change" listener="#{bookingDetailBean.showbank()}"/>
+                    </p:selectOneMenu> 
+                    <h:outputLabel for="clrDate" value="Clearing Date:" rendered="#{bookingDetailBean.fbsBrPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}"/>
+                    <p:calendar id="clrDate"  value="#{bookingDetailBean.clearingDate}" pattern="#{initParam['date-pattern']}" timeZone="IST"
+                                rendered="#{bookingDetailBean.fbsBrPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}" required="true" requiredMessage="Clearing Date Required">
+                        <p:ajax process="clrDate" event="dateSelect" listener="#{bookingDetailBean.handleDateSelect}" update=":brokerAuthForm"/>
+                    </p:calendar> </h:panelGrid>
+                <p:commandButton value="Submit" action="#{bookingDetailBean.editBrokerPaymentStatus()}" update=":bookingDetail:brokerpayments,:brokerAuthForm"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" onclick="brpaymentstatus.hide();" action="#{bookingDetailBean.resetBrokerPayment()}" process="@this" update=":bookingDetail:brokerpayments"/>
+
+
+            </p:dialog> 
+        </h:form>
+        <h:form id="addPaymentForm">
+            <p:dialog header="Add Payment" widgetVar="addPayment" visible="#{bookingDetailBean.renderDialog}" 
+                      closable="false" resizable="false" draggable="false" style="width: 300px;height: 500px;">
+
+                <h:panelGrid columns="2" id="addPaymentTab">
+                    <h:outputLabel value="Mode: *" for="paymentMode"/>
+                    <p:selectOneRadio id="paymentMode" value="#{bookingDetailBean.fbsPayment.paymentMode}" required="true" requiredMessage="Payment Mode should be entered." >
+                        <f:selectItem id="pay" itemLabel="Cash"  itemValue="Cash"   />
+                        <f:selectItem  itemLabel="Cheque" itemValue="Cheque"   />
+                        <f:selectItem  itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT"  />
+                        <p:ajax process="paymentMode"  update=":addPaymentForm" event="change" listener="#{bookingDetailBean.renderModeDetails(bookingDetailBean.fbsPayment.paymentMode)}" />
+                    </p:selectOneRadio>
+
+                    <h:outputLabel  value="Amount: *" for="paidamount"/>
+                    <p:inputText id="paidamount" value="#{bookingDetailBean.fbsPayment.paidAmount}" required="true" requiredMessage="Amount Required">
+                        <p:ajax process="paidamount" event="blur" listener="#{bookingDetailBean.checkPaidAmount('nonEdit')}"/>
+                    </p:inputText>
+
+                    <h:outputLabel value="Received Date: *" for="paymentdate"/>
+                    <p:calendar id="paymentdate" value="#{bookingDetailBean.fbsPayment.paymentDate}" mode="popup" pattern="#{initParam['date-pattern']}"  timeZone="IST" required="true" requiredMessage="Payment Date should be entered.">
+                        <p:ajax process="paymentdate" event="dateSelect" listener="#{bookingDetailBean.setOnBlur()}"/>
+                    </p:calendar>
+
+
+                    <h:outputLabel  value="Cheque No: *" for="chequeno" rendered="#{bookingDetailBean.renderCheque}" />
+                    <p:inputText id="chequeno" value="#{bookingDetailBean.fbsPayment.chequeNo}" rendered="#{bookingDetailBean.renderCheque}"  required="true" requiredMessage="Cheque No  should be entered.">                        
+                    </p:inputText>                    
+
+
+                    <h:outputLabel value="Cheque Date: *" for="chequedate" rendered="#{bookingDetailBean.renderCheque}"/>                  
+                    <p:calendar id="chequedate" value="#{bookingDetailBean.fbsPayment.chequeDate}" mode="popup"  pattern="#{initParam['date-pattern']}" rendered="#{bookingDetailBean.renderCheque}" timeZone="IST" required="true" requiredMessage="Cheque Date should be entered.">                       
+                    </p:calendar>
+
+
+                    <h:outputLabel  value="Bank Name: *" for="drawnon" rendered="#{bookingDetailBean.renderCheque}"/> 
+                    <p:inputText id="drawnon" value="#{bookingDetailBean.fbsPayment.drawnOn}" rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Bank Name should be entered.">                       
+                    </p:inputText>
+
+
+                    <h:outputLabel  value="Transaction ID: *" for="transactionId" rendered="#{bookingDetailBean.renderNeft}"/>
+                    <p:inputText id="transactionId" value="#{bookingDetailBean.fbsPayment.transactionId}" rendered="#{bookingDetailBean.renderNeft}"  required="true" requiredMessage="TransactionID should be entered.">                      
+                    </p:inputText>
+
+
+                    <h:outputLabel  value="Transaction Bank: *" for="transactionBank" rendered="#{bookingDetailBean.renderNeft}"/> 
+                    <p:inputText id="transactionBank" value="#{bookingDetailBean.fbsPayment.drawnOn}" rendered="#{bookingDetailBean.renderNeft}"  required="true" requiredMessage="TransactionBank should be entered.">                        
+                    </p:inputText>
+
+
+                    <h:outputLabel value="Remark: " for="remark"/>
+                    <p:inputTextarea id="remark" value="#{bookingDetailBean.fbsPayment.remark}" rows="3" cols="18" autoResize="false">
+                        <p:ajax process="remark" event="blur" listener="#{bookingDetailBean.setOnBlur()}"/>
+                    </p:inputTextarea>
+                </h:panelGrid>
+                <p:commandButton value="Save" update=":bookingDetail:payments,:addPaymentForm" action="#{bookingDetailBean.addPayment()}"/>                                 
+                <p:commandButton value="Cancel" onclick="addPayment.hide();" action="#{bookingDetailBean.resetPayment()}" process="@this"/> 
+
+            </p:dialog>
+        </h:form>
+        <h:form id="detailForm">
+            <p:dialog id="showDetail" header="Payment Detail" widgetVar="paymentDetail" closable="false" visible="#{bookingDetailBean.renderDialog}" resizable="false" draggable="false">
+
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel for="receiptNo" value="Receipt No: "/>
+                    <h:outputText id="receiptNo" value="#{bookingDetailBean.fbsPayment.paymentId}"/>
+
+                    <h:outputLabel value="Mode: *" for="paymentMode"/>
+                    <p:selectOneRadio id="paymentMode" value="#{bookingDetailBean.fbsPayment.paymentMode}"  required="true" requiredMessage="Payment Mode should be entered." >
+                        <f:selectItem  itemLabel="Cash"  itemValue="Cash"/>
+                        <f:selectItem  itemLabel="Cheque" itemValue="Cheque"/>
+                        <f:selectItem  itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT"/> 
+                        <p:ajax process="paymentMode" update=":detailForm" event="change" listener="#{bookingDetailBean.renderModeDetails(bookingDetailBean.fbsPayment.paymentMode)}" />
+                    </p:selectOneRadio> 
+
+                    <h:outputLabel for="amount" value="Amount :*"/>
+                    <p:inputText id="amount" value="#{bookingDetailBean.fbsPayment.paidAmount}"  required="true" requiredMessage="Amount Required">
+                        <p:ajax process="amount" event="blur" listener="#{bookingDetailBean.checkPaidAmount('chkEdit')}"/>
+                    </p:inputText>
+
+                    <h:outputLabel for="paymentDate" value="Received Date: *"/>
+                    <p:calendar id="paymentDate" value="#{bookingDetailBean.fbsPayment.paymentDate}" pattern="#{initParam['date-pattern']}" timeZone="IST"/>
+
+
+
+                    <h:outputLabel  value="Cheque No: *" for="chequeno" rendered="#{bookingDetailBean.renderCheque}"/>
+                    <p:inputText id="chequeno" value="#{bookingDetailBean.fbsPayment.chequeNo}"  rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Cheque No  should be entered."/>
+
+                    <h:outputLabel value="Cheque Date: *" for="chequedate" rendered="#{bookingDetailBean.renderCheque}"/>
+                    <p:calendar id="chequedate" value="#{bookingDetailBean.fbsPayment.chequeDate}" rendered="#{bookingDetailBean.renderCheque}" mode="popup"  pattern="#{initParam['date-pattern']}"  timeZone="IST" required="true" requiredMessage="Cheque Date should be entered."/>
+
+                    <h:outputLabel  value="Bank Name: *" for="drawnon" rendered="#{bookingDetailBean.renderCheque}"/> 
+                    <p:inputText id="drawnon" value="#{bookingDetailBean.fbsPayment.drawnOn}"  rendered="#{bookingDetailBean.renderCheque}" required="true" requiredMessage="Bank Name should be entered."  />
+
+                    <h:outputLabel  value="Transaction ID: *" for="transactionId"  rendered="#{bookingDetailBean.renderNeft}"/>
+                    <p:inputText id="transactionId" value="#{bookingDetailBean.fbsPayment.transactionId}"  rendered="#{bookingDetailBean.renderNeft}" required="true" requiredMessage="TransactionID should be entered." />
+
+                    <h:outputLabel  value="Transaction Bank: *" for="transactionBank" rendered="#{bookingDetailBean.renderNeft}"/> 
+                    <p:inputText id="transactionBank" value="#{bookingDetailBean.fbsPayment.drawnOn}"  rendered="#{bookingDetailBean.renderNeft}" required="true" requiredMessage="TransactionBank should be entered." />
+
+                    <h:outputLabel value="Authorized By: " rendered="#{bookingDetailBean.fbsPayment.status eq 'Cleared'}"/>
+                    <p:inputText value="#{bookingDetailBean.fbsPayment.authorizedBy}" rendered="#{bookingDetailBean.fbsPayment.status eq 'Cleared'}"/>
+
+                    <h:outputLabel value="Clearing Bank" rendered="#{bookingDetailBean.fbsPayment.status eq 'Cleared' and bookingDetailBean.renderCheque }"/>
+                    <p:inputText  value="#{bookingDetailBean.fbsPayment.clearingBank}"   rendered="#{bookingDetailBean.fbsPayment.status eq 'Cleared' and bookingDetailBean.renderCheque}" />
+
+                    <h:outputLabel value="Clearing Date" rendered="#{bookingDetailBean.fbsPayment.status eq 'Cleared'}"/>                   
+                    <p:inputText value="#{bookingDetailBean.fbsPayment.clearingDt}" rendered="#{bookingDetailBean.fbsPayment.status eq 'Cleared'}" >
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                    </p:inputText>
+
+                    <h:outputLabel value="Remark: " for="remark"/>
+                    <p:inputTextarea id="remark" value="#{bookingDetailBean.fbsPayment.remark}" rows="3" cols="18" autoResize="false"></p:inputTextarea>
+
+                </h:panelGrid>
+                <p:commandButton value="Save" action="#{bookingDetailBean.editPayment()}" 
+                                 disabled="#{ ((loginBean.authorizePayment ne true ) and  loginBean.login.userId ne bookingDetailBean.fbsPayment.userId  ) or (bookingDetailBean.fbsPayment.status eq 'Cleared') }"  
+                                 update=":bookingDetail:payments,:detailForm"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" onclick="paymentDetail.hide();"  action="#{bookingDetailBean.resetPayment()}" process="@this"/>
+
+            </p:dialog> 
+        </h:form>
+        <p:dialog header="Cancel Booking" widgetVar="cancelBooking">
+            <h:form>
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to cancel this Booking?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <p:commandButton value="Yes" action="#{bookingDetailBean.cancelBooking()}" process="@this"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="cancelBooking.hide();" process="@this"/>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="editFirstApplicantForm">
+            <p:dialog header="Edit First Applicant Detail" widgetVar="editFirstApplicant" visible="#{bookingDetailBean.showEditDialog eq 1}" closable="false" resizable="false" draggable="false">
+
+                <h:panelGrid id="applicantdetail" columns="6" >
+                    <h:outputLabel value="Name:* " for="eapplicantname"></h:outputLabel>
+                    <p:inputText id="eapplicantname" value="#{bookingDetailBean.fbsApplicant.applicantName}"  required="true" requiredMessage="Applicant Name Should Be Entered"/>
+                    <h:outputLabel value="S/W/D:* " for="eswd"></h:outputLabel>
+                    <p:inputText id="eswd" value="#{bookingDetailBean.fbsApplicant.SWD}" required="true" requiredMessage="S/W/D Should Be Entered"/>
+                    <h:outputLabel value="Nationality:* " for="enationality"></h:outputLabel>
+                    <p:inputText id="enationality" value="#{bookingDetailBean.fbsApplicant.nationality}" required="true" requiredMessage="Nationality Should Be Entered"/>
+                    <h:outputLabel value="DOB:* " for="edob"></h:outputLabel>
+                    <p:calendar pattern="#{initParam['date-pattern']}" timeZone="IST" id="edob" value="#{bookingDetailBean.fbsApplicant.dob}" required="true" requiredMessage="DOB Should Be Entered"/>
+                    <h:outputLabel value="Profession:* " for="eprofession"></h:outputLabel>
+                    <p:inputText id="eprofession" value="#{bookingDetailBean.fbsApplicant.profession}" required="true" requiredMessage="Profession Should Be Entered"/>
+                    <h:outputLabel value="PAN No:* " for="epanno"></h:outputLabel>
+                    <p:inputText id="epanno" value="#{bookingDetailBean.fbsApplicant.panNo}" required="true" requiredMessage="PAN NO. Should Be Entered"/>
+                    <h:outputLabel value="DL No: " for="edlno"></h:outputLabel>
+                    <p:inputText id="edlno" value="#{bookingDetailBean.fbsApplicant.dlNo}" />
+                    <h:outputLabel value="Passport No: " for="epassno"></h:outputLabel>
+                    <p:inputText id="epassno" value="#{bookingDetailBean.fbsApplicant.passportNo}" />
+                    <h:outputLabel value="Telephone: " for="etelephone"></h:outputLabel>
+                    <p:inputText id="etelephone" value="#{bookingDetailBean.fbsApplicant.telephone}" />
+                    <h:outputLabel value="Mobile:* " for="emobile"></h:outputLabel>
+                    <p:inputText id="emobile" value="#{bookingDetailBean.fbsApplicant.mobile}" required="true" requiredMessage="Mobile No. Should Be In Digit"/>
+                    <h:outputLabel value="FAX: " for="efax"></h:outputLabel>
+                    <p:inputText id="efax" value="#{bookingDetailBean.fbsApplicant.fax}" />
+                    <h:outputLabel value="Email: " for="eemail"></h:outputLabel>
+                    <p:inputText id="eemail" value="#{bookingDetailBean.fbsApplicant.email}"/>
+                    <h:outputLabel value="Res. Address:* " for="eresadd"></h:outputLabel>
+                    <p:inputTextarea id="eresadd" value="#{bookingDetailBean.fbsApplicant.resAdd}" required="true" requiredMessage="Res. Address Should Be Entered" rows="3" cols="18" autoResize="false"/>
+                    <h:outputLabel value="Off. Address: " for="eoffadd"></h:outputLabel>
+                    <p:inputTextarea id="eoffadd" value="#{bookingDetailBean.fbsApplicant.offAdd}" rows="3" cols="18" autoResize="false" />
+                </h:panelGrid>
+                <div class="vertical-space"/>
+                <p:commandButton value="Update" action="#{bookingDetailBean.updateApplicantDetails(1)}" update=":editFirstApplicantForm,:bookingDetail"/>                                 
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" action="#{bookingDetailBean.populateApplicantDetails()}" update=":editFirstApplicantForm,:bookingDetail" process="@this"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="editCoApplicantForm">
+            <p:dialog header="Edit Co-Applicant Detail" widgetVar="editCoApplicant" visible="#{bookingDetailBean.showEditDialog eq 2}" closable="false" resizable="false" draggable="false">
+
+                <h:panelGrid id="coapplicantdetail" columns="6" >
+                    <h:outputLabel value="Name:* " for="ecoapplicantname"></h:outputLabel>
+                    <p:inputText id="ecoapplicantname" value="#{bookingDetailBean.fbsCoApplicant.applicantName}" required="true" requiredMessage="Co-Applicant Name Should Be Entered"/>
+                    <h:outputLabel value="S/W/D:*" for="ecoswd"></h:outputLabel>
+                    <p:inputText id="ecoswd" value="#{bookingDetailBean.fbsCoApplicant.SWD}" required="true" requiredMessage="S/W/D Should Be Entered"/>
+                    <h:outputLabel value="Nationality:* " for="econationality"></h:outputLabel>
+                    <p:inputText id="econationality" value="#{bookingDetailBean.fbsCoApplicant.nationality}" requiredMessage="Nationality Should Be Entered"/>
+                    <h:outputLabel value="DOB:*" for="ecodob"></h:outputLabel>
+                    <p:calendar pattern="#{initParam['date-pattern']}" timeZone="IST" id="ecodob" value="#{bookingDetailBean.fbsCoApplicant.dob}" required="true" requiredMessage="DOB Should Be Entered"/>
+                    <h:outputLabel value="Profession:* " for="ecoprofession"></h:outputLabel>
+                    <p:inputText id="ecoprofession" value="#{bookingDetailBean.fbsCoApplicant.profession}" required="true" requiredMessage="Profession Should Be Entered"/>                   
+                    <h:outputLabel value="PAN No:* " for="ecopanno"></h:outputLabel>
+                    <p:inputText id="ecopanno" value="#{bookingDetailBean.fbsCoApplicant.panNo}" required="true" requiredMessage="PAN NO. Should Be Entered"/>
+                    <h:outputLabel value="DL No: " for="ecodlno"></h:outputLabel>
+                    <p:inputText id="ecodlno" value="#{bookingDetailBean.fbsCoApplicant.dlNo}" />
+                    <h:outputLabel value="Passport No: " for="ecopassno"></h:outputLabel>
+                    <p:inputText id="ecopassno" value="#{bookingDetailBean.fbsCoApplicant.panNo}" />
+                    <h:outputLabel value="Telephone: " for="ecotelephone"></h:outputLabel>
+                    <p:inputText id="ecotelephone" value="#{bookingDetailBean.fbsCoApplicant.telephone}"   maxlength="12"/>
+                    <h:outputLabel value="Mobile:* " for="ecomobile"></h:outputLabel>
+                    <p:inputText id="ecomobile" value="#{bookingDetailBean.fbsCoApplicant.mobile}"   maxlength="10" required="true" requiredMessage="Mobile No. Should Be In Digit"/>
+                    <h:outputLabel value="FAX :" for="ecofax"></h:outputLabel>
+                    <p:inputText id="ecofax" value="#{bookingDetailBean.fbsCoApplicant.fax}" />
+                    <h:outputLabel value="Email: " for="ecoemail"></h:outputLabel>
+                    <p:inputText id="ecoemail" value="#{bookingDetailBean.fbsCoApplicant.email}" />
+                    <h:outputLabel value="Res. Address:* " for="ecoresadd"></h:outputLabel>
+                    <p:inputTextarea id="ecoresadd" value="#{bookingDetailBean.fbsCoApplicant.resAdd}" required="true" requiredMessage="Res Address Should Be Entered" rows="3" cols="18" autoResize="false"/>
+                    <h:outputLabel value="Off. Address: " for="ecooffadd"></h:outputLabel>
+                    <p:inputTextarea id="ecooffadd" value="#{bookingDetailBean.fbsCoApplicant.offAdd}" rows="3" cols="18" autoResize="false"/>
+                </h:panelGrid>
+                <div class="vertical-space"/>
+                <p:commandButton value="Update" action="#{bookingDetailBean.updateApplicantDetails(2)}" update=":editCoApplicantForm,:bookingDetail"/>                                 
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" action="#{bookingDetailBean.populateApplicantDetails()}" update=":editCoApplicantForm,:bookingDetail" process="@this"/>
+
+            </p:dialog>
+        </h:form>
+
+        <h:form id="authForm">
+            <p:dialog id="statusDialog" header="Payment Status" widgetVar="paymentstatus" closable="false" resizable="false" draggable="false" visible="#{bookingDetailBean.renderDialog}" >
+                <h:outputLabel value="Do you want to change the status of this payment?"/>
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Clearing Bank: " rendered="#{bookingDetailBean.fbsPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}"/>
+                    <p:selectOneMenu id="clrBank" value="#{bookingDetailBean.fbsBank.bankId}" rendered="#{bookingDetailBean.fbsPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}" styleClass="select_box">  
+                        <f:selectItem itemLabel="Select" itemValue="0" />  
+                        <f:selectItems var="bank" value="#{bookingDetailBean.fbsBankList}" itemLabel="#{bank.bankName}" itemValue="#{bank.bankId}"/>
+                        <p:ajax process="clrBank" event="change" listener="#{bookingDetailBean.showbank()}"/>
+                    </p:selectOneMenu> 
+                    <h:outputLabel for="clrDate" value="Clearing Date:" rendered="#{bookingDetailBean.fbsPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}"/>
+                    <p:calendar id="clrDate"  value="#{bookingDetailBean.clearingDate}" pattern="#{initParam['date-pattern']}" timeZone="IST"
+                                rendered="#{bookingDetailBean.fbsPayment.paymentMode eq 'Cheque' and bookingDetailBean.renderPending}" required="true" requiredMessage="Clearing Date Required">
+                        <p:ajax process="clrDate" event="dateSelect" listener="#{bookingDetailBean.handleDateSelect}" update=":authForm"/>
+                    </p:calendar>
+                </h:panelGrid>
+                <p:commandButton value="Submit" action="#{bookingDetailBean.editPaymentStatus()}" update=":bookingDetail:payments,:authForm"/>
+
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" onclick="paymentstatus.hide();" action="#{bookingDetailBean.resetPayment()}" process="@this" update=":bookingDetail:payments"/>
+
+
+            </p:dialog> 
+        </h:form>        
+        <p:dialog id="paymentDialog" header="Confirm Delete Payment" widgetVar="delPayment">
+            <h:form id="delPaymentForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Payment?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delPayment.hide();" action="#{bookingDetailBean.deletePayment()}" update=":bookingDetail:payments" process="@this"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delPayment.hide();" action="#" process="@this"/>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="uploadimgFrom" enctype="multipart/form-data">
+            <p:dialog id="uploadImageDialog" header="Upload Image" widgetVar="uploadImage" visible="#{bookingDetailBean.renderDialog}">
+                <h:panelGrid id="grid" columns="2" cellpadding="4">
+                    <p:graphicImage url="/#{bookingDetailBean.uploadImagePath}"  width="100" height="100" alt="Image Not Found" cache="false"/>                    
+                    <p:fileUpload fileUploadListener="#{bookingDetailBean.uploadImage}"                                      
+                                  mode="advanced" update=":uploadimgFrom:grid"/> 
+                    <p:commandLink value="Remove Image" rendered="#{bookingDetailBean.imageExist(bookingDetailBean.uploadImagePath)}"
+                                   action="#{bookingDetailBean.removeImage(bookingDetailBean.uploadImagePath)}" update=":uploadimgFrom:grid"/>
+                </h:panelGrid>               
+            </p:dialog> 
+        </h:form>
+
+        <p:dialog id="sendMail" header="Send Mail" widgetVar="sendMail" resizable="false" height="100" width="300">
+            <h:form>
+                <p:selectOneRadio id="options" value="#{bookingDetailBean.attachmentType}">  
+                    <f:selectItem itemLabel="Consumer Report" itemValue="Consumer Report" />  
+                    <f:selectItem itemLabel="Due Letter" itemValue="Due Letter" />             
+                </p:selectOneRadio>
+                <br/>
+                <p:commandButton value="Send Mail" action="#{bookingDetailBean.sendMailWithAttachment()}" onclick="sendMail.hide()"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" onclick="sendMail.hide()"/> 
+            </h:form>
+        </p:dialog> 
+
+
+    </ui:define>
+
+
+
+</ui:composition>

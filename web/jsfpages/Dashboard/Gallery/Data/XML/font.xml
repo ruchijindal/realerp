@@ -1,0 +1,45 @@
+<chart animation="1" showvalues="0" caption="Collection of Last 12 Months" subcaption="" numberprefix="" chartrightmargin="15" xaxisname="" yaxisname="" pyaxisname="" canvasborderalpha="0" bgcolor="FFFFFF" bgratio="0" bgalpha="100" showalternatehgridcolor="0" numdivlines="3" showyaxisvalues="0" showlegend="0" chartleftmargin="40" charttopmargin="30" chartbottommargin="30" drawanchors="0" plotgradientcolor="" canvasbasecolor="CFCFCF" canvasbgratio="0" canvasbgalpha="100" showcanvasbg="0" showborder="1" canvasbgcolor="FFFFFF" showcanvasbase="1" bordercolor="9F9F9F" borderalpha="74" borderthickness="0" canvasbasedepth="4" adjustdiv="0" divlineisdashed="0" vdivlineisdashed="0" divlinecolor="FFFFFF" yaxisvaluespadding="15" stack100percent="0" >
+ <categories>
+  <category label="Jan"/>
+  <category label="Feb"/>
+  <category label="Mar"/>
+  <category label="Apr"/>
+  <category label="May"/>
+  <category label="Jun"/>
+  <category label="Jul"/>
+  <category label="Aug"/>
+  <category label="Sep"/>
+  <category label="Oct"/>
+  <category label="Nov"/>
+  <category label="Dec"/>
+  
+ </categories>
+ <dataset seriesName="Cleared" color_cc="CE0000" color="CE0000">
+  <set value="235"/>
+  <set value="125"/>
+  <set value="264"/>
+  <set value="234"/>
+  <set value="389"/>
+  <set value="235"/>
+  <set value="125"/>
+  <set value="264"/>
+  <set value="234"/>
+  <set value="389"/>
+  <set value="235"/>
+  <set value="125"/>
+ </dataset>
+ <dataset seriesName="Pending" color="5F5F5F" color_cc="5F5F5F">
+  <set value="190"/>
+  <set value="107"/>
+  <set value="203"/>
+  <set value="145"/>
+  <set value="175"/>
+  <set value="190"/>
+  <set value="107"/>
+  <set value="203"/>
+  <set value="145"/>
+  <set value="175"/>
+  <set value="190"/>
+  <set value="107"/>
+ </dataset>
+ </chart>

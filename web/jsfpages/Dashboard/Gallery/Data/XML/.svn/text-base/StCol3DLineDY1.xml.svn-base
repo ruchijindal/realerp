@@ -1,0 +1,50 @@
+<chart caption='Top 10 brokers' showLabels='1' showvalues='0' numberPrefix='Rs' sYAxisValuesDecimals='2' connectNullData='0' PYAxisName='Commision' SYAxisName='Units'  numDivLines='4' formatNumberScale='0' syncAxisLimits='1'>
+<categories>
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+<category label='BR1' />
+</categories>
+<dataset seriesName='Cleared' color='AFD8F8' showValues='0'>
+<set value='25601.34' />
+<set value='20148.82' />
+<set value='17372.76' />
+<set value='35407.15' />
+<set value='38105.68' />
+<set value='25601.34' />
+<set value='20148.82' />
+<set value='17372.76' />
+<set value='35407.15' />
+<set value='38105.68' />
+</dataset>
+<dataset seriesName='Pending' color='F6BD0F' showValues='0' >
+<set value='57401.85' /> 
+<set value='41941.19' />
+<set value='45263.37' />
+<set value='117320.16' />
+<set value='114845.27' />
+<set value='57401.85' /> 
+<set value='41941.19' />
+<set value='45263.37' />
+<set value='117320.16' />
+<set value='114845.27' dashed='1'/>
+</dataset>
+<dataset seriesName='Units' color='8BBA00' showValues='0' parentYAxis='S' >
+<set value='45 ' />
+<set value='44 ' />
+<set value='42 ' />
+<set value='77 ' />
+<set value='92 ' />
+<set value='45 ' />
+<set value='44 ' />
+<set value='42 ' />
+<set value='77 ' />
+<set value='92 ' />
+</dataset>
+</chart>

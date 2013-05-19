@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/report
+END
+dueLetterReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/report/dueLetterReport.java
+END
+MasterBrokerReceipt.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/791/RealErp/src/java/org/smp/realerp/report/MasterBrokerReceipt.java
+END
+BrokerPaymentReceipt.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/758/RealErp/src/java/org/smp/realerp/report/BrokerPaymentReceipt.java
+END
+ConsumerReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/report/ConsumerReport.java
+END
+BrokerBookingReceipt.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/793/RealErp/src/java/org/smp/realerp/report/BrokerBookingReceipt.java
+END
+collectionReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/1082/RealErp/src/java/org/smp/realerp/report/collectionReport.java
+END
+PaymentReceipt.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/792/RealErp/src/java/org/smp/realerp/report/PaymentReceipt.java
+END

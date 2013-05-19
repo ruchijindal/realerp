@@ -1,0 +1,487 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"     
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Broker Payment
+    </ui:define>
+
+
+    <ui:define name="content">
+        <p:accordionPanel id="accordian" activeIndex="1" styleClass="table-width">
+            <p:ajax process="accordian" event="tabChange" listener="#{brokerPaymentBean.reset()}" update=":accordian:brokerPayForm,:accordian:searchBrokerPayForm,:paymentList"/>
+            <p:tab title="Add Broker Payment"> 
+                <h:form id="brokerPayForm" rendered="#{loginBean.addBrokerPayment}" >
+                    <h:panelGrid columns="3" cellpadding="3">
+                        <h:outputLabel for="brokerCat" value="Broker Category: *"/>
+                        <p:selectOneMenu id="brokerCat" value="#{brokerPaymentBean.fbsBrokerCat.categoryId}" styleClass="select_box">  
+                            <f:selectItem itemLabel="Select" itemValue="0" />  
+                            <f:selectItems var="brokerCat" value="#{brokerPaymentBean.fbsBrokerCatList}" itemLabel="#{brokerCat.categoryName}" itemValue="#{brokerCat.categoryId}"/>
+                            <p:ajax event="change" process="brokerCat" listener="#{brokerPaymentBean.populateFbsBroker()}" update=":accordian:brokerPayForm:brokerName,:accordian:brokerPayForm:brokerCatInfo,:accordian:brokerPayForm:regNum,:accordian:brokerPayForm:regInfo"/>
+                        </p:selectOneMenu>
+                        <p:dataTable id="brokerCatInfo" var="#" value="#">                       
+                            <p:column headerText="Commission(in %)">
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderBrCategoryDetail}"/>
+                                <h:outputText id="block" value="#{brokerPaymentBean.fbsBrokerCat.commission}" rendered="#{brokerPaymentBean.renderBrCategoryDetail}"/>
+                            </p:column>
+                            <p:column headerText="Bsp(in %)">
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderBrCategoryDetail}"/>
+                                <h:outputText id="floor" value="#{brokerPaymentBean.fbsBrokerCat.bspPercent}" rendered="#{brokerPaymentBean.renderBrCategoryDetail}"/>
+                            </p:column>
+                            <p:column headerText="Brokerage(in %)">
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderBrCategoryDetail}"/>
+                                <h:outputText id="flat" value="#{brokerPaymentBean.fbsBrokerCat.brokerPercent}" rendered="#{brokerPaymentBean.renderBrCategoryDetail}"/>
+                            </p:column>                           
+                        </p:dataTable>
+
+                        <h:outputLabel for="brokerName" value="Broker: *"/>
+                        <p:selectOneMenu id="brokerName" value="#{brokerPaymentBean.fbsBroker.brokerId}" styleClass="select_box">  
+                            <f:selectItem itemLabel="Select" itemValue="0" />  
+                            <f:selectItems var="broker" value="#{brokerPaymentBean.fbsBrokerList}" itemLabel="#{broker.brName}" itemValue="#{broker.brokerId}"/>
+                            <p:ajax event="change" process="brokerName" listener="#{brokerPaymentBean.populateRegNum()}" update=":accordian:brokerPayForm:regNum,:accordian:brokerPayForm:regInfo"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel/>
+
+                        <h:outputLabel for="regNum" value="Reg No: *"/>
+                        <p:selectOneMenu id="regNum" value="#{brokerPaymentBean.fbsBooking.regNumber}" styleClass="select_box">  
+                            <f:selectItem itemLabel="Select" itemValue="0" />  
+                            <f:selectItems var="booking" value="#{brokerPaymentBean.fbsBookingList}" itemLabel="#{booking.regNumber.toString()}" itemValue="#{booking.regNumber}"/> 
+                            <p:ajax event="change" process="regNum" listener="#{brokerPaymentBean.showBookingDetail()}" update=":accordian:brokerPayForm:regInfo"/>
+                        </p:selectOneMenu>
+                        <p:dataTable id="regInfo" var="#" value="#">
+
+                            <p:column  headerText="Project" >
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderRegNumDetail}"/>
+                                <h:outputText id="project" value="#{brokerPaymentBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projName}" rendered="#{brokerPaymentBean.renderRegNumDetail}"/>
+                            </p:column>
+                            <p:column headerText="Block">
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderRegNumDetail}"/>
+                                <h:outputText id="block" value="#{brokerPaymentBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockName}" rendered="#{brokerPaymentBean.renderRegNumDetail}"/>
+                            </p:column>
+                            <p:column headerText="Floor">
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderRegNumDetail}"/>
+                                <h:outputText id="floor" value="#{brokerPaymentBean.convertFloorNo(floor.floorNo)}" rendered="#{brokerPaymentBean.renderRegNumDetail}"/>
+                            </p:column>
+                            <p:column headerText="Flat No">
+                                <h:outputText value="N/A" rendered="#{!brokerPaymentBean.renderRegNumDetail}"/>
+                                <h:outputText id="flat" value="#{brokerPaymentBean.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr.concat('-')}#{brokerPaymentBean.fbsBooking.fbsFlat.flatNo}" rendered="#{brokerPaymentBean.renderRegNumDetail}"/>
+                            </p:column>                           
+                        </p:dataTable>                                                               
+
+                        <h:outputLabel for="mode" value="Mode: *" />  
+                        <p:selectOneRadio id="mode" value="#{brokerPaymentBean.fbsBrPayment.paymentMode}" required="true" requiredMessage="Payment Mode should be entered">  
+                            <f:selectItem itemLabel="Cash" itemValue="Cash" />  
+                            <f:selectItem itemLabel="Cheque" itemValue="Cheque" />  
+                            <f:selectItem itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT" />
+                            <p:ajax process="mode" event="change" listener="#{brokerPaymentBean.renderMode(brokerPaymentBean.fbsBrPayment.paymentMode)}" update=":accordian:brokerPayForm"/>
+                        </p:selectOneRadio> 
+                        <h:outputLabel/>
+
+                        <h:outputLabel  value="Cheque No: *" for="chequeno" rendered="#{brokerPaymentBean.renderModeCheque}" />
+                        <p:inputText id="chequeno" value="#{brokerPaymentBean.fbsBrPayment.chequeNo}" rendered="#{brokerPaymentBean.renderModeCheque}" required="true" requiredMessage="Cheque No. should be entered" />
+                        <h:outputLabel rendered="#{brokerPaymentBean.renderModeCheque}"/>
+
+                        <h:outputLabel value="Cheque Date: *" for="chequedate" rendered="#{brokerPaymentBean.renderModeCheque}"/>
+                        <p:calendar id="chequedate" value="#{brokerPaymentBean.fbsBrPayment.chequeDate}" mode="popup"  pattern="#{initParam['date-pattern']}" rendered="#{brokerPaymentBean.renderModeCheque}" timeZone="IST" required="true" requiredMessage="Cheque Date should be entered"/>
+                        <h:outputLabel rendered="#{brokerPaymentBean.renderModeCheque}"/>
+
+                        <h:outputLabel  value="Bank Name: *" for="drawnon" rendered="#{brokerPaymentBean.renderModeCheque}"/> 
+                        <p:inputText id="drawnon" value="#{brokerPaymentBean.fbsBrPayment.drawnOn}" rendered="#{brokerPaymentBean.renderModeCheque}" required="true" requiredMessage="Bank Name should be entered" validatorMessage="Invalid Bank Name">
+                             <f:validateRegex pattern="#{initParam['name']}" />
+                        </p:inputText>
+
+                        <h:outputLabel rendered="#{brokerPaymentBean.renderModeCheque}"/>
+
+                        <h:outputLabel  value="Transaction ID: *" for="transactionId" rendered="#{brokerPaymentBean.renderModeNeft}"/>
+                        <p:inputText id="transactionId" value="#{brokerPaymentBean.fbsBrPayment.transactionId}" rendered="#{brokerPaymentBean.renderModeNeft}"  required="true" requiredMessage="TransactionID should be entered" />
+                        <h:outputLabel rendered="#{brokerPaymentBean.renderModeNeft}"/>
+
+                        <h:outputLabel  value="Transaction Bank: *" for="transactionBank" rendered="#{brokerPaymentBean.renderModeNeft}"/> 
+                        <p:inputText id="transactionBank" value="#{brokerPaymentBean.fbsBrPayment.drawnOn}" rendered="#{brokerPaymentBean.renderModeNeft}" required="true" requiredMessage="TransactionBank should be entered" validatorMessage="Invalid Transaction Bank">
+                             <f:validateRegex pattern="#{initParam['name']}" />
+                        </p:inputText>
+
+                        <h:outputLabel rendered="#{brokerPaymentBean.renderModeNeft}"/>
+
+                        <h:outputLabel for="paymentDate" value="Received Date: *"/>
+                        <p:calendar id="paymentDate" value="#{brokerPaymentBean.fbsBrPayment.paymentDate}" pattern="#{initParam['date-pattern']}" timeZone="IST" required="true" requiredMessage="Payment Date should be entered" converterMessage="Invalid start date  format">
+                            <p:ajax process="paymentDate" event="dateSelect" listener="#{brokerPaymentBean.setValuesOnBlur()}"/>
+                        </p:calendar>
+                        <h:outputLabel/>
+                        <h:outputLabel for="amount" value="Amount: *"/>
+                        <p:inputText id="amount" value="#{brokerPaymentBean.fbsBrPayment.amount}" required="true" requiredMessage="Amount should be entered" converterMessage="Invalid Amount">
+                            <p:ajax event="blur" process="amount" listener="#{brokerPaymentBean.showAmount('nonEdit')}"/>
+                            <f:convertNumber type="number" />
+                        </p:inputText>
+                        <h:outputLabel/>
+                        <h:outputLabel for="remark" value="Remark:"/>
+                        <p:inputTextarea id="remark" value="#{brokerPaymentBean.fbsBrPayment.remark}" rows="3" cols="18" autoResize="false">
+                            <p:ajax process="remark" event="blur" listener="#{brokerPaymentBean.setValuesOnBlur()}"/>
+                        </p:inputTextarea>
+                        <h:outputLabel/>
+
+                    </h:panelGrid>
+                    <p:commandButton value="Add" action="#{brokerPaymentBean.addBrokerPayment()}" update=":accordian:brokerPayForm,:paymentList"/>                 
+                    <p:commandButton value="Reset" action="#{brokerPaymentBean.reset()}"  update=":accordian:brokerPayForm,:paymentList" process="@this" /> 
+
+                </h:form>
+            </p:tab>
+            <p:tab title="Search Broker Payment">
+                <h:form id="searchBrokerPayForm">
+                    <p:selectOneButton id="searchType" value="#{brokerPaymentBean.searchType}">
+                        <f:selectItem itemLabel="Quick Search" itemValue="1" />  
+                        <f:selectItem itemLabel="Advanced Search" itemValue="2" />  
+                        <p:ajax process="searchType" event="change" update=":accordian:searchBrokerPayForm,:accordian:brokerPayForm,:paymentList" listener="#{brokerPaymentBean.changeTypeOfSearching()}"/> 
+                    </p:selectOneButton>
+                    <table cellpadding="3" cellspacing="3">
+                        <tr>
+                            <td><h:outputLabel value="Broker Category: "/></td>
+                            <td>
+                                <p:selectOneMenu id="brokerCat" value="#{brokerPaymentBean.fbsBrokerCat.categoryId}" styleClass="select_box">  
+                                    <f:selectItem itemLabel="Select" itemValue="0" />  
+                                    <f:selectItems var="brokerCat" value="#{brokerPaymentBean.fbsBrokerCatList}" itemLabel="#{brokerCat.categoryName}" itemValue="#{brokerCat.categoryId}"/>
+                                    <p:ajax event="change" process="brokerCat" listener="#{brokerPaymentBean.populateFbsBroker()}" update=":accordian:searchBrokerPayForm:brokerName,:paymentList"/>
+                                </p:selectOneMenu></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel for="brokerName" value="Broker: "/></td>
+                            <td> <p:selectOneMenu id="brokerName" value="#{brokerPaymentBean.fbsBroker.brokerId}" styleClass="select_box">  
+                                    <f:selectItem itemLabel="Select" itemValue="0" />  
+                                    <f:selectItems var="broker" value="#{brokerPaymentBean.fbsBrokerList}" itemLabel="#{broker.brName}" itemValue="#{broker.brokerId}"/>
+                                    <p:ajax event="change" process="brokerName" listener="#{brokerPaymentBean.populateRegNum()}"  update=":paymentList" />
+                                </p:selectOneMenu></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Mode: " for="pMode"/></td>
+                            <td colspan="4"> <p:selectOneRadio id="pMode" value="#{brokerPaymentBean.fbsBrokerPaymentMode}">
+                                    <f:selectItem  itemLabel="Cash"  itemValue="Cash"   />
+                                    <f:selectItem  itemLabel="Cheque" itemValue="Cheque"   />
+                                    <f:selectItem  itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT"  />
+                                    <p:ajax process="pMode" update=":paymentList" event="change" listener="#{brokerPaymentBean.filterBrokerPayment()}" />
+                                </p:selectOneRadio>     </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel  value="Receipt/Reg No:"/> </td>
+                            <td>
+                                <p:inputText id="receiptNo" value="#{brokerPaymentBean.fbsReceiptNo}">
+                                    <p:ajax process="receiptNo" event="keyup" listener="#{brokerPaymentBean.filterBrokerPayment()}" update=":paymentList"/>
+                                </p:inputText>
+                                <p:watermark for="receiptNo" value="Receipt No"/>
+                            </td>
+                            <td colspan="3">
+                                <p:inputText id="regNo" value="#{brokerPaymentBean.fbsRegistrationNo}">
+                                    <p:ajax process="regNo" event="keyup" listener="#{brokerPaymentBean.filterBrokerPayment()}" update=":paymentList"/>
+                                </p:inputText>
+                                <p:watermark for="regNo" value="Reg No"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Received Date: "/> </td>
+                            <td><p:calendar id="fromDate"  value="#{brokerPaymentBean.paymentDateFrom}" pattern="#{initParam['date-pattern']}" timeZone="IST" converterMessage="Invalid start date  format" >
+                                    <p:ajax process="fromDate" event="dateSelect"  update=":paymentList" listener="#{brokerPaymentBean.handleDateSelectForFromDate}"/>
+                                </p:calendar>
+                                <p:watermark for="fromDate" value="From"/>
+                            </td>
+                            <td colspan="3">
+                                <p:calendar id="toDate"  value="#{brokerPaymentBean.paymentDateTo}" pattern="#{initParam['date-pattern']}" timeZone="IST" converterMessage="Invalid start date  format" >
+                                    <p:ajax process="toDate" event="dateSelect"  update=":paymentList" listener="#{brokerPaymentBean.handleDateSelectForToDate}"/>
+                                </p:calendar>
+                                <p:watermark for="toDate" value="To"/>                   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p:separator rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Unit Details: " rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/> </td>
+                            <td>
+                                <p:selectOneMenu  id="project1" value="#{brokerPaymentBean.fbsProject.projId}" styleClass="select_box" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <f:selectItem itemLabel="Select Project" itemValue="0" />
+                                    <f:selectItems value="#{brokerPaymentBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  /> 
+                                    <p:ajax event="change" process="project1" listener="#{brokerPaymentBean.populateBlock()}" update=":accordian:searchBrokerPayForm:block1,:accordian:searchBrokerPayForm:floor1,:accordian:searchBrokerPayForm:flat1,:paymentList"/>
+                                </p:selectOneMenu> 
+                            </td>
+                            <td>
+                                <p:selectOneMenu id="block1" value="#{brokerPaymentBean.fbsBlock.blockId}" styleClass="select_box"  rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <f:selectItem itemLabel="Select Block" itemValue="0" />
+                                    <f:selectItems value="#{brokerPaymentBean.fbsBlockList}"  itemValue="#{block.blockId}" itemLabel="#{block.blockName}" var="block"  />
+                                    <p:ajax event="change" process="block1" listener="#{brokerPaymentBean.populateFloor()}" update=":accordian:searchBrokerPayForm:floor1,:accordian:searchBrokerPayForm:flat1,:paymentList"/>                                
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:selectOneMenu id="floor1" value="#{brokerPaymentBean.fbsFloor.floorId}" styleClass="select_box" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <f:selectItem itemLabel="Select Floor" itemValue="0" />
+                                    <f:selectItems value="#{brokerPaymentBean.fbsFloorList}"  var="floor" itemLabel="#{brokerPaymentBean.convertFloorNo(floor.floorNo)}" itemValue="#{floor.floorId}" />
+                                    <p:ajax event="change" process="floor1" listener="#{brokerPaymentBean.populateFlat()}" update=":accordian:searchBrokerPayForm:flat1,:paymentList"/>                               
+                                </p:selectOneMenu>
+                            </td>
+                            <td>
+                                <p:selectOneMenu id="flat1" value="#{brokerPaymentBean.searchFbsFlat.unitCode}" styleClass="select_box" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <f:selectItem itemLabel="Select Flat" itemValue="0"/>
+                                    <f:selectItems value="#{brokerPaymentBean.fbsFlatList}" var="flat1" itemLabel="#{brokerPaymentBean.fbsBlock.blockAbvr} - #{flat1.flatNo}" itemValue="#{flat1.unitCode}"/> 
+                                    <p:ajax event="change" process="flat1" listener="#{brokerPaymentBean.populatePayment()}" update=":paymentList"/>                              
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Other Details: " rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/></td>
+                            <td><p:selectOneMenu id="clrBank" value="#{brokerPaymentBean.fbsBank.bankId}" styleClass="select_box" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">  
+                                    <f:selectItem itemLabel="Select Clearing Bank" itemValue="0" />  
+                                    <f:selectItems var="bank" value="#{brokerPaymentBean.fbsBankList}" itemLabel="#{bank.bankName}" itemValue="#{bank.bankId}"/>
+                                    <p:ajax event="change" process="clrBank" listener="#{brokerPaymentBean.populateFbsBank()}" update=":paymentList"/>
+                                </p:selectOneMenu></td>
+                            <td><p:inputText id="chequeTranId" value="#{brokerPaymentBean.chequeTransactionNo}" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <p:ajax event="keyup" process="chequeTranId" listener="#{brokerPaymentBean.filterBrokerPayment()}" update=":paymentList"/> 
+                                </p:inputText>
+                                <p:watermark for="chequeTranId" value="ChequeNo/TransId" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>
+                            </td>
+                            <td>
+                                <p:inputText id="authorizeBy" value="#{brokerPaymentBean.fbsAuthorizeBy}" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <p:ajax event="keyup" process="authorizeBy" listener="#{brokerPaymentBean.filterBrokerPayment()}" update=":paymentList"/> 
+                                </p:inputText>
+                                <p:watermark for="authorizeBy" value="Authorize By" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>
+                            </td>
+                            <td>
+                                <p:inputText id="paymentBy" value="#{brokerPaymentBean.fbsPaymentBy}" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}">
+                                    <p:ajax event="keyup" process="paymentBy" listener="#{brokerPaymentBean.filterBrokerPayment()}" update=":paymentList"/> 
+                                </p:inputText>
+                                <p:watermark for="paymentBy" value="Payment By" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Cheque Date: " rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/></td>
+                            <td>
+                                <p:calendar id="chequeFromDate"  value="#{brokerPaymentBean.chequeDateFrom}" pattern="#{initParam['date-pattern']}" timeZone="IST" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}" converterMessage="Invalid Cheque Date  format">
+                                    <p:ajax process="chequeFromDate" event="dateSelect"  update=":paymentList" listener="#{brokerPaymentBean.handleDateSelectForChequeFromDate}"/>
+                                </p:calendar>
+                                <p:watermark for="chequeFromDate" value="From" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>
+                            </td>
+                            <td colspan="3">
+                                <p:calendar id="chequeToDate"  value="#{brokerPaymentBean.chequeDateTo}" pattern="#{initParam['date-pattern']}" timeZone="IST" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}" converterMessage="Invalid start date  format">
+                                    <p:ajax process="chequeToDate" event="dateSelect"  update=":paymentList" listener="#{brokerPaymentBean.handleDateSelectForChequeToDate}"/>
+                                </p:calendar>
+                                <p:watermark for="chequeToDate" value="To" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>                   
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="Clearing Date: " rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/></td>
+                            <td>
+                                <p:calendar id="clearFromDate"  value="#{brokerPaymentBean.clearingDateFrom}" pattern="#{initParam['date-pattern']}" timeZone="IST" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}" converterMessage="Invalid start date  format">
+                                    <p:ajax process="clearFromDate" event="dateSelect"  update=":paymentList" listener="#{brokerPaymentBean.handleDateSelectForStatusFromDate}"/>
+                                </p:calendar>
+                                <p:watermark for="clearFromDate" value="From" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/>
+                            </td>
+                            <td colspan="3">
+                                <p:calendar id="clearToDate"  value="#{brokerPaymentBean.clearingDateTo}" pattern="#{initParam['date-pattern']}" timeZone="IST" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}" converterMessage="Invalid start date  format">
+                                    <p:ajax process="clearToDate" event="dateSelect"  update=":paymentList" listener="#{brokerPaymentBean.handleDateSelectForStatusToDate}"/>
+                                </p:calendar>
+                                <p:watermark for="clearToDate" value="To" rendered="#{brokerPaymentBean.renderAdvanceSearchForm}"/> 
+
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <p:button value="Reset"/>
+                </h:form>
+
+            </p:tab>
+        </p:accordionPanel>
+
+        <div class="vertical-space"/>
+        <h:form id="paymentList" rendered="#{loginBean.viewBrokerPayment}" styleClass="table-width">
+
+            <p:dataTable id="payments" var="payment" value="#{brokerPaymentBean.fbsBrPaymentList}" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom"  rowIndexVar="sn" rowStyleClass="#{payment.status eq 'Pending' ? 'unauthorize': null}">
+
+                <f:facet name="header">
+                    <div class="table-header">
+                        Broker Payment Details
+                    </div>
+                </f:facet>
+                <p:column  headerText="S_No."  >
+                    <h:outputText value="#{sn+1}" />
+                </p:column>
+
+                <p:column sortBy="#{payment.paymentId}" headerText="Receipt No." >
+                    <h:outputText value="#{payment.paymentId}" />
+                </p:column>
+
+                <p:column sortBy="#{payment.fbsBooking.regNumber}" headerText="Reg No" >
+                    <h:outputText value="#{payment.fbsBooking.regNumber}"/>
+                </p:column>
+
+                <p:column  sortBy="#{payment.fbsBooking.fbsFlat.flatNo}" headerText="Unit Code"> 
+                    <p:commandLink  value="#{payment.fbsBooking.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{payment.fbsBooking.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{payment.fbsBooking.fbsFlat.flatNo}" 
+                                    action="#{brokerPaymentBean.bookingDetail(payment)}"  style="color:#{payment.status eq 'Pending' ? '#EF2F12': null}"  />
+                </p:column>
+
+                <p:column  headerText="Broker">
+                    <h:outputText value="#{payment.fbsBroker.brName}"/>
+                </p:column>
+
+                <p:column  sortBy="#{payment.paymentDate}" headerText="Received Date">
+                    <h:outputText value="#{payment.paymentDate}">
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" /></h:outputText>
+                </p:column>
+
+                <p:column  headerText="Mode" >                        
+                    <h:outputText value="#{payment.paymentMode}"/>                          
+                </p:column>
+
+                <p:column headerText="Amount"  style="text-align: right">                      
+                    <h:outputText value="#{brokerPaymentBean.roundOfUptoTwoDecimal(payment.amount)}"/>
+                </p:column>
+
+                <p:column headerText="User Id">
+                    <h:outputText value="#{payment.userId}"/>
+                </p:column>
+                <p:column  headerText="Status">                   
+                    <p:commandLink value="#{payment.status}" rendered="#{loginBean.authorizePayment}"  action="#{brokerPaymentBean.showPaymentStatus(payment)}" update=":authForm"
+                                   style="color:#{payment.status eq 'Pending' ? '#EF2F12': null}"/>
+                </p:column>
+
+
+
+                <p:column headerText="Options">
+                    <p:commandLink styleClass="ui-icon ui-icon-info" title="Detail"  update=":detailForm" action="#{brokerPaymentBean.showPaymentDetail(payment)}"/>
+                    <p:commandLink action="#{brokerPaymentBean.generateReceipt(payment)}" title="Payment Receipt" styleClass="ui-icon ui-icon-document"/>
+                    <p:commandLink styleClass="ui-icon ui-icon-trash" title="Delete" action="#{brokerPaymentBean.confirmDeleteBrokerPayment(payment)}" 
+                                   onclick="delBank.show()" update=":delBankForm" rendered="#{payment.status eq 'Pending'}">                                                      
+                    </p:commandLink>
+                </p:column> 
+
+            </p:dataTable>
+
+
+        </h:form>
+                
+        <h:form id="authForm">
+            <p:dialog id="statusDialog" header="Payment Status" widgetVar="paymentstatus" closable="false" resizable="false" draggable="false" visible="#{brokerPaymentBean.renderDialog}">
+                <h:outputLabel value="Do you want to change the status of this payment?"/>
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Clearing Bank" rendered="#{brokerPaymentBean.statusBrPayment.paymentMode eq 'Cheque' and brokerPaymentBean.renderPending}"/>
+                    <p:selectOneMenu id="clrBank" value="#{brokerPaymentBean.fbsBank.bankId}" rendered="#{brokerPaymentBean.statusBrPayment.paymentMode eq 'Cheque' and brokerPaymentBean.renderPending}" styleClass="select_box">  
+                        <f:selectItem itemLabel="Select" itemValue="0" />  
+                        <f:selectItems var="bank" value="#{brokerPaymentBean.fbsBankList}" itemLabel="#{bank.bankName}" itemValue="#{bank.bankId}"/>
+                          <p:ajax process="clrBank" event="change" listener="#{brokerPaymentBean.showbank()}"/>
+                    </p:selectOneMenu> 
+                    <h:outputLabel for="clrDate" value="Clearing Date:" rendered="#{brokerPaymentBean.statusBrPayment.paymentMode eq 'Cheque' and brokerPaymentBean.renderPending}"/>
+                    <p:calendar id="clrDate"  value="#{brokerPaymentBean.clearingDate}" pattern="#{initParam['date-pattern']}" timeZone="IST" converterMessage="Invalid Clearing Date  format"
+                                rendered="#{brokerPaymentBean.statusBrPayment.paymentMode  eq 'Cheque' and brokerPaymentBean.renderPending}" required="true" requiredMessage="Clearing Date Required">
+                        <p:ajax process="clrDate" event="dateSelect" listener="#{brokerPaymentBean.handleDateSelect}" update=":authForm"/>
+                    </p:calendar>
+                </h:panelGrid>              
+                <p:commandButton value="Submit" action="#{brokerPaymentBean.editPaymentStatus()}"  update=":paymentList,:authForm"/>
+                <p:button value="Cancel" />
+            </p:dialog> 
+        </h:form>
+
+        <p:dialog id="delBankDialog" header="Confirm Delete Broker Payment" widgetVar="delBank">
+            <h:form id="delBankForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this payment?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delBank.hide();" action="#{brokerPaymentBean.deleteBrokerPayment()}" update=":paymentList"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delbank.hide();"/>
+            </h:form>
+        </p:dialog> 
+
+        <h:form id="detailForm">
+            <p:dialog id="showDetail" header="Payment Detail" widgetVar="paymentDetail" closable="false" visible="#{brokerPaymentBean.renderDialog}" resizable="false" draggable="false">
+
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel for="receiptNo" value="Receipt No.: "/>
+                    <h:outputText id="receiptNo" value="#{brokerPaymentBean.selectedFbsBrPayment.paymentId}"/>
+
+                    <h:outputLabel for="brokerCat" value="Broker Category"/>
+                    <p:selectOneMenu id="brokerCat" value="#{brokerPaymentBean.fbsBrokerCat.categoryId}" styleClass="select_box">  
+                        <f:selectItem itemLabel="Select" itemValue="0" />  
+                        <f:selectItems var="brokerCat" value="#{brokerPaymentBean.fbsBrokerCatList}" itemLabel="#{brokerCat.categoryName}" itemValue="#{brokerCat.categoryId}"/>
+                        <p:ajax event="change" process="brokerCat" listener="#{brokerPaymentBean.populateFbsBroker()}" update=":detailForm:brokerName,:detailForm:regNum"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="brokerName" value="Broker"/>
+                    <p:selectOneMenu id="brokerName" value="#{brokerPaymentBean.fbsBroker.brokerId}" styleClass="select_box">  
+                        <f:selectItem itemLabel="Select" itemValue="0" />  
+                        <f:selectItems var="broker" value="#{brokerPaymentBean.fbsBrokerList}" itemLabel="#{broker.brName}" itemValue="#{broker.brokerId}"/>
+                        <p:ajax event="change" process="brokerName" listener="#{brokerPaymentBean.populateRegNum()}" update=":detailForm:regNum"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel for="regNum" value="Reg No:" />
+                    <p:selectOneMenu id="regNum" value="#{brokerPaymentBean.fbsBooking.regNumber}" styleClass="select_box">  
+                        <f:selectItem itemLabel="Select" itemValue="0" />  
+                        <f:selectItems var="booking" value="#{brokerPaymentBean.fbsBookingList}" itemLabel="#{booking.regNumber.toString()}" itemValue="#{booking.regNumber}"/> 
+                        <p:ajax event="change" process="regNum" listener="#{brokerPaymentBean.showBookingDetail()}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Mode: *" for="paymentMode"/>
+                    <p:selectOneRadio id="paymentMode" value="#{brokerPaymentBean.selectedFbsBrPayment.paymentMode}"  required="true" requiredMessage="Payment Mode should be entered." >
+                        <f:selectItem  itemLabel="Cash"  itemValue="Cash"/>
+                        <f:selectItem  itemLabel="Cheque" itemValue="Cheque"/>
+                        <f:selectItem  itemLabel="RTGS/NEFT" itemValue="RTGS/NEFT"/> 
+                        <p:ajax process="paymentMode" update=":detailForm" event="change" listener="#{brokerPaymentBean.renderMode(brokerPaymentBean.selectedFbsBrPayment.paymentMode)}" />
+                    </p:selectOneRadio>
+
+                    <h:outputLabel for="amount" value="Amount"/>
+                    <p:inputText id="amount" value="#{brokerPaymentBean.selectedFbsBrPayment.amount}">
+                        <p:ajax event="blur" process="amount" listener="#{brokerPaymentBean.showAmount('chkEdit')}"/>
+                    </p:inputText>
+
+                    <h:outputLabel for="paymentDate" value="Received Date: "/>
+                    <p:calendar id="paymentDate" value="#{brokerPaymentBean.selectedFbsBrPayment.paymentDate}" pattern="#{initParam['date-pattern']}" timeZone="IST" />
+
+                    <h:outputLabel  value="Cheque No: *" for="chequeno" rendered="#{brokerPaymentBean.renderModeCheque}"/>
+                    <p:inputText id="chequeno" value="#{brokerPaymentBean.selectedFbsBrPayment.chequeNo}"  rendered="#{brokerPaymentBean.renderModeCheque}" required="true" requiredMessage="Cheque No  should be entered."/>
+
+                    <h:outputLabel value="Cheque Date: *" for="chequedate" rendered="#{brokerPaymentBean.renderModeCheque}"/>
+                    <p:calendar id="chequedate" value="#{brokerPaymentBean.selectedFbsBrPayment.chequeDate}" rendered="#{brokerPaymentBean.renderModeCheque}" mode="popup"  pattern="#{initParam['date-pattern']}"  timeZone="IST" required="true" requiredMessage="Cheque Date should be entered." />
+
+                    <h:outputLabel  value="Bank Name: *" for="drawnon" rendered="#{brokerPaymentBean.renderModeCheque}"/> 
+                    <p:inputText id="drawnon" value="#{brokerPaymentBean.selectedFbsBrPayment.drawnOn}"  rendered="#{brokerPaymentBean.renderModeCheque}" required="true" requiredMessage="Bank Name should be entered."  />
+
+                    <h:outputLabel  value="Transaction ID: *" for="transactionId"  rendered="#{brokerPaymentBean.renderModeNeft}"/>
+                    <p:inputText id="transactionId" value="#{brokerPaymentBean.selectedFbsBrPayment.transactionId}"  rendered="#{brokerPaymentBean.renderModeNeft}" required="true" requiredMessage="TransactionID should be entered." />
+
+                    <h:outputLabel  value="Transaction Bank: *" for="transactionBank" rendered="#{brokerPaymentBean.renderModeNeft}"/> 
+                    <p:inputText id="transactionBank" value="#{brokerPaymentBean.selectedFbsBrPayment.drawnOn}"  rendered="#{brokerPaymentBean.renderModeNeft}" required="true" requiredMessage="TransactionBank should be entered." />
+
+                    <h:outputLabel value="Authorized By: " rendered="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared'}"/>
+                    <h:outputText value="#{brokerPaymentBean.selectedFbsBrPayment.authorizedBy}" rendered="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared'}"/>
+
+                    <h:outputLabel value="Clearing Bank" rendered="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared' and brokerPaymentBean.renderModeCheque}"/>
+                    <p:inputText  value="#{brokerPaymentBean.selectedFbsBrPayment.clearingBank}"   rendered="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared' and brokerPaymentBean.renderModeCheque}" />
+
+                    <h:outputLabel value="Clearing Date" rendered="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared'}"/>                   
+                    <p:inputText value="#{brokerPaymentBean.selectedFbsBrPayment.clearingDt}" rendered="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared'}" >
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST"  />
+                    </p:inputText>
+
+                    <h:outputLabel for="remark" value="Remark:"/>
+                    <p:inputTextarea id="remark" value="#{brokerPaymentBean.selectedFbsBrPayment.remark}" rows="3" cols="18" autoResize="false"/>
+
+                </h:panelGrid>
+                <p:commandButton value="Save" action="#{rbrokerPaymentBean.editBrokerPayment()}"  update=":paymentList,:detailForm" disabled="#{brokerPaymentBean.selectedFbsBrPayment.status eq 'Cleared'}"/>
+                <p:spacer width="5"/>
+                <p:button value="Cancel"/>
+                <p:spacer width="5"/>
+
+
+            </p:dialog> 
+        </h:form>
+
+
+    </ui:define>
+
+
+
+</ui:composition>

@@ -1,0 +1,18 @@
+<chart caption='Project wise booking details' showLabels='1' showvalues='0' decimals='0' yAxisName='Units' >
+<categories><category label='Project 1' /><category label='Project 2' /><category label='Project 3' /><category label='Project 4' /><category label='Project 5' /></categories>
+<dataset seriesName='Booked' color='0B6138' showValues='0'>
+<set value='25' />
+<set value='20' />
+<set value='17' />
+<set value='35' />
+<set value='38' />
+</dataset>
+<dataset seriesName='Unbooked' color='8A0808' showValues='0'>
+<set value='57' />
+<set value='41' />
+<set value='45' />
+<set value='11' />
+<set value='11' />
+</dataset>
+ 
+</chart>

@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"     
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        User Role
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="addUserRole" styleClass="table-width" >
+            <p:panel header="Add User Role">
+                <h:panelGrid columns="2" >
+                    <h:outputLabel value="Role Name " for="roleName"></h:outputLabel>
+                    <p:inputText id="roleName" value="#{userRoleBean.fbsUser.roleName}" size="20" required="true" requiredMessage="Role Name Required" validatorMessage="Invalid Role Name" >
+                        <f:validateRegex pattern="#{initParam['name']}" />
+
+                    </p:inputText>
+                    <h:outputLabel value="Role Abvr " for="roleArv"></h:outputLabel>
+                    <p:inputText id="roleArv" value="#{userRoleBean.fbsUser.roleArv}" size="20" required="true" requiredMessage="Role Abvr Required" validatorMessage="Invalid Role Abrv">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+
+                    </p:inputText>
+                </h:panelGrid>
+            </p:panel>
+
+            <div class="vertical-space"/>
+
+            <p:panel header="Access Rights" >
+                <h:panelGrid columns="3">
+                    <p:tree value="#{userRoleBean.companySideBar}" var="node" id="checkboxTree"  selectionMode="checkbox"  selection="#{userRoleBean.selectedCompanyNode}">
+                        <p:treeNode>
+                            <h:outputText value="#{node}" />
+                        </p:treeNode>
+                    </p:tree>
+                </h:panelGrid>
+
+                <br/>
+                <p:commandButton value="Submit" update=":messages,:addUserRole,:messages,:userRoleDetails" action="#{userRoleBean.addUserRole()}"  />
+                <p:commandButton value="Reset" type="reset" update=":messages"  />
+            </p:panel>
+        </h:form>
+
+        <div class="vertical-space"/>
+        <h:form id="userRoleDetails" styleClass="table-width">
+            <p:dataTable id="roleDetails" var="role"  value="#{userRoleBean.userRoleList}" paginator="true" rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">
+
+                <f:facet name="header">
+                    User Role Details
+                </f:facet>
+                <p:column headerText="Role Name">
+                    <h:outputText value="#{role.roleName}" />
+                </p:column>
+
+                <p:column headerText="Role Abrv">
+                    <h:outputText value="#{role.roleArv}" />
+                </p:column>
+
+                <p:column headerText="Options">
+                    <p:commandLink id="link" action="#{userRoleBean.processUpdate(role)}" value="edit"  styleClass="ui-icon ui-icon-pencil" title="Edit"  onclick="updateRole.show()" update=":updateUserRole1">
+
+                    </p:commandLink>
+
+                    <p:commandLink id="delLink" action="#{userRoleBean.confirmDeleteUserRole(role)}" styleClass="ui-icon ui-icon-trash" title="Delete"   onclick="delUserRole.show()" update=":delUserRoleForm">
+
+                    </p:commandLink>
+
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <div class="vertical-space"/>
+        <p:dialog id="delUserRoleDialog" header="Confirm Delete User Role" widgetVar="delUserRole">
+            <h:form id="delUserRoleForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this Role"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delUserRole.hide();" action="#{userRoleBean.deleteUserRole()}" update=":userRoleDetails"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delUserRole.hide();" action="#"/>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="updateUserRoleId"   widgetVar="updateRole">
+            <div class="vertical-space"/>
+            <h:form id="updateUserRole1">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Role Name " for="roleName"></h:outputLabel>
+                    <p:inputText id="roleName1" value="#{userRoleBean.fbsUser.roleName}" size="20" required="true" requiredMessage="Role Name Required" validatorMessage="Invalid Role Name">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+                    </p:inputText>
+                    <h:outputLabel value="Role Abvr " for="roleArv"></h:outputLabel>
+                    <p:inputText id="roleArv1" value="#{userRoleBean.fbsUser.roleArv}" size="20" required="true" requiredMessage="Role Abrv Required" validatorMessage="Invalid Role abrv">
+                        <f:validateRegex pattern="#{initParam['name']}" />
+
+                    </p:inputText>
+                    <p:panel header="Access Rights" >
+                        <h:panelGrid columns="3">
+
+                            <p:tree value="#{userRoleBean.editCompanySideBar}" var="node" id="checkboxTree1"  selectionMode="checkbox"  selection="#{userRoleBean.editselectedNode}">
+                                <p:treeNode>
+                                    <h:outputText value="#{node}" />
+                                </p:treeNode>
+                            </p:tree>
+
+                        </h:panelGrid>
+                    </p:panel>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Update" onclick="updateRole.hide();" action="#{userRoleBean.updateUserRole}" update=":userRoleDetails"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Cancel" onclick="updateRole.hide();" action="#"/>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

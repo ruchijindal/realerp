@@ -1,0 +1,59 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:head>
+        <title>Real Estate Login</title>
+        <link href="${facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body onload="dlg.show()">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit id="top" position="north" gutter="0">
+                <div id="header">
+                    <a href="#" id="logo" title="Real Estate Erp"></a>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" >
+
+
+                <h:form id="showMessage">
+                    <p:growl id="growl"   showDetail="true"/>
+                    <p:dialog id="dialog" header="Show Message" widgetVar="dlg" closable="false" draggable="false" resizable="false" styleClass="dialog1">
+
+                        <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel value="Your Password is sent to your mail:" ></h:outputLabel>
+                            <br/>
+                            <h:outputLabel value="#{loginBean.email}"  styleClass="mail" ></h:outputLabel>
+                            <br/>
+                            <p:commandButton value="Click Here To Login" action="#{loginBean.forwardIndex()}" update=":showMessage:growl"/>
+
+                        </h:panelGrid>
+
+                    </p:dialog>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="bottom" position="south"  gutter="0">               
+                <div id="footer">
+                    <h:form id="bottomForm" style="text-align: right;">   
+                        <p:commandButton type="push" title="SMP Technologies Pvt Ltd © 2008-2012.All rights reserved"  value="©" onclick="copyright.show()"/>
+                        <p:dialog header="Copyright Information" widgetVar="copyright" showEffect="scale" hideEffect="scale" height="350"  width="400" styleClass="dialog1">
+                            <h:outputText  value="#{loginBean.copyRightMessage}">
+                            </h:outputText>
+                        </p:dialog>
+                    </h:form>
+                </div>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
+
+
+

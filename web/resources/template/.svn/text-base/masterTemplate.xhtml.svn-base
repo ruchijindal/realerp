@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <f:view>
+
+        <h:head>
+            <title>RE-ERP : <ui:insert name="title">title</ui:insert></title>
+            <link href="${facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+        </h:head>
+        <h:body>
+
+            <p:layout fullPage="true"  >
+
+
+
+                <p:layoutUnit id="top" position="north">
+                    <ui:insert name="top" >
+                        <div id="header">
+                            <ui:include src="/jsfpages/common/top.xhtml"  ></ui:include>
+                        </div>
+                    </ui:insert>
+                </p:layoutUnit>
+
+
+
+                <p:layoutUnit id="left"  position="west">
+                  
+                    <ui:insert name="sidebar">
+                        <ui:include src="/jsfpages/common/sidebar.xhtml"></ui:include>
+                    </ui:insert>
+               
+                </p:layoutUnit>
+
+
+
+                <p:layoutUnit id="center" position="center" closable="true" resizable="true" > 
+
+                    <h:form id="messages" styleClass="table-width">
+                        <p:growl showDetail="true" autoUpdate="true"  />  
+                    </h:form> 
+                    <ui:insert name="content"> 
+                    </ui:insert>
+
+
+                </p:layoutUnit>
+
+
+                <p:layoutUnit id="bottom" position="south">
+
+                    <ui:insert name="bottom">
+                        <div id="footer">
+                            <ui:include src="/jsfpages/common/bottom.xhtml"></ui:include>
+                        </div>
+                    </ui:insert>
+
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+
+
+    </f:view>
+
+</html>

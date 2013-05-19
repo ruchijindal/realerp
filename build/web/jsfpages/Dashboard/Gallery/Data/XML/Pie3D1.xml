@@ -1,0 +1,6 @@
+<chart caption="Total collection of company" palette="2" animation="1"   showValues="1" 
+numberPrefix="Rs" formatNumberScale="1" showPercentInToolTip="1" showLabels='0' showLegend='1'>
+<set label="Cleared" value="100524" isSliced="0" />
+<set label="Pending" value="87790" isSliced="0" />
+ 
+</chart>

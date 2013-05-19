@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/entity
+END
+FbsBroker.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/projects/!svn/ver/675/RealErp/src/java/org/smp/realerp/entity/FbsBroker.java
+END
+FbsPlc.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsPlc.java
+END
+FbsPayment.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/1112/RealErp/src/java/org/smp/realerp/entity/FbsPayment.java
+END
+FbsReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/projects/!svn/ver/1157/RealErp/src/java/org/smp/realerp/entity/FbsReport.java
+END
+FbsApplicant.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/1164/RealErp/src/java/org/smp/realerp/entity/FbsApplicant.java
+END
+FbsCharge.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/projects/!svn/ver/704/RealErp/src/java/org/smp/realerp/entity/FbsCharge.java
+END
+FbsPlanname.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/projects/!svn/ver/1095/RealErp/src/java/org/smp/realerp/entity/FbsPlanname.java
+END
+FbsFlatType.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsFlatType.java
+END
+FbsLoan.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsLoan.java
+END
+FbsProject.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/entity/FbsProject.java
+END
+FbsUser.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsUser.java
+END
+FbsBooking.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/1157/RealErp/src/java/org/smp/realerp/entity/FbsBooking.java
+END
+FbsInterest.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsInterest.java
+END
+FbsParking.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/projects/!svn/ver/704/RealErp/src/java/org/smp/realerp/entity/FbsParking.java
+END
+FbsPayplan.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/1049/RealErp/src/java/org/smp/realerp/entity/FbsPayplan.java
+END
+FbsDiscount.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/668/RealErp/src/java/org/smp/realerp/entity/FbsDiscount.java
+END
+FbsBlock.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/projects/!svn/ver/536/RealErp/src/java/org/smp/realerp/entity/FbsBlock.java
+END
+FbsComplaintReply.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/1088/RealErp/src/java/org/smp/realerp/entity/FbsComplaintReply.java
+END
+FbsDocs.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsDocs.java
+END
+FbsFlat.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/projects/!svn/ver/700/RealErp/src/java/org/smp/realerp/entity/FbsFlat.java
+END
+FbsServicetax.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/1186/RealErp/src/java/org/smp/realerp/entity/FbsServicetax.java
+END
+FbsCompany.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/1192/RealErp/src/java/org/smp/realerp/entity/FbsCompany.java
+END
+FbsBrokerCat.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsBrokerCat.java
+END
+FbsProjectAllot.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/1208/RealErp/src/java/org/smp/realerp/entity/FbsProjectAllot.java
+END
+FbsMailsetting.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/1192/RealErp/src/java/org/smp/realerp/entity/FbsMailsetting.java
+END
+FbsBrPayment.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/projects/!svn/ver/752/RealErp/src/java/org/smp/realerp/entity/FbsBrPayment.java
+END
+FbsParkingType.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/513/RealErp/src/java/org/smp/realerp/entity/FbsParkingType.java
+END
+FbsFacility.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsFacility.java
+END
+FbsPlcAllot.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/projects/!svn/ver/704/RealErp/src/java/org/smp/realerp/entity/FbsPlcAllot.java
+END
+FbsFloor.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/projects/!svn/ver/482/RealErp/src/java/org/smp/realerp/entity/FbsFloor.java
+END
+FbsComplaint.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/1042/RealErp/src/java/org/smp/realerp/entity/FbsComplaint.java
+END
+FbsBank.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/entity/FbsBank.java
+END
+FbsLogin.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/entity/FbsLogin.java
+END

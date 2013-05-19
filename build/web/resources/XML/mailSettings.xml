@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<mail_detail>
+    <from>noidajal@gmail.com</from>
+    <port>25</port>
+    <user>noidajal@gmail.com</user>
+    <password>smp@123</password>
+    <host>smtp.gmail.com</host>
+</mail_detail>

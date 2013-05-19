@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"    
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Block Detail List
+    </ui:define>
+
+
+
+    <ui:define name="content">
+        <h:form id="blockDetail" styleClass="table-width">
+            <p:breadCrumb>
+                <p:menuitem value="Dashboard" url="#" />
+                <p:menuitem value="Block" url="/faces/jsfpages/ProjectSetting/blockSettings.xhtml" />
+                <p:menuitem value="#{blockBean.selectedFbsBlock.blockName}" url="#" />
+            </p:breadCrumb>
+            <p:panel header="Block Details" rendered="#{loginBean.addProject}"  >
+                <h:panelGrid columns="4" cellpadding="4" >
+                    <p:fieldset styleClass="fieldsetStyle">   
+                        <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel value="Block Name: " for="blockName"></h:outputLabel>
+                            <p:inputText id="blockName"
+                                         value="#{blockBean.selectedFbsBlock.blockName}" readonly="true"  />
+                            <h:outputLabel value="Block Abvr:" for="blockAbvr"></h:outputLabel>
+                            <p:inputText id="blockAbvr"
+                                         value="#{blockBean.selectedFbsBlock.blockAbvr}" readonly="true"  />
+
+                            <h:outputLabel value= "Floor: " for="floor" rendered="#{loginBean.addProject}" ></h:outputLabel>
+                            <p:selectOneMenu  id="floor" value="#{blockBean.fbsFloor.floorId}" styleClass="select_box" rendered="#{loginBean.addProject}" >
+                                <f:selectItem itemLabel="New Floor" itemValue="0"/>
+                                <f:selectItems value="#{blockBean.fbsFloorList}" itemValue="#{floor.floorId}" itemLabel="#{blockBean.convertFloorNo(floor.floorNo)}"  var="floor" />                                
+                            </p:selectOneMenu>
+                            <h:outputLabel value= "Flat:" for="flat" rendered="#{loginBean.addProject}" ></h:outputLabel>
+                            <p:inputText id="flat" value="#{blockBean.noOfFlat}"  rendered="#{loginBean.addProject}" />
+                        </h:panelGrid>
+                        <br/>
+                        <p:commandButton value="Submit" action="#{blockBean.addFlat()}" update=":blockDetail"/>
+                        <p:spacer width="10"/>
+                        <p:button value="Reset"/>
+                    </p:fieldset>
+                    <p:fieldset styleClass="fieldsetStyle">
+                        <h:panelGrid columns="1" cellpadding="3">
+                            <h:outputLabel value="Flat Specification: " ></h:outputLabel>
+                            <p:selectOneMenu  value="#{blockBean.fbsFlatType.flatTypeId}" styleClass="select_box"  >
+                                <f:selectItem itemLabel="Select" itemValue="0"/>
+                                <f:selectItems value="#{blockBean.flatTypeList}" var="flatType" itemLabel="#{flatType.flatSpecification}" itemValue="#{flatType.flatTypeId}"/>                        
+                            </p:selectOneMenu>                           
+                        </h:panelGrid>                        
+                        <br/>
+                        <p:commandButton value="Submit" action="#{blockBean.addFlatSpecification()}" update=":blockDetail"/>
+                        <p:spacer width="10"/>
+                        <p:button value="Reset" />
+                    </p:fieldset>
+                    <p:fieldset styleClass="fieldsetStyle">
+                        <h:panelGrid columns="1" cellpadding="3">
+                            <h:outputText value="PLC: " />  
+                            <p:selectCheckboxMenu label="Select"  value="#{blockBean.selectPlcList}"  styleClass="select_box">                        
+                                <f:selectItems value="#{blockBean.fbsPlcList}" var="plc" itemValue="#{plc.plcId}" itemLabel="#{plc.plcName}"/> 
+                                <f:selectItem  itemLabel="No PLC" itemValue="0"/>
+                            </p:selectCheckboxMenu> 
+                        </h:panelGrid>                        
+                        <br/>
+                        <p:commandButton value="Submit" action="#{blockBean.addPlc()}" update=":blockDetail"/>
+                        <p:spacer width="10"/>
+                        <p:button value="Reset" />
+                    </p:fieldset>
+                    <p:fieldset styleClass="fieldsetStyle">
+                        <p:graphicImage value="/#{blockBean.selectedFbsBlock.imagePath}"  width="150" height="120"/>                       
+                        <br/>
+                        <br/>
+
+                        <p:commandButton value="Change Image" onclick="uploadImage.show()" />
+                    </p:fieldset>
+                </h:panelGrid>
+            </p:panel>
+            <div class="vertical-space"/>
+            <p:panel header="Block Detail List">
+                <p:commandButton value="Delete" action="#{blockBean.checkSelectedFlatList()}" update=":delSelectedFlatForm" rendered="#{loginBean.addProject}" />
+                <p:commandButton value="Lock" action="#{blockBean.lockSelectedFlat('Locked')}" update=":blockDetail" rendered="#{loginBean.addProject}" />
+                <br/>
+                <br/>
+                <p:dataTable id="flatTable" var="flat" value="#{blockBean.modelFlatList}" paginator="true" rows="10" rowsPerPageTemplate="10,15,20" 
+                             paginatorPosition="bottom" selection="#{blockBean.selectFlatList}" rowStyleClass="#{flat.fbsFloor.floorNo % 2 eq 0 ? 'rowStyle' : null}">
+
+                    <p:column selectionMode="multiple" disabledSelection="#{flat.lockStatus eq 'locked'}"/>
+
+                    <p:column headerText="Floor" >
+                        #{blockBean.convertFloorNo(flat.fbsFloor.floorNo)}
+
+                    </p:column>
+
+                    <p:column headerText="Unit Code">
+                        <p:commandLink value="#{ blockBean.selectedFbsBlock.fbsProject.projAbvr} - #{ blockBean.selectedFbsBlock.blockAbvr} - #{flat.flatNo}"
+                                       action="#{blockBean.bookingDetail(flat)}"/>
+                    </p:column>
+
+                    <p:column headerText="Flat Specification">
+                        <h:outputText value="#{flat.fbsFlatType.flatSpecification}"/>
+                    </p:column> 
+
+                    <p:column headerText="PLC">
+                        <h:outputText value="#{blockBean.showPlc(flat)}"/>
+                    </p:column>
+
+                    <p:column headerText="Status">
+                        <h:outputLabel value="#{flat.status}"  styleClass="#{flat.status}"/>
+                    </p:column> 
+
+                    <p:column headerText="Options" rendered="#{loginBean.addProject}" >
+                        <p:commandLink styleClass="#{blockBean.lockString(flat)}" action="#{blockBean.lockFlat(flat)}" title="#{blockBean.lockString(flat) eq 'ui-icon ui-icon-locked'?'Lock':'Unlock'}"
+                                       disabled="#{flat.lockStatus eq 'locked' and flat.status eq 'booked'}" update=":blockDetail"/>
+                        <p:spacer width="10"/>
+                        <p:commandLink action="#{blockBean.deleteFbsFlat(flat)}"  onclick="delFlat.show()" styleClass="ui-icon ui-icon-trash" title="Delete" update=":delFlatForm"  rendered="#{!(flat.lockStatus eq 'locked')}">
+                                                      
+                        </p:commandLink>
+
+                    </p:column> 
+
+                </p:dataTable>  
+
+            </p:panel>
+
+        </h:form>  
+        <div class="vertical-space"/>
+        <p:dialog id="uploadImageDialog" header="Upload Block Image" widgetVar="uploadImage">
+            <h:form id="uploadImageForm" >
+                <h:panelGrid columns="2" cellpadding="3">
+
+                    <p:graphicImage value="/#{blockBean.selectedFbsBlock.imagePath}"  width="100" height="100"/>
+                    <p:fileUpload fileUploadListener="#{blockBean.uploadBlockImage}" mode="advanced"  sizeLimit="100000" update=":uploadImageForm,:blockDetail" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                </h:panelGrid>
+                <br/>
+
+                <p:commandButton value="Back" onclick="uploadImage.hide();" action="#"/>
+            </h:form>
+            <div class="vertical-space"/>
+        </p:dialog> 
+        <p:dialog id="delFlatDialog" header="Confirm Delete Flat" widgetVar="delFlat">
+            <h:form id="delFlatForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete this flat?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delFlat.hide();" action="#{blockBean.confirmDeleteFlat()}" update=":blockDetail"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delFlat.hide();" action="#{blockBean.reset()}" update=":blockDetail"/>
+            </h:form>
+        </p:dialog>
+        <h:form id="delSelectedFlatForm" >
+            <p:dialog id="delSelectedFlatDialog" header="Confirm Delete Flat" widgetVar="delSelectedFlat" visible="#{blockBean.renderDialog}" >
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to delete these flats?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="delSelectedFlat.hide();" action="#{blockBean.deleteSelectedFlat()}" update=":blockDetail"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="delSelectedFlat.hide();" action="#{blockBean.reset()}" update=":blockDetail"/>
+
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+
+
+</ui:composition>

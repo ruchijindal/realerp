@@ -1,0 +1,68 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:head>
+        <title>Real Estate Admin Login</title>
+        <link href="${facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body onload="dlg.show()">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit id="top" position="north" gutter="0">
+                <div id="header">
+                    <a href="#" id="logo" title="Real Estate Erp"></a>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" >
+
+
+                <h:form id="loginform">
+                    <p:growl id="growl"   showDetail="true"/>
+                    <p:dialog id="dialog"  widgetVar="dlg" closable="false" draggable="false" resizable="false" styleClass="dialog1">
+                        <f:facet name="header"  >
+                            <h:outputLabel value="Admin Login" />                           
+                        </f:facet>
+                        <h:panelGrid columns="2" cellpadding="5" >
+                            <h:outputLabel for="username" value="User Id: * " />
+                            <p:inputText  id="username"  label="username" value="#{loginBean.adminLogin.userId}" required="true" requiredMessage="User Id is required"/>
+
+                            <h:outputLabel for="password" value="Password: * " />
+                            <p:inputText type="password" id="password"  label="password" value="#{loginBean.adminLogin.password}" required="true" requiredMessage="Password is required"/>
+                        </h:panelGrid>
+
+                        <p:commandButton  value="Login"  actionListener="#{loginBean.adminLoginValidate()}" update=":loginform:growl"/>
+                        <p:spacer width="20"/>
+                        <p:commandLink value="Forgot Password?" action="#{loginBean.recoverPassword()}" style="margin-left: 75px;" process="@this"/>
+
+
+                    </p:dialog>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit id="bottom" position="south"  gutter="0">
+
+                <div id="footer">
+                    <h:form id="bottomForm" style="text-align: right;">
+                        <p:commandButton type="push" title="SMP Technologies Pvt Ltd © 2008-2012.All rights reserved"  value="©" onclick="copyright.show()"/>
+                        <p:dialog header="Copyright Information" widgetVar="copyright" showEffect="scale" hideEffect="scale" height="350"  width="400" styleClass="dialog1">
+                            <h:outputText  value="#{loginBean.copyRightMessage}">
+                            </h:outputText>
+                        </p:dialog>
+                        <p:commandButton value="User Login Page" action="#{loginBean.redirectIndex()}" />
+                    </h:form>
+                </div>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+</html>
+
+
+

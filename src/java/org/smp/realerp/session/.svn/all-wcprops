@@ -1,0 +1,209 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/projects/!svn/ver/1207/RealErp/src/java/org/smp/realerp/session
+END
+FbsPlcAllotFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsPlcAllotFacade.java
+END
+FbsFloorFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsFloorFacade.java
+END
+FbsComplaintFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsComplaintFacade.java
+END
+FbsBankFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsBankFacade.java
+END
+FbsLoginFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsLoginFacade.java
+END
+FbsBrokerFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsBrokerFacade.java
+END
+FbsPlcFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsPlcFacade.java
+END
+FbsPaymentFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsPaymentFacade.java
+END
+FbsChargeFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsChargeFacade.java
+END
+FbsPlannameFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsPlannameFacade.java
+END
+FbsReportFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsReportFacade.java
+END
+FbsApplicantFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsApplicantFacade.java
+END
+FbsFlatTypeFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsFlatTypeFacade.java
+END
+FbsLoanFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsLoanFacade.java
+END
+FbsProjectFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsProjectFacade.java
+END
+FbsUserFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsUserFacade.java
+END
+FbsBookingFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsBookingFacade.java
+END
+AbstractFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/AbstractFacade.java
+END
+FbsParkingFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsParkingFacade.java
+END
+FbsInterestFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsInterestFacade.java
+END
+FbsPayplanFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsPayplanFacade.java
+END
+FbsDiscountFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsDiscountFacade.java
+END
+FbsBlockFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsBlockFacade.java
+END
+FbsComplaintReplyFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/projects/!svn/ver/930/RealErp/src/java/org/smp/realerp/session/FbsComplaintReplyFacade.java
+END
+FbsDocsFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsDocsFacade.java
+END
+FbsFlatFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsFlatFacade.java
+END
+FbsServicetaxFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsServicetaxFacade.java
+END
+FbsCompanyFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsCompanyFacade.java
+END
+FbsBrokerCatFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsBrokerCatFacade.java
+END
+FbsProjectAllotFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/projects/!svn/ver/1208/RealErp/src/java/org/smp/realerp/session/FbsProjectAllotFacade.java
+END
+FbsMailsettingFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/projects/!svn/ver/1192/RealErp/src/java/org/smp/realerp/session/FbsMailsettingFacade.java
+END
+FbsBrPaymentFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsBrPaymentFacade.java
+END
+FbsParkingTypeFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsParkingTypeFacade.java
+END
+FbsFacilityFacade.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/projects/!svn/ver/456/RealErp/src/java/org/smp/realerp/session/FbsFacilityFacade.java
+END

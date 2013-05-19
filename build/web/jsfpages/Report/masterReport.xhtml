@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Master Report
+    </ui:define>
+    <ui:define name="content">
+
+        <p:panel header="Report Generation" styleClass="table-width" >
+
+            <h:panelGrid columns="4">
+                <h:form id="consumerForm" >
+                    <p:fieldset legend="Consumer Report" >
+                        <h:panelGrid columns="2"  >
+                            <h:outputLabel value="Project:"/>
+                            <p:selectOneMenu  id="project" value="#{reportMasterBean.fbsProject.projId}" styleClass="select_box"  >
+                                <f:selectItem itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{reportMasterBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  />
+                                <p:ajax event="change" process="project" listener="#{reportMasterBean.populateBlock()}" update=":consumerForm:block  "/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Block: " />
+                            <p:selectOneMenu id="block" value="#{reportMasterBean.fbsBlock.blockId}" styleClass="select_box"   >
+                                <f:selectItem itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{reportMasterBean.fbsBlockList}"  itemValue="#{block.blockId}" itemLabel="#{block.blockName}" var="block"  />
+                                <p:ajax event="change" process="block" listener="#{reportMasterBean.populateFloor()}" update=":consumerForm:floor" />
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Floor: " />
+                            <p:selectOneMenu id="floor" value="#{reportMasterBean.fbsFloor.floorId}" styleClass="select_box"  >
+                                <f:selectItem itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{reportMasterBean.fbsFloorList}"  var="floor" itemLabel="#{reportMasterBean.convertFloorNo(floor.floorNo)}" itemValue="#{floor.floorId}" />
+                                <p:ajax event="change" process="floor" listener="#{reportMasterBean.populateFlat()}" update=":consumerForm:flat" />
+                            </p:selectOneMenu>
+
+
+                            <h:outputText value="UnitCode: " />
+                            <p:selectOneMenu id="flat" value="#{reportMasterBean.fbsFlat.unitCode}" styleClass="select_box"   >
+                                <f:selectItem itemLabel="Select" itemValue="0"/>
+                                <f:selectItems value="#{reportMasterBean.fbsFlatList}" var="flat" itemLabel="#{reportMasterBean.fbsBlock.fbsProject.projAbvr}-#{reportMasterBean.fbsBlock.blockAbvr} - #{flat.flatNo}" itemValue="#{flat.unitCode}" />
+                                <p:ajax event="change" process="flat" listener="#{reportMasterBean.updateselectionList()}"  />
+                            </p:selectOneMenu>
+
+                            <p:commandButton value="Get Report" action="#{reportMasterBean.genrateConsumerReportFromMasterReportPage()}"  update="consumerForm"  />
+                            <p:button value="Reset" />
+                        </h:panelGrid>
+                    </p:fieldset>
+
+                </h:form>
+                <h:form id="dueLetterForm" >
+                    <p:fieldset legend="Due Letter Report" >
+                        <h:panelGrid columns="2"  >
+                            <h:outputLabel value="Project" />
+                            <p:selectOneMenu  id="project1" value="#{reportMasterBean.fbsProject.projId}" styleClass="select_box"  >
+                                <f:selectItem itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{reportMasterBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  />
+                                <p:ajax event="change" process="project1" listener="#{reportMasterBean.populateBlock()}" update=":dueLetterForm:block1  "/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Block Name: " />
+                            <p:selectOneMenu id="block1" value="#{reportMasterBean.fbsBlock.blockId}" styleClass="select_box"   >
+                                <f:selectItem itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{reportMasterBean.fbsBlockList}"  itemValue="#{block1.blockId}" itemLabel="#{block1.blockName}" var="block1"  />
+                                <p:ajax event="change" process="block1" listener="#{reportMasterBean.populateFloor()}" update=":dueLetterForm:floor1" />
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Floor No: " />
+                            <p:selectOneMenu id="floor1" value="#{reportMasterBean.fbsFloor.floorId}" styleClass="select_box"  >
+                                <f:selectItem itemLabel="Select" itemValue="0" />
+                                <f:selectItems value="#{reportMasterBean.fbsFloorList}"  var="floor1" itemLabel="#{reportMasterBean.convertFloorNo(floor1.floorNo)}" itemValue="#{floor1.floorId}" />
+                                <p:ajax event="change" process="floor1" listener="#{reportMasterBean.populateFlat()}" update=":dueLetterForm:flat1" />
+                            </p:selectOneMenu>
+                            <h:outputText value="UnitCode: " />
+                            <p:selectOneMenu id="flat1" value="#{reportMasterBean.fbsFlat.unitCode}" styleClass="select_box"   >
+                                <f:selectItem itemLabel="Select" itemValue="0"/>
+                                <f:selectItems value="#{reportMasterBean.fbsFlatList}" var="flat1" itemLabel="#{reportMasterBean.fbsBlock.fbsProject.projAbvr}-#{reportMasterBean.fbsBlock.blockAbvr} - #{flat1.flatNo}" itemValue="#{flat1.unitCode}" />
+                                <p:ajax event="change" process="flat1" listener="#{reportMasterBean.updateselectionList()}"  />
+                            </p:selectOneMenu>
+
+                            <p:commandButton value="Get Report" action="#{reportMasterBean.genrateDueLetterReportFromMasterReportPage}"  update="dueLetterForm"  />
+                            <p:button value="Reset" /> </h:panelGrid>
+                    </p:fieldset></h:form>
+            </h:panelGrid>
+        </p:panel>
+        <div class="vertical-space"/>
+        <h:form id="collectionReportForm" styleClass="table-width">
+
+            <p:panel id="dateSearchPanel" header="Collection Details" >
+                <h:outputLabel value="Date Between:  " for="txt_startdate"> </h:outputLabel>
+                <p:calendar id="txt_startdate" value="#{reportMasterBean.startDate}"   mode="popup" pattern="dd-MM-yyyy" timeZone="IST" required="true" requiredMessage="Start Date should be entered."/>
+                <h:outputLabel value="- " for="txt_enddate">
+                </h:outputLabel>
+                <p:calendar id="txt_enddate" value="#{reportMasterBean.endDate}"  mode="popup" pattern="dd-MM-yyyy" timeZone="IST" required="true" requiredMessage="End Date should be entered."/>
+                <br/><br/>
+                <p:commandButton value="Search" action="#{reportMasterBean.generateReportbetweenStartDateAndEndDate()}" update="collectionReportForm" />
+                <p:spacer width="5"/>
+                <p:button value="Reset"/>
+            </p:panel>
+            
+            <div class="vertical-space"/>
+            <p:dataTable id="paymentCollection" var="collection" value="#{reportMasterBean.fbsPaymentList}" styleClass="table-width" paginator="true" rows="10"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15"  paginatorPosition="bottom"  >
+
+                 
+                <p:column  headerText="RegistrationNumber" sortBy="#{collection.fbsBooking.regNumber}" style="width: 150px" >
+                    <h:outputText value="#{collection.fbsBooking.regNumber}"/>
+                </p:column>
+                <p:column  headerText="Payment Date"  style="width: 150px">
+                    <h:outputText value="#{collection.paymentDate}"><f:convertDateTime pattern="dd-MM-yyyy" timeZone="IST"/></h:outputText>
+                </p:column>
+                <p:column  headerText="Status"  style="width: 150px" >
+                    <h:outputText value="#{collection.status}"/>
+                </p:column>
+                <p:column headerText="Total Amount" sortBy="#{collection.paidAmount}"  style="width: 150px" styleClass="alignamt">
+                    <h:outputText value="#{reportMasterBean.roundOfUptoTwoDecimal(collection.paidAmount)}" />
+                </p:column>
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="3" footerText="Total Collection:" style="text-align:right; font-weight: bold"  />
+                        <p:column footerText="#{reportMasterBean.roundOfUptoTwoDecimal(reportMasterBean.totalPaymentCollectionForCompany())}" style="text-align:right; font-weight: bold"/>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3" footerText="Cleared Amount" style="text-align:right; font-weight: bold"  />
+                        <p:column footerText="#{reportMasterBean.roundOfUptoTwoDecimal(reportMasterBean.totalClearedPaymentCollectionForCompany())}" style="text-align:right; font-weight: bold"/>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3" footerText="Pending Amount" style="text-align:right; font-weight: bold"  />
+                        <p:column footerText="#{reportMasterBean.roundOfUptoTwoDecimal(reportMasterBean.totalPendingPaymnetCollectionForCompany())}" style="text-align:right; font-weight: bold"/>
+                    </p:row>
+                </p:columnGroup>
+            </p:dataTable>
+            <div class="vertical-space"/>
+            <p:commandButton type="push" value="Collection Report" action="#{reportMasterBean.generateReportPDFBetweenStartDateAndEndDate()}"    />
+        </h:form>
+
+
+    </ui:define>
+
+
+
+</ui:composition>

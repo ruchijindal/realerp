@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../resources/template/masterTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:define name="title">
+        Booking List
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="bookingListForm" styleClass="table-width">
+            <p:panel id="panel" header="Search Bookings">
+                <p:selectOneButton id="searchType" value="#{bookingListBean.searchType}">  
+                    <f:selectItem itemLabel="Quick Search" itemValue="1" />  
+                    <f:selectItem itemLabel="Advanced Search" itemValue="2" />  
+                    <p:ajax process="searchType" event="change" update=":bookingListForm,:bookingDetails" listener="#{bookingListBean.changeTypeOfSearching()}"/> 
+                </p:selectOneButton>
+                <table cellpadding="4" cellspacing="4">
+                    <tr>
+                        <td>
+                            <h:outputLabel value="Type: " />  
+                        </td>
+                        <td>
+                            <p:selectOneRadio id="options" value="#{bookingListBean.requestType}">  
+                                <f:selectItem itemLabel="Booked Units" itemValue="booked" />  
+                                <f:selectItem itemLabel="Cancelled Units" itemValue="cancelled" /> 
+                                <p:ajax process="options" event="change" listener="#{bookingListBean.populate()}" update=":bookingDetails"/>
+                            </p:selectOneRadio>  
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h:outputLabel for="regNum" value="Reg No: "/>
+                        </td>
+                        <td colspan="4">
+                            <p:inputText id="regNum" value="#{bookingListBean.fbsRegNum}" validatorMessage="Invalid Reg No">
+                                <p:ajax process="regNum" event="keyup" listener="#{bookingListBean.filterBookingList()}" update=":bookingDetails" />
+                                <f:validateRegex pattern="#{initParam['numberOnly']}"/> 
+                            </p:inputText> 
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>  
+                            <h:outputLabel value="Booking Date: "/> 
+                        </td>
+                        <td> <p:calendar id="fromDate"  value="#{bookingListBean.bookingDateFrom}" pattern="#{initParam['date-pattern']}" timeZone="IST"  >
+                                <p:ajax process="fromDate" event="dateSelect"  update=":bookingDetails" listener="#{bookingListBean.handleDateSelectForFromDate}"/>
+                            </p:calendar>
+                            <p:watermark for="fromDate" value="From"/>
+                        </td>
+                        <td colspan="3"> 
+                            <p:calendar id="toDate"  value="#{bookingListBean.bookingDateTo}" pattern="#{initParam['date-pattern']}" timeZone="IST" >
+                                <p:ajax process="toDate" event="dateSelect"  update=":bookingDetails" listener="#{bookingListBean.handleDateSelectForToDate}"/>
+                            </p:calendar>
+                            <p:watermark for="toDate" value="To"/> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <p:separator rendered="#{bookingListBean.renderAdvanceSearchForm}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <h:outputLabel value="Unit Details:" rendered="#{bookingListBean.renderAdvanceSearchForm}"/></td>
+                        <td> 
+                            <p:selectOneMenu value="#{bookingListBean.fbsProject.projId}" styleClass="select_box" rendered="#{!bookingListBean.renderProject and bookingListBean.renderAdvanceSearchForm}">                           
+                                <f:selectItems value="#{bookingListBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  />                           
+                            </p:selectOneMenu>
+                            <p:selectOneMenu  id="project" value="#{bookingListBean.fbsProject.projId}" styleClass="select_box" rendered="#{bookingListBean.renderProject and bookingListBean.renderAdvanceSearchForm}">
+                                <f:selectItem itemLabel="Select Project" itemValue="0" />
+                                <f:selectItems value="#{bookingListBean.fbsProjectList}" itemValue="#{project.projId}" itemLabel="#{project.projName}"  var="project"  /> 
+                                <p:ajax event="change" process="project" listener="#{bookingListBean.populateBlock()}" update=":bookingListForm:block,:bookingListForm:floor,:bookingListForm:flat,:bookingDetails"/>
+                            </p:selectOneMenu> 
+                        </td>
+                        <td>
+                            <p:selectOneMenu id="block" value="#{bookingListBean.fbsBlock.blockId}" styleClass="select_box"  rendered="#{bookingListBean.renderAdvanceSearchForm}">
+                                <f:selectItem itemLabel="Select Block" itemValue="0" />
+                                <f:selectItems value="#{bookingListBean.fbsBlockList}"  itemValue="#{block.blockId}" itemLabel="#{block.blockName}" var="block"  />
+                                <p:ajax event="change" process="block" listener="#{bookingListBean.populateFloor()}" update=":bookingListForm:floor,:bookingListForm:flat,:bookingDetails"/>                                
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:selectOneMenu id="floor" value="#{bookingListBean.fbsFloor.floorId}" styleClass="select_box" rendered="#{bookingListBean.renderAdvanceSearchForm}">
+                                <f:selectItem itemLabel="Select Floor" itemValue="0" />
+                                <f:selectItems value="#{bookingListBean.fbsFloorList}"  var="floor" itemLabel="#{bookingListBean.convertFloorNo(floor.floorNo)}" itemValue="#{floor.floorId}" />
+                                <p:ajax event="change" process="floor" listener="#{bookingListBean.populateFlat()}" update=":bookingListForm:flat,:bookingDetails"/>                               
+                            </p:selectOneMenu>
+                        </td>
+                        <td>
+                            <p:selectOneMenu id="flat" value="#{bookingListBean.fbsFlat.unitCode}" styleClass="select_box" rendered="#{bookingListBean.renderAdvanceSearchForm}">
+                                <f:selectItem itemLabel="Select UnitCode" itemValue="0"/>
+                                <f:selectItems value="#{bookingListBean.fbsFlatList}" var="flat" itemLabel="#{bookingListBean.fbsBlock.fbsProject.projAbvr}-#{bookingListBean.fbsBlock.blockAbvr} - #{flat.flatNo}" itemValue="#{flat.unitCode}"/> 
+                                <p:ajax event="change" process="flat" listener="#{bookingListBean.populateBooking()}" update=":bookingDetails"/>                              
+                            </p:selectOneMenu>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td> <h:outputLabel value="Other Details:" rendered="#{bookingListBean.renderAdvanceSearchForm}"/></td>
+                        <td>
+                            <p:inputText id="applicant" value="#{bookingListBean.applicantName}" rendered="#{bookingListBean.renderAdvanceSearchForm}">
+                                <p:ajax event="keyup" process="applicant" listener="#{bookingListBean.filterBookingList()}" update=":bookingDetails"/> 
+                            </p:inputText>
+                            <p:watermark for="applicant" value="Applicant Name" rendered="#{bookingListBean.renderAdvanceSearchForm}"/>
+
+                        </td>
+                        <td>
+                            <p:inputText id="authorizeBy" value="#{bookingListBean.fbsAuthorizeBy}" rendered="#{bookingListBean.renderAdvanceSearchForm}">
+                                <p:ajax event="keyup" process="authorizeBy" listener="#{bookingListBean.filterBookingList()}" update=":bookingDetails"/> 
+                            </p:inputText>
+                            <p:watermark for="authorizeBy" value="Authorize By" rendered="#{bookingListBean.renderAdvanceSearchForm}"/>    
+                        </td>
+                        <td colspan="3">
+                            <p:inputText id="bookingBy" value="#{bookingListBean.fbsBookingBy}" rendered="#{bookingListBean.renderAdvanceSearchForm}">
+                                <p:ajax event="keyup" process="bookingBy" listener="#{bookingListBean.filterBookingList()}" update=":bookingDetails"/> 
+                            </p:inputText>
+                            <p:watermark for="bookingBy" value="Booking By" rendered="#{bookingListBean.renderAdvanceSearchForm}"/>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <p:button value="Reset"/>
+            </p:panel>
+        </h:form>
+        <div class="vertical-space"/>
+        <h:form id="bookingDetails" styleClass="table-width">
+            <p:dataTable id="booking" var="book" value="#{bookingListBean.fbsBookingList}" paginator="true" rows="20"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,15,25"   paginatorPosition="bottom" rowIndexVar="sn" rowStyleClass="#{book.authorizeStatus eq 'UA' ? 'unauthorize': null}">
+
+                <f:facet name="header">
+                    <div class="facetheader">
+                        Booking List
+                    </div>
+                </f:facet>
+                <p:column headerText="S No.">
+                    <h:outputText value="#{sn+1}"/>
+                </p:column>
+
+                <p:column sortBy="#{book.regNumber}" headerText="Reg No.">
+                    <h:outputText value="#{book.regNumber}"/>
+                </p:column>
+                <p:column sortBy="#{book.fbsFlat.flatNo}" headerText="Unit Code ">
+
+                    <p:commandLink value="#{book.fbsFlat.fbsFloor.fbsBlock.fbsProject.projAbvr} - #{book.fbsFlat.fbsFloor.fbsBlock.blockAbvr} - #{book.fbsFlat.flatNo}" action="#{bookingListBean.bookingDetail(book)}" 
+                                   style="color:#{book.authorizeStatus eq 'UA' ? '#EF2F12': null}"/>
+                </p:column>
+                <p:column   sortBy="#{book.bookingDt}" headerText="Date">
+                    <h:outputText value="#{book.bookingDt}" >
+                        <f:convertDateTime pattern="#{initParam['date-pattern']}" timeZone="IST" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column sortBy="#{book.userId}" headerText="BookingBy">
+                    <h:outputText value="#{book.userId}" />
+                </p:column>
+                <p:column sortBy="#{book.authorizeBy}" headerText="AuthorizeBy">
+                    <h:outputText value="#{book.authorizeBy}" />
+                </p:column>
+
+                <p:column sortBy="#{bookingListBean.showApplicant(book.fbsFlat).applicantName}" headerText="Applicant">
+                    <h:outputText value="#{bookingListBean.showApplicant(book.fbsFlat).applicantName}" />
+                </p:column> 
+                <p:column  headerText="Authorize Status">
+                    <p:commandLink value="#{bookingListBean.statusValue(book.authorizeStatus)}" style="color:#{book.authorizeStatus eq 'UA' ? '#EF2F12': null}"
+                                   action="#{bookingListBean.authorizeBooking(book)}" onclick="authorizeBooking.show()" update=":authorizeBBookingForm" />
+                </p:column>
+                <p:column  headerText="Option">                     
+                    <p:commandLink value="Detail" action="#{bookingListBean.bookingDetail(book)}" title="Detail" styleClass="ui-icon ui-icon-info"  />
+                    <p:spacer width="10"/>
+                    <p:commandLink value="Transfer" action="#{bookingListBean.transferBooking(book)}" title="Transfer" styleClass="ui-icon ui-icon-transfer-e-w"  rendered="#{loginBean.lTransfer}" />
+                    <p:spacer width="10"/>
+                    <p:commandLink id="report" value="Consumer Report" title="Report" styleClass="ui-icon ui-icon-document"  />
+                    <p:overlayPanel id="overpanel" appendToBody="true" for="report" >
+                        <p:commandButton value="Consumer Report" action="#{bookingListBean.consumerReport(book.regNumber)}" title="Consumer Report"  rendered="#{loginBean.lConsumenrReport}" />
+                        <p:spacer width="10"/>
+                        <p:commandButton value="Due Letter" action="#{bookingListBean.dueLetterReport(book.regNumber)}" title="Dues Letter"   rendered="#{loginBean.ldueLetterReport}" />
+                    </p:overlayPanel>
+                    <p:commandLink value="Cancel" action="#{bookingListBean.conFirmBookingCancel(book)}" title="Cancel" styleClass="ui-icon ui-icon-circle-close"  rendered="#{(loginBean.lCancel) and (loginBean.login.userId eq book.userId or loginBean.authorizeBooking )  }" onclick="cancelBooking.show()" update=":cancelBookingForm" />
+
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog id="authorizeBooking" header="Authorize Booking" widgetVar="authorizeBooking">
+            <h:form id="authorizeBBookingForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to update status of booking?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="authorizeBooking.hide();" action="#{bookingListBean.authorizeBook()}" update=":bookingDetails"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="authorizeBooking.hide();" action="#"/>
+
+            </h:form>
+        </p:dialog>
+        <p:dialog id="cancelBooking" header="Confirm Cancel Booking" widgetVar="cancelBooking">
+            <h:form id="cancelBookingForm">
+                <h:panelGrid columns="2" cellpadding="3">
+                    <h:outputLabel value="Do you want to cancel this booking?"/>
+                    <h:outputLabel/>
+                </h:panelGrid>
+                <br/>
+                <p:commandButton value="Yes" onclick="cancelBooking.hide();" action="#{bookingListBean.cancelBooking()}" update=":bookingDetails"/>
+                <p:spacer width="5"/>
+                <p:commandButton value="Not Yet" onclick="cancelBooking.hide();" action="#"/>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+
+
+</ui:composition>

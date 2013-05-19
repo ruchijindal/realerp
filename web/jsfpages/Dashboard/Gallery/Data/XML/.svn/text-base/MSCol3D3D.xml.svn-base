@@ -1,0 +1,27 @@
+<chart palette='1' caption='Collection details for last 7 days' xAxisName='Days' yAxisName='Amount' numberPrefix='Rs.'  rotateValues='1' placeValuesInside='1' forceYAxisValueDecimals='1'  yAxisValueDecimals='2'>
+	
+        <categories>
+		<category label='Mon' />
+		<category label='Tue' />
+		<category label='Wed' />
+		<category label='Thu' />
+		<category label='Fri' />
+		<category label='Sat' />
+	</categories>
+	<dataset seriesname='Cleared' color='3DBF7A' showValues='1'>
+		<set value='8343' />
+		<set value='6983' />
+		<set value='7658' />
+		<set value='8345' />
+		<set value='8195' />
+		<set value='7684'/>
+	</dataset>
+	<dataset seriesname='Pending' color='F48497'  showValues='1'>
+		<set value='2446' />
+		<set value='3935' />
+		<set value='3452'  />
+		<set value='4424' />
+		<set value='4925' />
+		<set value='4328' />
+	</dataset>
+</chart>
